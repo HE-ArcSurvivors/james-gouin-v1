@@ -1,0 +1,27 @@
+Le joueur joue un pingouin, il a 3 vies (chances) pour réussir un niveau. Il retourne à un check point s'il meurt. Si les 3 vies sont passées, il doit recommencer le niveau depuis le début.
+Il peut trouver des vies de façon aléatoire ou non, dans des coffres ou lieux secrets comme par exemple sous un tas de neige.
+
+Le joueur commence avec le niveau tutoriel, obligatoire. Il peut par contre déactiver la conversation avec la Grosse Loutre (PNJ qui lui donne des indications sur comment résoudre les puzzles du niveau tutoriel).
+
+Par exemple pour le niveau tutoriel. Le but de ce niveau au niveau histoire est de soudoyer la Loutre avec des poissons cachés dans différentes pièces de la map. Quand le joueur approche la grosse loutre (qui est devant un grand portail) pour la première fois. La loutre lui explique qu’elle est la gardienne du portail, mais qu’elle trouve qu’elle n’est pas assez bien payée pour faire ce travaille. La loutre propose de fermer les yeux pour le passage si le pingouin se rend utile et lui donne du poisson, car elle n’arrive pas à se déplacer correctement avec la finesse de ce petit pingouin. Une fois la conversation terminée elle pousse le pingouin dans le portail.
+Le pingouin devra donc résoudre des puzzles simples à travers 5 pièces différentes, chaque pièce à un poisson. La loutre explique ou se trouve le poisson, et le joueur doit le récupérer.
+1er poisson: Le poisson est derrière une série de blocs de glace bloquant le passage. Le joueur doit pousser les blocs pour libérer le passage. Les blocs se déplacent de 1 bloc à la fois. La loutre est trop grosse pour passer elle même.
+2ieme poisson: Le poisson est derrière une série de blocs de glace aussi. Seulement cette fois les blocs de glace sont sur une surface glissante. Le joueur devrait bouger les blocs de façon intelligente pour ne pas bloquer le passage.
+3ieme poisson: Le pingouin glisse aussi. il se déplacera donc avec les blocs qu’il pousse.
+4ieme Poisson: Il y a des trous dans la glace, le joueur peut tomber dedans. Mais ils peuvent aussi être comblés avec des blocs.
+5ieme poisson: Il y a des trous dans la glace, le pingouin glisse, et les blocs se collent ensemble s’il se touche, évitant ainsi de combler les trous.
+Le joueur peut choisir d’abandonner sa partie en cours s’il pense qu’il a gâché la partie avec de mauvais mouvements, ou s’il ne veut plus continuer:
+-> en se suicidant, à ce moment la loutre va le repêcher
+-> en appuyant sur ESC et Recommencer le Puzzle
+
+Une fois le dernier poisson dans la poche, la loutre explique que le Boss Final est protégé par une rivière gelée. Mais que touts ses soufifres ont un morceau du pont pour le rejoindre lors des réunions officielles a son siège.
+Il faut donc battre chacun des soufifres pour récupérer chacun des morceaux du pont et ainsi le reconstruire pour accéder au bosse final.
+Cependant chacun des souffifres à ses propres souffifres. Et la loutre voit clairement que le pingouin ne fait pas le poids au niveau physique pour récupérer par la force les différents morceaux du pont. Et il faudra donc résoudre différents puzzles afin de pouvoir atteindre les sous-boss sans se faire repérer et sonner l’alerte générale.
+
+Touts les sous boss ont des techniques spéciaux, lancés de blocs, créer des trous de façon aléatoire, créer un labyrinthe, etc...
+Les bosses peuvent cependant faire un pseudo combats avec le joueur, cet à dire que le boss est conscient de la présence du Pingouin, mais veut le mettre au défi, sans forcement lui faire du mal, car ils le trouvent chou.
+
+Par exemple un combat de sous-boss pourrait être d’éviter des vagues de blocs de glace.
+
+Une fois tout les sous-bosses battues, et le pont reconstruits, il est temps de se battre contre le Boss final.
+Cependant le Boss Final ne se bat pas seul! Car il est nul. Tous les sous-boss sont là pour le protéger. Donc le puzzle final mélange toutes les techniques spéciales des sous-boss.
