@@ -2,8 +2,12 @@
 #define MAINWINDOW_H
 
 #include <QWidget>
+#include <player.h>
 
 class QPushButton;
+class QGridLayout;
+class QLineEdit;
+class QComboBox;
 
 class MainWindow : public QWidget
 {
@@ -18,9 +22,10 @@ public:
     QPushButton* buttonLoad;
     QPushButton* buttonExit;
 
-    // DATA TEST
-    int level_number;
-    QString username;
+    QGridLayout* layout;
+    QLineEdit* username_insert;
+    QComboBox* username_select;
+    Player* current_player;
 
 public slots:
     void save();

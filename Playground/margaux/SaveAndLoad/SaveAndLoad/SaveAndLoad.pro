@@ -13,6 +13,12 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    player.cpp \
+    menustart.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    player.h \
+    menustart.h
+
+FORMS +=
