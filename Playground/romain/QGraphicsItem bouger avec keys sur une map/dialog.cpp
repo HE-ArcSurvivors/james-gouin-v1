@@ -9,8 +9,7 @@ Dialog::Dialog(QWidget *parent) :
     ui->setupUi(this);
 
     scene = new QGraphicsScene(this);
-    // !!! Penser à changer l'adresse de l'image du background !!!
-    QPixmap m("/Users/Rocla/Box Sync/DEV/P2/Playground/romain/QGraphicsItem bouger avec keys sur une map/IcePuzzle.jpg");
+    QPixmap m(":/IcePuzzle.jpg");
     scene->setBackgroundBrush(m);//.scaled(545,412,Qt::IgnoreAspectRatio,Qt::SmoothTransformation));
     ui->graphicsView->setScene(scene);
 

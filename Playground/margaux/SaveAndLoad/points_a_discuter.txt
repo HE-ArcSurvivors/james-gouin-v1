@@ -1,0 +1,5 @@
+Points à discuter concernant les sauvegarde et chargement des fichiers : 
+
+- Cryptage des fichiers de sauvegarde (?)
+- Fichier .txt (ou .txt sans extension ^^)
+- Données à enregistrer

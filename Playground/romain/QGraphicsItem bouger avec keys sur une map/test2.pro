@@ -24,6 +24,8 @@ HEADERS  += dialog.h \
 
 FORMS    += dialog.ui
 
-OTHER_FILES += \
-    IcePuzzle.jpg
+OTHER_FILES +=
+
+RESOURCES += \
+    images.qrc
 
