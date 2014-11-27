@@ -7,6 +7,7 @@
 #include <QGraphicsItem>
 #include <QPixmap>
 #include <QKeyEvent>
+#include <QMessageBox>
 #include "player.h"
 
 #include <QMessageBox>

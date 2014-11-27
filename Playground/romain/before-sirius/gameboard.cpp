@@ -10,7 +10,7 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     viewStartPostionY = 1;
     viewPositionX = 640;
     viewPositionY = 480;
-    startingPoint = QPoint (15,15); // 20x15
+    startingPoint = QPoint (1,10); // 20x15
     QString tutorialLevel3 = ":/images/test_map_tutoriel_3.png";
 
     this->setWindowTitle(windowTitle);
@@ -48,6 +48,9 @@ Gameboard::~Gameboard(){
 //http://doc.qt.digia.com/4.6/qt.html#Key-enum
 void Gameboard::keyPressEvent(QKeyEvent *event)
 {
+//    QMessageBox msgBox;
+//    msgBox.setText(QString(event->key()));
+//    msgBox.exec();
     if(event->key() == Qt::Key_W)
     {
         // Determiner si le joueur sort de la vue
