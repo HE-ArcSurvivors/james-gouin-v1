@@ -1,4 +1,6 @@
 #include "gameboard.h"
+#include <QDebug>
+#include <QApplication>
 
 Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 {
@@ -39,6 +41,12 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     //On position la vue
     playerView->setScene(mainScene);
 
+//    setFocusPolicy(Qt::StrongFocus);
+//    playerView->setFocusPolicy(Qt::StrongFocus);
+
+
+    //playerView->
+    grabKeyboard();
 }
 
 Gameboard::~Gameboard(){
@@ -49,9 +57,13 @@ Gameboard::~Gameboard(){
 void Gameboard::keyPressEvent(QKeyEvent *event)
 {
 //    QMessageBox msgBox;
-//    msgBox.setText(QString(event->key()));
+//    msgBox.setText(QString(event->modifiers()));
 //    msgBox.exec();
-    if(event->key() == Qt::Key_W)
+
+
+qDebug() << event->modifiers() << event->key() << QApplication::keyboardModifiers ();
+
+    if(event->key() == Qt::Key_Up)
     {
         // Determiner si le joueur sort de la vue
         if (player->pos().y() > viewStartPostionY)
