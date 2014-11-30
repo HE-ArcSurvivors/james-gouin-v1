@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2014-11-08T12:18:19
+# Project created by QtCreator 2014-11-19T19:01:08
 #
 #-------------------------------------------------
 
@@ -8,17 +8,19 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = SaveAndLoad
+TARGET = sceneAndViews
 TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
     player.cpp \
-    menustart.cpp
+    gameboard.cpp \
+    viewtransitionsurface.cpp
 
-HEADERS  += mainwindow.h \
+HEADERS  += \
     player.h \
-    menustart.h
+    gameboard.h \
+    viewtransitionsurface.h
 
-FORMS +=
+RESOURCES += \
+    images.qrc

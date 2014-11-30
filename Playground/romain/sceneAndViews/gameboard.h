@@ -7,8 +7,8 @@
 #include <QGraphicsItem>
 #include <QPixmap>
 #include <QKeyEvent>
-#include <QMessageBox>
 #include "player.h"
+#include "viewtransitionsurface.h"
 
 #include <QMessageBox>
 
@@ -26,8 +26,8 @@ private:
     QGraphicsView *playerView;
     Player *player;
     void keyPressEvent(QKeyEvent *event);
-    int viewPositionX;
-    int viewPositionY;
+    int viewSizeX;
+    int viewSizeY;
     int windowSizeY;
     int windowSizeX;
     int viewStartPostionX;
@@ -35,6 +35,15 @@ private:
     int gameSquares = 32;
     QString windowTitle;
     QPoint startingPoint;
+    QPoint viewRequested;
+    QPoint exit;
+
+    ViewTransitionSurface *transitionSurface;
+
+    int pointToPixelX(QPoint);
+    int pointToPixelY(QPoint);
+
+    void setView(QPoint);
 
 protected:
 
