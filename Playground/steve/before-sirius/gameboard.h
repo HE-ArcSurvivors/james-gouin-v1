@@ -22,7 +22,7 @@ private:
     QGraphicsScene *mainScene;
 //    QGraphicsScene *preloadedScene;
     QGraphicsView *playerView;
-    pingouin *pingouin;
+    Pingouin *pingouin;
     void keyPressEvent(QKeyEvent *event);
     int viewPositionX;
     int viewPositionY;
@@ -33,6 +33,7 @@ private:
     int gameSquares = 32;
     QString windowTitle;
     QPoint startingPoint;
+
 
 protected:
 

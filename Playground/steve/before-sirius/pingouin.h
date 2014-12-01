@@ -5,7 +5,7 @@
 #include <QPoint>
 #include <QGraphicsScene>
 
-class pingouin
+class Pingouin
 {
 private:
     Player *player;
@@ -18,7 +18,7 @@ private:
     int gameSquare = 32;
 
 public:
-    pingouin(int gameSquare);
+    Pingouin(int gameSquare);
 
     void moveBy(int, int);
     void setPos(int, int);
@@ -26,6 +26,18 @@ public:
     void addToScene(QGraphicsScene*);
     void setPlayerOrientation(QString);
 
+
+
+    bool
+
+
+    //temporaire
+
+    QList<QGraphicsItem *> CollidesRight();
+    QList<QGraphicsItem *> CollidesLeft();
+    QList<QGraphicsItem *> CollidesTop();
+    QList<QGraphicsItem *> CollidesBottom();
+    QList<QGraphicsItem *> CollidesCenter();
 
     QGraphicsRectItem* getLeftCB();
     QGraphicsRectItem* getRightCB();

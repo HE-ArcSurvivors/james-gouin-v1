@@ -42,9 +42,9 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 
 
     //On ajoute le joueur
-    pingouin = new class pingouin(gameSquares);
+    pingouin = new Pingouin(gameSquares);
     pingouin->addToScene(mainScene);
-    pingouin->setPos(startingPoint.x(),startingPoint.y());
+    pingouin->setPos(startingPoint.x(), startingPoint.y());
 
 
 
@@ -95,10 +95,14 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
 
             //JUST des essais de collisions ;)
             QList<QGraphicsItem *> CollidesRight;
-            CollidesRight = pingouin->getRightCB()->collidingItems();
+            CollidesRight = pingouin->CollidesRight();
 
             for(int i=0; i<CollidesRight.length(); i++)
             {
+                QMessageBox m;
+                m.setText(typeid(*CollidesRight.at(i)).name());
+                m.exec();
+
                 if(typeid(*CollidesRight.at(i)).name() == typeid(neige).name())
                 {
                     QMessageBox m;
@@ -108,7 +112,7 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
             }
 
             QList<QGraphicsItem *> CollidesLeft;
-            CollidesLeft = pingouin->getLeftCB()->collidingItems();
+            CollidesLeft = pingouin->CollidesLeft();
 
             for(int i=0; i<CollidesLeft.length(); i++)
             {
@@ -119,6 +123,8 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
                     m.exec();
                 }
             }
+
+
 
             pingouin->moveBy(1, 0);
             pingouin->setPlayerOrientation("right");
