@@ -51,6 +51,10 @@ bool BlocDeplacable::IsMovable(QList<QGraphicsItem *> l)
         {
             bMove = false;
         }
+        if(typeid(*l.at(i)).name() == typeid(BlocDeplacable).name())
+        {
+            bMove = false;
+        }
     }
     return bMove;
 }
