@@ -3,10 +3,10 @@
 #include "surface.h"
 #include <QGraphicsItem>
 
-class neige : public surface
+class Neige : public Surface
 {
 public:
-    neige(int xpos, int ypos, QGraphicsItem *parent = 0);
+    Neige(int xpos, int ypos, QGraphicsItem *parent = 0);
 };
 
 #endif // NEIGE_H

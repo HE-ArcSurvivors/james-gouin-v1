@@ -1,7 +1,7 @@
 #include "neige.h"
-#include <QtWidgets>
+#include <QBrush>
 
-neige::neige(int xpos, int ypos, QGraphicsItem *parent) : surface(xpos, ypos, parent)
+Neige::Neige(int xpos, int ypos, QGraphicsItem *parent) : Surface(xpos, ypos, parent)
 {
 
     QBrush brush;

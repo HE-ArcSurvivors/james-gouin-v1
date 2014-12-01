@@ -17,14 +17,16 @@ SOURCES += main.cpp\
     gameboard.cpp \
     pingouin.cpp \
     neige.cpp \
-    surface.cpp
+    surface.cpp \
+    blocdeplacable.cpp
 
 HEADERS  += \
     player.h \
     gameboard.h \
     pingouin.h \
     neige.h \
-    surface.h
+    surface.h \
+    blocdeplacable.h
 
 RESOURCES += \
     images.qrc

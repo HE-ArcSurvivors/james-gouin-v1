@@ -1,14 +1,14 @@
 #ifndef PINGOUIN_H
 #define PINGOUIN_H
 #include "player.h"
-#include <QGraphicsRectItem>
-#include <QPoint>
-#include <QGraphicsScene>
 
-class Pingouin
+#include "qgraphicsitem.h"
+#include "qpoint.h"
+#include "qgraphicsscene.h"
+
+class Pingouin  : public Player
 {
 private:
-    Player *player;
 
     QGraphicsRectItem *leftCollideBox;
     QGraphicsRectItem *rightCollideBox;
@@ -17,21 +17,20 @@ private:
 
     int gameSquare = 32;
 
+//    bool IsMovable(QList<QGraphicsItem *>);
+
 public:
     Pingouin(int gameSquare);
 
-    void moveBy(int, int);
     void setPos(int, int);
-    QPoint pos();
+    void moveBy(int, int);
+
     void addToScene(QGraphicsScene*);
-    void setPlayerOrientation(QString);
 
-
-
-    bool
-
-
-    //temporaire
+//    bool IsMovableToLeft();
+//    bool IsMovableToRight();
+//    bool IsMovableToBottom();
+//    bool IsMovableToTop();
 
     QList<QGraphicsItem *> CollidesRight();
     QList<QGraphicsItem *> CollidesLeft();
@@ -39,11 +38,11 @@ public:
     QList<QGraphicsItem *> CollidesBottom();
     QList<QGraphicsItem *> CollidesCenter();
 
+    //temporaire
     QGraphicsRectItem* getLeftCB();
     QGraphicsRectItem* getRightCB();
     QGraphicsRectItem* getTopCB();
     QGraphicsRectItem* getBottomCB();
-
     Player* getPlayer();
 
 };

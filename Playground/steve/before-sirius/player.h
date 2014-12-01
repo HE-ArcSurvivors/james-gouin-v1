@@ -19,7 +19,7 @@ public:
 
     void setPlayerOrientation(QString orientation);
 
-private:
+protected:
     //J'ai essayé de changer la taille de la box dynamiquement selon l'image,
     //mais le probleme est qu'il y a des bugs graphiques inGame, l'image qui se decompose..
     int playerSizeX = 32;
@@ -27,7 +27,7 @@ private:
 
     int xPos;
     int yPos;
-
+private:
     //Les skins sont les images attribué au personnage
     QString leftSkin = ":/images/Pingouin_de_Profil_gauche.png";
     QString rightSkin = ":/images/Pingouin_de_Profil_droite.png";

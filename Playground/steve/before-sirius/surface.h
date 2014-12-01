@@ -4,12 +4,16 @@
 #include <QGraphicsItem>
 #include <QGraphicsRectItem>
 
-class surface : public QGraphicsRectItem
+class Surface : public QGraphicsRectItem
 {
 public:
-    surface(int xpos, int ypos, QGraphicsItem *parent = 0);
-    ~surface();
+    Surface(int xpos, int ypos, QGraphicsItem *parent = 0);
+    ~Surface();
     void setPos(int, int);
+
+    int getWidth();
+    int getHeight();
+    int getGameSquare();
 
 private:
     int gameSquare = 32;
