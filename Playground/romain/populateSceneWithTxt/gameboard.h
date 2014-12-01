@@ -11,7 +11,6 @@
 #include "viewtransitionsurface.h"
 #include <QDebug>
 #include <QMessageBox>
-#include "surfaces.h"
 #include <QFile>
 
 class Gameboard : public QWidget
@@ -50,6 +49,8 @@ private:
     int transition = 0;
 
     void populateScene();
+
+    bool canPlayerMove();
 
 protected:
 

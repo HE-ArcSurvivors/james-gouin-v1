@@ -16,15 +16,13 @@ SOURCES += main.cpp\
     player.cpp \
     gameboard.cpp \
     viewtransitionsurface.cpp \
-    bloques.cpp \
-    surfaces.cpp
+    blockswalls.cpp
 
 HEADERS  += \
     player.h \
     gameboard.h \
     viewtransitionsurface.h \
-    bloques.h \
-    surfaces.h
+    blockswalls.h
 
 RESOURCES += \
     images.qrc \

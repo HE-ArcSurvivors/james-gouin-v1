@@ -1,26 +1,28 @@
-#ifndef BLOQUES_H
-#define BLOQUES_H
+#ifndef BLOCKSWALLS_H
+#define BLOCKSWALLS_H
 
 #include <QGraphicsItem>
 #include <QPainter>
 
-class Bloques : public QGraphicsItem
+class BlocksWalls : public QGraphicsItem
 {
 public:
-    Bloques();
+    BlocksWalls();
+    BlocksWalls(QString type);
     QRectF boundingRect() const;    //la box du player
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget); //paint event
     QBrush *surfaceSkin;
+
+    void setType(QString type);
 
     int getSurfaceSizeX();
     int getSurfaceSizeY();
 
 private:
-    //J'ai essayé de changer la taille de la box dynamiquement selon l'image,
-    //mais le probleme est qu'il y a des bugs graphiques inGame, l'image qui se decompose..
     int surfaceSizeX = 29;
     int surfaceSizeY = 29;
+    QString type = "test";
 };
 
-#endif // BLOQUES_H
+#endif // BLOCKSWALLS_H
 

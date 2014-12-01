@@ -1,4 +1,5 @@
 #include "gameboard.h"
+#include "blockswalls.h"
 
 Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 {
@@ -56,7 +57,12 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
         if (player->pos().y() > viewStartPostionY)
         {
             player->moveBy(0,-gameSquares);
-            player->setPlayerOrientation("up"); //definir l'orientation du joueur
+            if (!canPlayerMove())
+            {
+                player->moveBy(0,gameSquares);
+            }else{
+                player->setPlayerOrientation("up");
+            }
         }
     }
     if(event->key() == Qt::Key_S)
@@ -64,7 +70,12 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
         if (player->pos().y() <= viewSizeY-player->getPlayerSizeY()-8)
         {
             player->moveBy(0,gameSquares);
-            player->setPlayerOrientation("down");
+            if (!canPlayerMove())
+            {
+                player->moveBy(0,-gameSquares);
+            }else{
+                player->setPlayerOrientation("down");
+            }
         }
     }
     if(event->key() == Qt::Key_A)
@@ -72,7 +83,12 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
         if (player->pos().x() > viewStartPostionX)
         {
             player->moveBy(-gameSquares,0);
-            player->setPlayerOrientation("left");
+            if (!canPlayerMove())
+            {
+                player->moveBy(gameSquares,0);
+            }else{
+                player->setPlayerOrientation("left");
+            }
         }
     }
     if(event->key() == Qt::Key_D)
@@ -80,7 +96,13 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
         if (player->pos().x() < viewSizeX-player->getPlayerSizeX())
         {
             player->moveBy(gameSquares,0);
-            player->setPlayerOrientation("right");            
+            if (!canPlayerMove())
+            {
+                player->moveBy(-gameSquares,0);
+            }else{
+                player->setPlayerOrientation("right");
+            }
+
         }
     }
     if (player->collidesWithItem(transitionSurface))
@@ -102,13 +124,13 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
 
         }
     }
-    qDebug() << "x: " << player->pos().x() <<" y: " << player->pos().y();
+
+//    qDebug() << "x: " << player->pos().x() <<" y: " << player->pos().y();
     if (!player->collidesWithItem(transitionSurface))
     {
         transition = 0;
     }
 //    qDebug() << transition;
-//    player->update();   //on recharge le painter
 }
 
 int Gameboard::pointToPixelX(QPoint point)
@@ -123,44 +145,24 @@ int Gameboard::pointToPixelY(QPoint point)
 
 void Gameboard::setView(QPoint viewPoint)
 {
-    //int viewStartPostionXTemp = viewStartPostionX;
-    //int viewStartPostionYTemp = viewStartPostionY;
-
     int viewStartPostionXTemp = viewStartPostionX+(viewPoint.x()-1)*viewSizeX;
     int viewStartPostionYTemp = viewStartPostionY+(viewPoint.y()-1)*viewSizeY;
-
 
     playerView->setSceneRect(viewStartPostionXTemp,viewStartPostionYTemp,viewSizeX,viewSizeY);
 }
 
 void Gameboard::populateScene()
 {
-
+    int Mat_Walls[60][30];
     QFile f(":/maps/sceneTutorial_v1.txt");
     if(f.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-//        int lines_infile=0;
-
-//
-//        while(!t.atEnd())
-//        {
-//            t.readLine();
-//            lines_infile++;
-//        }
-//        f.resize(0);
-
-//
-
-//        qDebug() << "Total of " << lines_infile;
-
         QTextStream t(&f);
         QString line[1000];
         QString s;
         int line_count=0;
-        int flag = 0;
-        int Walls[60][29];
-        int matX, matY;
 
+        int matX, matY;
 
         while(!t.atEnd())
         {
@@ -168,15 +170,12 @@ void Gameboard::populateScene()
             line[line_count]=t.readLine();
             if(line[line_count].contains("type=Walls"))
             {
-                qDebug() << "Found Layer: " << line[line_count] << " at: " << line_count;
-                flag = 3;
-            }
-            flag--;
-            if(flag == 0){
-
-//                qDebug() << "Flaged: " << line[line_count] << " at: " << line_count;
-                int positionChar = 0;
-                for (matY = 0; matY < 29; matY++)
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+//                qDebug() << "Found Layer: " << line[line_count] << " at: " << line_count;
+                for (matY = 0; matY < 30; matY++)
                 {
                     QStringList values = line[line_count].split(",");
 
@@ -184,17 +183,53 @@ void Gameboard::populateScene()
 //                    qDebug() << "Values: " << values;
                     for (matX = 0; matX < 60; matX++)
                     {
-                        Walls[matX][matY] = values.at(matX).toInt();
+                        Mat_Walls[matX][matY] = values.at(matX).toInt();
 //                        qDebug() << "Value: " << Walls[matX][matY];
                     }
                     line_count++;
                     line[line_count]=t.readLine();
                 }
+            }
+            if(line[line_count].contains("type=Solid_Blocks"))
+            {
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+                for (matY = 0; matY < 30; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
 
+                    for (matX = 0; matX < 60; matX++)
+                    {
+                        Mat_Walls[matX][matY] += values.at(matX).toInt();
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
+            }
+            if(line[line_count].contains("type=NoMoves"))
+            {
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+
+                for (matY = 0; matY < 30; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
+
+                    for (matX = 0; matX < 60; matX++)
+                    {
+                        Mat_Walls[matX][matY] += values.at(matX).toInt();
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
             }
         }
-        qDebug() << "Total of " << line_count;
-        qDebug() << "test of 31x11 " << Walls[59][28];
+//        qDebug() << "Total of " << line_count;
+//        qDebug() << "test of 31x11 " << Walls[58][29]; //max 59x29
         f.resize(0);
         t << s;
         f.close();
@@ -203,16 +238,33 @@ void Gameboard::populateScene()
 
     // Populate scene
     int nitems = 0;
-    for (int i = 1; i < viewSizeX; i += 32) {
+    for (int i = 0; i < 40; i++) {
 
-        for (int j = 1; j < viewSizeY; j += 32) {
-
-            QColor color(Qt::blue);
-            QGraphicsItem *item = new Surfaces();
-            item->setPos(QPointF(i+1, j+1));
-            mainScene->addItem(item);
-            ++nitems;
+        for (int j = 0; j < 15; j++) {
+            if (Mat_Walls[i][j] != 0)
+            {
+//                qDebug() << "I am in, i= " << i << "j= " << j;
+                QGraphicsItem *item = new BlocksWalls;
+                item->setPos(QPointF(i*32+2, j*32+2));
+                mainScene->addItem(item);
+                ++nitems;
+            }
         }
     }
-    qDebug() << nitems;
+//    qDebug() << nitems;
+}
+
+bool Gameboard::canPlayerMove()
+{
+    QList <QGraphicsItem *> test = player->collidingItems();
+    for(int i=0; i<test.length(); i++)
+    {
+        if(typeid(*test.at(i)).name() == typeid(BlocksWalls).name())
+        {
+//            qDebug() << "false";
+            return false;
+
+        }
+    }
+    return true;
 }
