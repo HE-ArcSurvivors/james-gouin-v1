@@ -25,15 +25,9 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     //On crée la scene
     QPixmap loadScene(tutorialLevel);
     mainScene->setBackgroundBrush(loadScene);
-    //mainScene->setSceneRect(viewStartPostionX,viewStartPostionY,viewPositionX,viewPositionX);
 
-    //Ce qui est dessous peut etre utilise si la map est plus grande que la vue
-    //playerView->setHorizontalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
-    //playerView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    //playerView->setFocus();
-    //playerView->setFixedSize(640,480);
     setView(viewRequested);
-    //playerView->setSceneRect(viewStartPostionX,viewStartPostionY,viewSizeX,viewSizeX);
+    populateScene();
 
     //On ajoute le joueur
     player = new Player();
@@ -137,4 +131,22 @@ void Gameboard::setView(QPoint viewPoint)
 
 
     playerView->setSceneRect(viewStartPostionXTemp,viewStartPostionYTemp,viewSizeX,viewSizeY);
+}
+
+void Gameboard::populateScene()
+{
+    // Populate scene
+    int nitems = 0;
+    for (int i = 1; i < viewSizeX; i += 32) {
+
+        for (int j = 1; j < viewSizeY; j += 32) {
+
+            QColor color(Qt::blue);
+            QGraphicsItem *item = new Surfaces();
+            item->setPos(QPointF(i+1, j+1));
+            mainScene->addItem(item);
+            ++nitems;
+        }
+    }
+    qDebug() << nitems;
 }

@@ -25,15 +25,9 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     //On crée la scene
     QPixmap loadScene(tutorialLevel);
     mainScene->setBackgroundBrush(loadScene);
-    //mainScene->setSceneRect(viewStartPostionX,viewStartPostionY,viewPositionX,viewPositionX);
 
-    //Ce qui est dessous peut etre utilise si la map est plus grande que la vue
-    //playerView->setHorizontalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
-    //playerView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    //playerView->setFocus();
-    //playerView->setFixedSize(640,480);
     setView(viewRequested);
-    //playerView->setSceneRect(viewStartPostionX,viewStartPostionY,viewSizeX,viewSizeX);
+    populateScene();
 
     //On ajoute le joueur
     player = new Player();
@@ -137,4 +131,88 @@ void Gameboard::setView(QPoint viewPoint)
 
 
     playerView->setSceneRect(viewStartPostionXTemp,viewStartPostionYTemp,viewSizeX,viewSizeY);
+}
+
+void Gameboard::populateScene()
+{
+
+    QFile f(":/maps/sceneTutorial_v1.txt");
+    if(f.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+//        int lines_infile=0;
+
+//
+//        while(!t.atEnd())
+//        {
+//            t.readLine();
+//            lines_infile++;
+//        }
+//        f.resize(0);
+
+//
+
+//        qDebug() << "Total of " << lines_infile;
+
+        QTextStream t(&f);
+        QString line[1000];
+        QString s;
+        int line_count=0;
+        int flag = 0;
+        int Walls[60][29];
+        int matX, matY;
+
+
+        while(!t.atEnd())
+        {
+            line_count++;
+            line[line_count]=t.readLine();
+            if(line[line_count].contains("type=Walls"))
+            {
+                qDebug() << "Found Layer: " << line[line_count] << " at: " << line_count;
+                flag = 3;
+            }
+            flag--;
+            if(flag == 0){
+
+//                qDebug() << "Flaged: " << line[line_count] << " at: " << line_count;
+                int positionChar = 0;
+                for (matY = 0; matY < 29; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
+
+//                    qDebug() << "Flaged: " << line[line_count] << " at: " << line_count;
+//                    qDebug() << "Values: " << values;
+                    for (matX = 0; matX < 60; matX++)
+                    {
+                        Walls[matX][matY] = values.at(matX).toInt();
+//                        qDebug() << "Value: " << Walls[matX][matY];
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
+
+            }
+        }
+        qDebug() << "Total of " << line_count;
+        qDebug() << "test of 31x11 " << Walls[59][28];
+        f.resize(0);
+        t << s;
+        f.close();
+    }
+
+
+    // Populate scene
+    int nitems = 0;
+    for (int i = 1; i < viewSizeX; i += 32) {
+
+        for (int j = 1; j < viewSizeY; j += 32) {
+
+            QColor color(Qt::blue);
+            QGraphicsItem *item = new Surfaces();
+            item->setPos(QPointF(i+1, j+1));
+            mainScene->addItem(item);
+            ++nitems;
+        }
+    }
+    qDebug() << nitems;
 }

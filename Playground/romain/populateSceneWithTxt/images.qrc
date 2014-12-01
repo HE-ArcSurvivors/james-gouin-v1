@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/James Gouin de Face V1.png</file>
+        <file>images/test_map_tutoriel_3.png</file>
+        <file>images/Pingouin_de_Profil_droite.png</file>
+        <file>images/Pingouin_de_Profil_gauche.png</file>
+        <file>images/sceneTutorial_v1_only_solides.png</file>
+    </qresource>
+</RCC>

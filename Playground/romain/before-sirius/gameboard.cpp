@@ -61,9 +61,9 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
 //    msgBox.exec();
 
 
-qDebug() << event->modifiers() << event->key() << QApplication::keyboardModifiers ();
+//qDebug() << event->modifiers() << event->key() << QApplication::keyboardModifiers ();
 
-    if(event->key() == Qt::Key_Up)
+    if(event->key() == Qt::Key_Up || event->key() == Qt::Key_W)
     {
         // Determiner si le joueur sort de la vue
         if (player->pos().y() > viewStartPostionY)
@@ -72,7 +72,7 @@ qDebug() << event->modifiers() << event->key() << QApplication::keyboardModifier
             player->setPlayerOrientation("up"); //definir l'orientation du joueur
         }
     }
-    if(event->key() == Qt::Key_S)
+    if(event->key() == Qt::Key_Down || event->key() == Qt::Key_S)
     {
         if (player->pos().y() <= viewPositionY-player->getPlayerSizeX()-8)
         {
@@ -80,7 +80,7 @@ qDebug() << event->modifiers() << event->key() << QApplication::keyboardModifier
             player->setPlayerOrientation("down");
         }
     }
-    if(event->key() == Qt::Key_A)
+    if(event->key() == Qt::Key_Left || event->key() == Qt::Key_A)
     {
         if (player->pos().x() > viewStartPostionY)
         {
@@ -88,7 +88,7 @@ qDebug() << event->modifiers() << event->key() << QApplication::keyboardModifier
             player->setPlayerOrientation("left");
         }
     }
-    if(event->key() == Qt::Key_D)
+    if(event->key() == Qt::Key_Right || event->key() == Qt::Key_D)
     {
         if (player->pos().x() < viewPositionX-player->getPlayerSizeY())
         {
