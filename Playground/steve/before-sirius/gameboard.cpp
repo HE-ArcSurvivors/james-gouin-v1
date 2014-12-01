@@ -1,7 +1,9 @@
 #include "gameboard.h"
 #include "pingouin.h"
 #include "neige.h"
+#include "blocdeplacable.h"
 #include <QList>;
+#include <QDebug>;
 
 Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 {
@@ -36,17 +38,20 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 
 
     //surfaces
-    neige *n = new neige(10,10);
+    Neige *n = new Neige(5,5);
+
+    BlocDeplacable *bd = new BlocDeplacable(15,10);
+    BlocDeplacable *bd1 = new BlocDeplacable(5,10);
 
     mainScene->addItem(n);
+    bd->addToScene(mainScene);
+    bd1->addToScene(mainScene);
 
 
     //On ajoute le joueur
     pingouin = new Pingouin(gameSquares);
     pingouin->addToScene(mainScene);
     pingouin->setPos(startingPoint.x(), startingPoint.y());
-
-
 
 
     //On position la vue
@@ -63,8 +68,7 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
 {
     if(event->key() == Qt::Key_W)
     {
-        // Determiner si le joueur sort de la vue
-        if (pingouin->pos().y() > viewStartPostionY)
+        if(MovePingouinToTop())
         {
             pingouin->moveBy(0, -1);
             pingouin->setPlayerOrientation("up"); //definir l'orientation du joueur
@@ -72,7 +76,7 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
     }
     if(event->key() == Qt::Key_S)
     {
-        if (pingouin->pos().y() <= viewPositionY-pingouin->getPlayer()->getPlayerSizeX()-8)
+        if(MovePingouinToBottom())
         {
             pingouin->moveBy(0, 1);
             pingouin->setPlayerOrientation("down");
@@ -80,7 +84,7 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
     }
     if(event->key() == Qt::Key_A)
     {
-        if (pingouin->pos().x() > viewStartPostionY)
+        if(MovePingouinToLeft())
         {
             pingouin->moveBy(-1, 0);
             pingouin->setPlayerOrientation("left");
@@ -88,48 +92,92 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
     }
     if(event->key() == Qt::Key_D)
     {
-        if (pingouin->pos().x() < viewPositionX-pingouin->getPlayer()->getPlayerSizeY())
+        if(MovePingouinToRight())
         {
-
-
-
-            //JUST des essais de collisions ;)
-            QList<QGraphicsItem *> CollidesRight;
-            CollidesRight = pingouin->CollidesRight();
-
-            for(int i=0; i<CollidesRight.length(); i++)
-            {
-                QMessageBox m;
-                m.setText(typeid(*CollidesRight.at(i)).name());
-                m.exec();
-
-                if(typeid(*CollidesRight.at(i)).name() == typeid(neige).name())
-                {
-                    QMessageBox m;
-                    m.setText(QString("Collision détectée entre le bloc de D et neige"));
-                    m.exec();
-                }
-            }
-
-            QList<QGraphicsItem *> CollidesLeft;
-            CollidesLeft = pingouin->CollidesLeft();
-
-            for(int i=0; i<CollidesLeft.length(); i++)
-            {
-                if(typeid(*CollidesLeft.at(i)).name() == typeid(neige).name())
-                {
-                    QMessageBox m;
-                    m.setText(QString("Collision détectée entre le bloc de G et neige"));
-                    m.exec();
-                }
-            }
-
-
-
             pingouin->moveBy(1, 0);
             pingouin->setPlayerOrientation("right");
         }
     }
-    pingouin->getPlayer()->update();   //on recharge le painter
+}
+
+
+bool Gameboard::MovePingouinToLeft()
+{
+    if (pingouin->pos().x() > viewStartPostionY)
+    {
+        return MovePingouin(pingouin->CollidesLeft(), 'l');
+    }
+    else{
+        return false;
+    }
+}
+bool Gameboard::MovePingouinToRight()
+{
+    if (pingouin->pos().x() < viewPositionX-pingouin->getPlayerSizeY())
+    {
+        return MovePingouin(pingouin->CollidesRight(), 'r');
+    }
+    else{
+        return false;
+    }
+}
+bool Gameboard::MovePingouinToTop()
+{
+    // Determiner si le joueur sort de la vue
+    if (pingouin->pos().y() > viewStartPostionY)
+    {
+        return MovePingouin(pingouin->CollidesTop(), 't');
+    }
+    else{
+        return false;
+    }
+}
+bool Gameboard::MovePingouinToBottom()
+{
+    if (pingouin->pos().y() <= viewPositionY-pingouin->getPlayerSizeX()-8)
+    {
+        return MovePingouin(pingouin->CollidesBottom(), 'b');
+    }
+    else{
+        return false;
+    }
+}
+bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDepl)
+{
+    bool bMove = true;
+    for(int i=0; i<CollidingItems.length(); i++)
+    {
+//        QMessageBox m;
+//        m.setText(typeid(*CollidingItems.at(i)).name());
+//        m.exec();
+
+        if(typeid(*CollidingItems.at(i)).name() == typeid(Neige).name())                //SNOW
+        {
+            bMove = false;
+        }
+        else if(typeid(*CollidingItems.at(i)).name() == typeid(BlocDeplacable).name())  //BLOC_DEPL
+        {
+            BlocDeplacable *b;
+            b = dynamic_cast<BlocDeplacable*>(CollidingItems.at(i));
+
+            bMove = true;
+            if(sensDepl == 'l' && b->IsMovableToLeft() && b->pos().x() > viewStartPostionY){
+                b->moveBy(-1,0);
+            }
+            else if(sensDepl == 'r' && b->IsMovableToRight() && b->pos().x() < viewPositionX-b->getWidth()){
+                b->moveBy(1,0);
+            }
+            else if(sensDepl == 't' && b->IsMovableToTop() && b->pos().y() > viewStartPostionY){
+                b->moveBy(0,-1);
+            }
+            else if(sensDepl == 'b' && b->IsMovableToBottom() && b->pos().y() <= viewPositionY-b->getWidth()-8){
+                b->moveBy(0, 1);
+            }
+            else{
+                bMove=false;
+            }
+        }
+    }
+    return bMove;
 }
 

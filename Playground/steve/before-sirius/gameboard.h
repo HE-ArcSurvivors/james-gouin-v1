@@ -34,6 +34,11 @@ private:
     QString windowTitle;
     QPoint startingPoint;
 
+    bool MovePingouinToLeft();
+    bool MovePingouinToRight();
+    bool MovePingouinToTop();
+    bool MovePingouinToBottom();
+    bool MovePingouin(QList<QGraphicsItem *>, char);
 
 protected:
 
