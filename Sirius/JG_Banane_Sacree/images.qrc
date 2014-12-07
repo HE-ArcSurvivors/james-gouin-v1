@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/characters">
+        <file>characters/player_front.png</file>
+        <file>characters/player_left.png</file>
+        <file>characters/player_right.png</file>
+    </qresource>
+    <qresource prefix="/maps">
+        <file>maps/tutorial.png</file>
+    </qresource>
+    <qresource prefix="/population">
+        <file>maps/tutorial.txt</file>
+    </qresource>
+</RCC>
