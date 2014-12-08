@@ -1,0 +1,32 @@
+{
+    "Margaux": {
+        "difficulty": 1,
+        "gameTime": "0000:00:00:00:00:00",
+        "level": 0,
+        "nbLive": 3,
+        "power": "01001010",
+        "saveDate": "04:12:2014:19:22",
+        "startDate": "04:12:2014:19:22",
+        "username": "Margaux"
+    },
+    "Romain": {
+        "difficulty": 1,
+        "gameTime": "0000:00:00:00:00:00",
+        "level": 0,
+        "nbLive": 3,
+        "power": "10001000",
+        "saveDate": "04:12:2014:17:55",
+        "startDate": "04:12:2014:17:55",
+        "username": "Romain"
+    },
+    "Steve": {
+        "difficulty": 1,
+        "gameTime": "0000:00:00:00:00:00",
+        "level": 0,
+        "nbLive": 3,
+        "power": "00000000",
+        "saveDate": "04:12:2014:17:53",
+        "startDate": "04:12:2014:17:53",
+        "username": "Steve"
+    }
+}
