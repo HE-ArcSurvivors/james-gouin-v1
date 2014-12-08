@@ -15,6 +15,9 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     viewStartPostionY = 1;
     viewPositionX = 640;
     viewPositionY = 480;
+    maxBlocksHeigh = 30;
+    maxBlocksWidth = 60;
+    gameSquares = 32;
     startingPoint = QPoint (10,10); // 20x15
     QString sceneToLoad = ":/maps/maps/tutorial.png";
 
@@ -175,8 +178,17 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
 
 void Gameboard::populateScene()
 {
-    int Mat_Walls[60][30];
-    QFile f(":/population/maps/tutorial.txt");
+    int Mat_Walls_Blocks[maxBlocksWidth][maxBlocksHeigh];
+    int Mat_Movable_Blocks[maxBlocksWidth][maxBlocksHeigh];
+    int Mat_Items[maxBlocksWidth][maxBlocksHeigh];
+    int Mat_Bonus[maxBlocksWidth][maxBlocksHeigh];
+    int Mat_Enemies[maxBlocksWidth][maxBlocksHeigh];
+    int Mat_Scene_Start[maxBlocksWidth][maxBlocksHeigh];
+    int Mat_Scene_End[maxBlocksWidth][maxBlocksHeigh];
+    int Mat_Doors[maxBlocksWidth][maxBlocksHeigh];
+    int Mat_Water_Blocks[maxBlocksWidth][maxBlocksHeigh];
+
+    QFile f(":/maps/maps/tutorial.txt");
     if(f.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QTextStream t(&f);
@@ -190,60 +202,220 @@ void Gameboard::populateScene()
         {
             line_count++;
             line[line_count]=t.readLine();
-            if(line[line_count].contains("type=Walls"))
+            if(line[line_count].contains("type=Walls_Blocks"))
             {
                 line_count ++;
                 line[line_count]=t.readLine();
                 line_count ++;
                 line[line_count]=t.readLine();
 //                qDebug() << "Found Layer: " << line[line_count] << " at: " << line_count;
-                for (matY = 0; matY < 30; matY++)
+                for (matY = 0; matY < maxBlocksHeigh; matY++)
                 {
                     QStringList values = line[line_count].split(",");
 
 //                    qDebug() << "Flaged: " << line[line_count] << " at: " << line_count;
 //                    qDebug() << "Values: " << values;
-                    for (matX = 0; matX < 60; matX++)
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
                     {
-                        Mat_Walls[matX][matY] = values.at(matX).toInt();
+                        Mat_Walls_Blocks[matX][matY] = values.at(matX).toInt();
 //                        qDebug() << "Value: " << Walls[matX][matY];
                     }
                     line_count++;
                     line[line_count]=t.readLine();
                 }
             }
+
+            if(line[line_count].contains("type=Water_Blocks"))
+            {
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+                for (matY = 0; matY < maxBlocksHeigh; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
+
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
+                    {
+                        Mat_Water_Blocks[matX][matY] += values.at(matX).toInt();
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
+            }
+
             if(line[line_count].contains("type=Solid_Blocks"))
             {
                 line_count ++;
                 line[line_count]=t.readLine();
                 line_count ++;
                 line[line_count]=t.readLine();
-                for (matY = 0; matY < 30; matY++)
+                for (matY = 0; matY < maxBlocksHeigh; matY++)
                 {
                     QStringList values = line[line_count].split(",");
 
-                    for (matX = 0; matX < 60; matX++)
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
                     {
-                        Mat_Walls[matX][matY] += values.at(matX).toInt();
+                        Mat_Walls_Blocks[matX][matY] += values.at(matX).toInt();
                     }
                     line_count++;
                     line[line_count]=t.readLine();
                 }
             }
-            if(line[line_count].contains("type=NoMoves"))
+
+            if(line[line_count].contains("type=NoMoves_Blocks"))
             {
                 line_count ++;
                 line[line_count]=t.readLine();
                 line_count ++;
                 line[line_count]=t.readLine();
 
-                for (matY = 0; matY < 30; matY++)
+                for (matY = 0; matY < maxBlocksHeigh; matY++)
                 {
                     QStringList values = line[line_count].split(",");
 
-                    for (matX = 0; matX < 60; matX++)
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
                     {
-                        Mat_Walls[matX][matY] += values.at(matX).toInt();
+                        Mat_Walls_Blocks[matX][matY] += values.at(matX).toInt();
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
+            }
+
+            if(line[line_count].contains("type=Movable_Blocks"))
+            {
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+
+                for (matY = 0; matY < maxBlocksHeigh; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
+
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
+                    {
+                        Mat_Movable_Blocks[matX][matY] += values.at(matX).toInt();
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
+            }
+
+            if(line[line_count].contains("type=Items"))
+            {
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+
+                for (matY = 0; matY < maxBlocksHeigh; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
+
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
+                    {
+                        Mat_Items[matX][matY] += values.at(matX).toInt();
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
+            }
+
+            if(line[line_count].contains("type=Bonus"))
+            {
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+
+                for (matY = 0; matY < maxBlocksHeigh; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
+
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
+                    {
+                        Mat_Bonus[matX][matY] += values.at(matX).toInt();
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
+            }
+
+            if(line[line_count].contains("type=Enemies"))
+            {
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+
+                for (matY = 0; matY < maxBlocksHeigh; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
+
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
+                    {
+                        Mat_Enemies[matX][matY] += values.at(matX).toInt();
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
+            }
+
+            if(line[line_count].contains("type=Scene_Start"))
+            {
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+
+                for (matY = 0; matY < maxBlocksHeigh; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
+
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
+                    {
+                        Mat_Scene_Start[matX][matY] += values.at(matX).toInt();
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
+            }
+
+            if(line[line_count].contains("type=Scene_End"))
+            {
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+
+                for (matY = 0; matY < maxBlocksHeigh; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
+
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
+                    {
+                        Mat_Scene_End[matX][matY] += values.at(matX).toInt();
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
+            }
+            if(line[line_count].contains("type=Doors"))
+            {
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+
+                for (matY = 0; matY < maxBlocksHeigh; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
+
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
+                    {
+                        Mat_Doors[matX][matY] += values.at(matX).toInt();
                     }
                     line_count++;
                     line[line_count]=t.readLine();
@@ -257,18 +429,25 @@ void Gameboard::populateScene()
         f.close();
     }
 
+//    int Mat_Walls_Blocks[maxBlocksWidth][maxBlocksHeigh];
+//    int Mat_Movable_Blocks[maxBlocksWidth][maxBlocksHeigh];
+//    int Mat_Items[maxBlocksWidth][maxBlocksHeigh];
+//    int Mat_Bonus[maxBlocksWidth][maxBlocksHeigh];
+//    int Mat_Enemies[maxBlocksWidth][maxBlocksHeigh];
+//    int Mat_Scene_Start[maxBlocksWidth][maxBlocksHeigh];
+//    int Mat_Scene_End[maxBlocksWidth][maxBlocksHeigh];
+//    int Mat_Doors[maxBlocksWidth][maxBlocksHeigh];
+//    int Mat_Water_Blocks[maxBlocksWidth][maxBlocksHeigh];
 
     // Populate scene
     int nitems = 0;
-    for (int i = 0; i < 40; i++) {
+    for (int i = 0; i < maxBlocksHeigh; i++) {
 
-        for (int j = 0; j < 15; j++) {
-            if (Mat_Walls[i][j] != 0)
+        for (int j = 0; j < maxBlocksWidth; j++) {
+            if (Mat_Walls_Blocks[i][j] != 0)
             {
-//STEVE: Il faut debeuger ici: B_Wall() avec item->setPos(QPointF(i*32+2, j*32+2));
-//ou B_Wall(i*32+2,j*32+2) devrait marcher, car la c'est du bricolage :(
 //                qDebug() << "I am in, i= " << i << "j= " << j;
-                QGraphicsItem *item = new B_Wall(000000000,000000000);
+                QGraphicsItem *item = new B_Wall();
 //                QGraphicsItem *item = new B_Wall();
                 item->setPos(QPointF(i*32, j*32));
                 mainScene->addItem(item);

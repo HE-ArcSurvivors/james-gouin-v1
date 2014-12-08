@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/maps">
+        <file>maps/tutorial.txt</file>
+    </qresource>
+</RCC>

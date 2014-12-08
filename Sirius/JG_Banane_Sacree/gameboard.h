@@ -30,9 +30,12 @@ private:
     int windowSizeX;
     int viewStartPostionX;
     int viewStartPostionY;
-    int gameSquares = 32;
+    int gameSquares;
     QString windowTitle;
     QPoint startingPoint;
+
+    int maxBlocksHeigh;
+    int maxBlocksWidth;
 
     bool MovePingouinToLeft();
     bool MovePingouinToRight();

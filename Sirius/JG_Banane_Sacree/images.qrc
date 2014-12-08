@@ -7,7 +7,4 @@
     <qresource prefix="/maps">
         <file>maps/tutorial.png</file>
     </qresource>
-    <qresource prefix="/population">
-        <file>maps/tutorial.txt</file>
-    </qresource>
 </RCC>

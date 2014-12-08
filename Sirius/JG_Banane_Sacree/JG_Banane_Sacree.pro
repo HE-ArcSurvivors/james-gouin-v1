@@ -34,4 +34,5 @@ HEADERS  += \
     p_penguin.h
 
 RESOURCES += \
-    images.qrc
+    images.qrc \
+    ItemsPopulation.qrc
