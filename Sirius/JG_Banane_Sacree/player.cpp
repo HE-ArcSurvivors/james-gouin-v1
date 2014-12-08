@@ -7,17 +7,20 @@
 
 Player::Player()
 {
+    leftSkin = ":/characters/characters/player_left.png";
+    rightSkin = ":/characters/characters/player_right.png";
+    upSkin = ":/characters/characters/player_front.png";
+    downSkin = ":/characters/characters/player_front.png";
     playerOrientation = "down"; //Orientation de depart du joueur
 }
 
 QRectF Player::boundingRect() const
 {
-    return QRectF(0,0,playerSizeX,playerSizeY);
+    return QRectF(0,0,Gameboard::getGameSquares(),Gameboard::getGameSquares());
 }
 
 void Player::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-
     playerSkin = new QBrush();
 
     //Set playerSkin texture depending on player's orientation
@@ -34,23 +37,11 @@ void Player::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         playerSkin->setTexture(QPixmap(downSkin));
     }
 
-
     QRectF playerBox = boundingRect();  //Setting player's box
-
 
     painter->setPen(Qt::transparent);   //Le coutour du joueur
     painter->fillRect(playerBox,*playerSkin);   //charger la couleur
     painter->drawRect(playerBox);   //dessiner le joueur
-}
-
-int Player::getPlayerSizeX()
-{
-    return playerSizeX;
-}
-
-int Player::getPlayerSizeY()
-{
-    return playerSizeY;
 }
 
 void Player::setPlayerOrientation(QString orientation)

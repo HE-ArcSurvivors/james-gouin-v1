@@ -7,6 +7,8 @@
 #include <QDebug>
 #include <typeinfo.h>
 
+int Gameboard::gameSquares = 32;
+
 Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 {
     // Les Variables par default du jeu
@@ -19,7 +21,6 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     viewPositionY = 480;
     maxBlocksHeigh = 30;
     maxBlocksWidth = 60;
-    gameSquares = 32;
     startingPoint = QPoint (10,10); // 20x15
     QString sceneToLoad = ":/maps/maps/tutorial.png";
 
@@ -105,7 +106,7 @@ bool Gameboard::MovePingouinToLeft()
 }
 bool Gameboard::MovePingouinToRight()
 {
-    if (pingouin->pos().x() < viewPositionX-pingouin->getPlayerSizeY())
+    if (pingouin->pos().x() < viewPositionX-Gameboard::getGameSquares())
     {
         return MovePingouin(pingouin->CollidesRight(), 'r');
     }
@@ -126,7 +127,7 @@ bool Gameboard::MovePingouinToTop()
 }
 bool Gameboard::MovePingouinToBottom()
 {
-    if (pingouin->pos().y() <= viewPositionY-pingouin->getPlayerSizeX()-8)
+    if (pingouin->pos().y() <= viewPositionY-Gameboard::getGameSquares()-8)
     {
         return MovePingouin(pingouin->CollidesBottom(), 'b');
     }
@@ -153,13 +154,13 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
             if(sensDepl == 'l' && b->IsMovableToLeft() && b->pos().x() > viewStartPostionY){
                 b->moveBy(-1,0);
             }
-            else if(sensDepl == 'r' && b->IsMovableToRight() && b->pos().x() < viewPositionX-b->getWidth()){
+            else if(sensDepl == 'r' && b->IsMovableToRight() && b->pos().x() < viewPositionX-Gameboard::getGameSquares()){
                 b->moveBy(1,0);
             }
             else if(sensDepl == 't' && b->IsMovableToTop() && b->pos().y() > viewStartPostionY){
                 b->moveBy(0,-1);
             }
-            else if(sensDepl == 'b' && b->IsMovableToBottom() && b->pos().y() <= viewPositionY-b->getWidth()-8){
+            else if(sensDepl == 'b' && b->IsMovableToBottom() && b->pos().y() <= viewPositionY-Gameboard::getGameSquares()-8){
                 b->moveBy(0, 1);
             }
             else{
@@ -494,5 +495,10 @@ void Gameboard::populateScene()
         }
     }
 //    qDebug() << nitems;
+}
+
+int Gameboard::getGameSquares()
+{
+    return gameSquares;
 }
 

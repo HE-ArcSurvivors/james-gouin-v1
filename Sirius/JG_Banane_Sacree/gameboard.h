@@ -18,6 +18,8 @@ public:
     Gameboard(QWidget *parent = 0);
     ~Gameboard();
 
+    static int getGameSquares();
+
 private:
     QGraphicsScene *mainScene;
     QGraphicsScene *preloadedScene;
@@ -30,7 +32,7 @@ private:
     int windowSizeX;
     int viewStartPostionX;
     int viewStartPostionY;
-    int gameSquares;
+    static int gameSquares;
     QString windowTitle;
     QPoint startingPoint;
 
