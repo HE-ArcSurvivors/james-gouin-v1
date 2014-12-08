@@ -29,10 +29,10 @@ void B_Movable::setDesign(int xpos, int ypos)
     int BlocsSizeX = getWidth();
     int gameSquare = getGameSquare();
 
-    leftCollideBox = new QGraphicsRectItem(gameSquare*xpos-gameSquare-BlocsSizeX+1, gameSquare*ypos-gameSquare+1,BlocsSizeX-2, BlocsSizeY-2);
-    rightCollideBox = new QGraphicsRectItem(gameSquare*xpos-gameSquare+BlocsSizeX+1, gameSquare*ypos-gameSquare+1,BlocsSizeX-2, BlocsSizeY-2);
-    bottomCollideBox = new QGraphicsRectItem(gameSquare*xpos-gameSquare+1, gameSquare*ypos-gameSquare+BlocsSizeY+1, BlocsSizeX-2, BlocsSizeY-2);
-    topCollideBox = new QGraphicsRectItem(gameSquare*xpos-gameSquare+1, gameSquare*ypos-gameSquare-BlocsSizeY+1, BlocsSizeX-2, BlocsSizeY-2);
+    leftCollideBox = new QGraphicsRectItem(gameSquare*xpos-BlocsSizeX+1, gameSquare*ypos+1,BlocsSizeX-2, BlocsSizeY-2);
+    rightCollideBox = new QGraphicsRectItem(gameSquare*xpos+BlocsSizeX+1, gameSquare*ypos+1,BlocsSizeX-2, BlocsSizeY-2);
+    bottomCollideBox = new QGraphicsRectItem(gameSquare*xpos+1, gameSquare*ypos+BlocsSizeY+1, BlocsSizeX-2, BlocsSizeY-2);
+    topCollideBox = new QGraphicsRectItem(gameSquare*xpos+1, gameSquare*ypos-BlocsSizeY+1, BlocsSizeX-2, BlocsSizeY-2);
 }
 
 void B_Movable::moveBy(int x, int y)
