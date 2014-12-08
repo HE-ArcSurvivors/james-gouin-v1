@@ -1,10 +1,23 @@
-#include "b_movable.h"
+
 #include <QBrush>
 #include <QDebug>
+#include <QGraphicsRectItem>
+#include <QGraphicsScene>
 
 #include "b_wall.h"
+#include "b_movable.h"
 
-B_Movable::B_Movable(int xpos, int ypos, QGraphicsItem *parent) : Block(xpos, ypos, parent)
+B_Movable::B_Movable(int xpos, int ypos, QGraphicsItem *parent) : Surface(xpos, ypos, parent)
+{
+   setDesign(xpos, ypos);
+}
+
+B_Movable::B_Movable(QGraphicsItem *parent) : Surface(0, 0, parent) //obligé de donner une position fictive
+{
+    setDesign(0, 0);
+}
+
+void B_Movable::setDesign(int xpos, int ypos)
 {
     QBrush brush;
     brush.setStyle(Qt::SolidPattern);

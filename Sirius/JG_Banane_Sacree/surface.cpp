@@ -1,9 +1,9 @@
 #include "surface.h"
 #include <QGraphicsRectItem>
 
-Surface::Surface(int xpos, int ypos, QGraphicsItem *parent) : QGraphicsRectItem(0,0,32,32,parent)
+Surface::Surface(int xpos, int ypos, QGraphicsItem *parent) : QGraphicsRectItem(0, 0, 32, 32, parent) //HEY !?!?!
 {
-    //setRect(xpos*gameSquare-gameSquare, ypos*gameSquare-gameSquare, width, height);
+
     setPos(xpos, ypos);
 }
 

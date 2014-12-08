@@ -4,20 +4,16 @@
 #include <QGraphicsItem>
 #include <QPainter>
 
-class S_ViewTransition : public QGraphicsItem
+#include "surface.h"
+
+class S_ViewTransition : public Surface
 {
 public:
-    S_ViewTransition();
-    QRectF boundingRect() const;    //la box du player
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget); //paint event
-    QBrush *surfaceSkin;
-
-    int getSurfaceSizeX();
-    int getSurfaceSizeY();
+    S_ViewTransition(int xpos, int ypos, QGraphicsItem *parent = 0);
+    S_ViewTransition(QGraphicsItem *parent = 0);
 
 private:
-    int surfaceSizeX = 30;
-    int surfaceSizeY = 30;
+    void setDesign();
 };
 
 #endif // S_VIEWTRANSITION_H

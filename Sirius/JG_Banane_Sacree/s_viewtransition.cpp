@@ -1,32 +1,21 @@
 #include "s_viewtransition.h"
 
-S_ViewTransition::S_ViewTransition()
+#include <QBrush>
+
+S_ViewTransition::S_ViewTransition(int xpos, int ypos, QGraphicsItem *parent) : Surface(xpos, ypos, parent)
 {
+    setDesign();
+}
+S_ViewTransition::S_ViewTransition(QGraphicsItem *parent) : Surface(0, 0, parent)
+{
+    setDesign();
 }
 
-QRectF S_ViewTransition::boundingRect() const
+void S_ViewTransition::setDesign()
 {
-    return QRectF(0,0,surfaceSizeX,surfaceSizeY);
-}
+    QBrush brush;
+    brush.setStyle(Qt::SolidPattern);
+    brush.setColor(Qt::green);
 
-void S_ViewTransition::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-//    surfaceSkin = new QBrush();//Qt::blue);
-    surfaceSkin = new QBrush(Qt::blue);
-
-    QRectF surfaceBox = boundingRect();  //Setting player's box
-
-    painter->setPen(Qt::transparent);   //Le coutour du joueur
-    painter->fillRect(surfaceBox,*surfaceSkin);   //charger la couleur
-    painter->drawRect(surfaceBox);   //dessiner le joueur
-}
-
-int S_ViewTransition::getSurfaceSizeX()
-{
-    return surfaceSizeX;
-}
-
-int S_ViewTransition::getSurfaceSizeY()
-{
-    return surfaceSizeY;
+    setBrush(brush);
 }
