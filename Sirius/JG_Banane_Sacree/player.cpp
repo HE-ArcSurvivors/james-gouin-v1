@@ -8,6 +8,7 @@
 Player::Player()
 {
     playerOrientation = "down"; //Orientation de depart du joueur
+    setZValue(2);
 }
 
 QRectF Player::boundingRect() const

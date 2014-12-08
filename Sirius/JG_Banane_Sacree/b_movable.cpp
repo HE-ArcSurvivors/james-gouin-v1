@@ -4,6 +4,7 @@
 #include <QGraphicsScene>
 #include "b_wall.h"
 #include "b_movable.h"
+#include "b_water.h"
 
 #if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
 #else
@@ -13,11 +14,14 @@
 B_Movable::B_Movable(int xpos, int ypos, QGraphicsItem *parent) : Surface(xpos, ypos, parent)
 {
    setDesign(xpos, ypos);
+   setZValue(1);
 }
 
 B_Movable::B_Movable(QGraphicsItem *parent) : Surface(0, 0, parent) //obligé de donner une position fictive
 {
     setDesign(0, 0);
+    setZValue(1);
+    IsSunk = false;
 }
 
 void B_Movable::setDesign(int xpos, int ypos)
@@ -69,6 +73,16 @@ bool B_Movable::IsMovable(QList<QGraphicsItem *> l)
         }
         if(typeid(*l.at(i)).name() == typeid(B_Movable).name())
         {
+            bMove = false;
+        }
+        if(typeid(*l.at(i)).name() == typeid(B_Water).name() && !this->IsSunk)
+        {
+            this->IsSunk = true;
+//            qDebug() << "on water";
+        }
+        else if(this->IsSunk)
+        {
+//            qDebug() << "blocked on water";
             bMove = false;
         }
     }

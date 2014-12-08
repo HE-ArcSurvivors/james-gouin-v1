@@ -36,6 +36,10 @@ private:
 
     int maxBlocksHeigh;
     int maxBlocksWidth;
+    int transition = 0;
+    QPoint viewRequested;
+    QPoint exit;
+    void setView(QPoint);
 
     bool MovePingouinToLeft();
     bool MovePingouinToRight();
