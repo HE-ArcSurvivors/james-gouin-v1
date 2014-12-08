@@ -1,5 +1,5 @@
 #include "p_penguin.h"
-
+#include "gameboard.h"
 #include <QGraphicsRectItem>
 #include <QPoint>
 #include <QGraphicsScene>
@@ -10,8 +10,8 @@ Pingouin::Pingouin(int gameSquare) : Player()
 {
     this->gameSquare = gameSquare;
 
-    int BlocsSizeX = playerSizeX-2;
-    int BlocsSizeY = playerSizeY-2;
+    int BlocsSizeX = Gameboard::getGameSquares()-2;
+    int BlocsSizeY = Gameboard::getGameSquares()-2;
 
     leftCollideBox = new QGraphicsRectItem(0,0,BlocsSizeX,BlocsSizeY);
     rightCollideBox = new QGraphicsRectItem(0,0,BlocsSizeX,BlocsSizeY);
@@ -26,10 +26,10 @@ void Pingouin::setPos(int x, int y)
 
     Player::setPos(xPos, yPos);
 
-    leftCollideBox->setPos(xPos-playerSizeX+1, yPos+1);
-    rightCollideBox->setPos(xPos+playerSizeX+1, yPos+1);
-    bottomCollideBox->setPos(xPos+1, yPos+playerSizeY+1);
-    topCollideBox->setPos(xPos+1, yPos-playerSizeY+1);
+    leftCollideBox->setPos(xPos-Gameboard::getGameSquares()+1, yPos+1);
+    rightCollideBox->setPos(xPos+Gameboard::getGameSquares()+1, yPos+1);
+    bottomCollideBox->setPos(xPos+1, yPos+Gameboard::getGameSquares()+1);
+    topCollideBox->setPos(xPos+1, yPos-Gameboard::getGameSquares()+1);
 }
 
 void Pingouin::moveBy(int x, int y)

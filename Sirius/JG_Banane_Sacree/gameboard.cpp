@@ -15,6 +15,8 @@
 
 
 
+int Gameboard::gameSquares = 32;
+
 Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 {
     // Les Variables par default du jeu
@@ -117,7 +119,7 @@ bool Gameboard::MovePingouinToLeft()
 }
 bool Gameboard::MovePingouinToRight()
 {
-    if (pingouin->pos().x() < viewPositionX-pingouin->getPlayerSizeY())
+    if (pingouin->pos().x() < viewPositionX-Gameboard::getGameSquares())
     {
         return MovePingouin(pingouin->CollidesRight(), 'r');
     }
@@ -138,7 +140,7 @@ bool Gameboard::MovePingouinToTop()
 }
 bool Gameboard::MovePingouinToBottom()
 {
-    if (pingouin->pos().y() <= viewPositionY-pingouin->getPlayerSizeX()-8)
+    if (pingouin->pos().y() <= viewPositionY-Gameboard::getGameSquares()-8)
     {
         return MovePingouin(pingouin->CollidesBottom(), 'b');
     }
@@ -182,13 +184,13 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
             if(sensDepl == 'l' && b->IsMovableToLeft() && b->pos().x() > viewStartPostionY){
                 b->moveBy(-1,0);
             }
-            else if(sensDepl == 'r' && b->IsMovableToRight() && b->pos().x() < viewPositionX-b->getWidth()){
+            else if(sensDepl == 'r' && b->IsMovableToRight() && b->pos().x() < viewPositionX-Gameboard::getGameSquares()){
                 b->moveBy(1,0);
             }
             else if(sensDepl == 't' && b->IsMovableToTop() && b->pos().y() > viewStartPostionY){
                 b->moveBy(0,-1);
             }
-            else if(sensDepl == 'b' && b->IsMovableToBottom() && b->pos().y() <= viewPositionY-b->getWidth()-8){
+            else if(sensDepl == 'b' && b->IsMovableToBottom() && b->pos().y() <= viewPositionY-Gameboard::getGameSquares()-8){
                 b->moveBy(0, 1);
             }
             else{
@@ -589,10 +591,16 @@ void Gameboard::populateScene()
     }
 }
 
+
 void Gameboard::setView(QPoint viewPoint)
 {
     int viewStartPostionXTemp = viewStartPostionX+(viewPoint.x()-1)*windowSizeX;
     int viewStartPostionYTemp = viewStartPostionY+(viewPoint.y()-1)*windowSizeY;
 
     playerView->setSceneRect(viewStartPostionXTemp,viewStartPostionYTemp,windowSizeX,windowSizeY);
+}
+
+int Gameboard::getGameSquares()
+{
+    return gameSquares;
 }

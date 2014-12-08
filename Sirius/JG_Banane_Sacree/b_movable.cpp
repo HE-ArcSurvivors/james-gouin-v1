@@ -5,6 +5,7 @@
 #include "b_wall.h"
 #include "b_movable.h"
 #include "b_water.h"
+#include "gameboard.h"
 
 #if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
 #else
@@ -32,19 +33,17 @@ void B_Movable::setDesign(int xpos, int ypos)
 
     setBrush(brush);
 
-    int BlocsSizeY = getHeight();
-    int BlocsSizeX = getWidth();
-    int gameSquare = getGameSquare();
+    int size = Gameboard::getGameSquares();
 
-    leftCollideBox = new QGraphicsRectItem(gameSquare*xpos-BlocsSizeX+1, gameSquare*ypos+1,BlocsSizeX-2, BlocsSizeY-2);
-    rightCollideBox = new QGraphicsRectItem(gameSquare*xpos+BlocsSizeX+1, gameSquare*ypos+1,BlocsSizeX-2, BlocsSizeY-2);
-    bottomCollideBox = new QGraphicsRectItem(gameSquare*xpos+1, gameSquare*ypos+BlocsSizeY+1, BlocsSizeX-2, BlocsSizeY-2);
-    topCollideBox = new QGraphicsRectItem(gameSquare*xpos+1, gameSquare*ypos-BlocsSizeY+1, BlocsSizeX-2, BlocsSizeY-2);
+    leftCollideBox = new QGraphicsRectItem(size*xpos-size+1, size*ypos+1,size-2, size-2);
+    rightCollideBox = new QGraphicsRectItem(size*xpos+size+1, size*ypos+1,size-2, size-2);
+    bottomCollideBox = new QGraphicsRectItem(size*xpos+1, size*ypos+size+1, size-2, size-2);
+    topCollideBox = new QGraphicsRectItem(size*xpos+1, size*ypos-size+1, size-2, size-2);
 }
 
 void B_Movable::moveBy(int x, int y)
 {
-    int gameSquare = getGameSquare();
+    int gameSquare = Gameboard::getGameSquares();
 
     QGraphicsRectItem::moveBy(x*gameSquare,y*gameSquare);
     leftCollideBox->moveBy(x*gameSquare,y*gameSquare);
