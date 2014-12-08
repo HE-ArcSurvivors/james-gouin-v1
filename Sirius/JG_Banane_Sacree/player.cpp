@@ -1,5 +1,8 @@
 #include "player.h"
 #include "gameboard.h"
+
+#include <QPainter>
+#include <QGraphicsItem>
 #include <QDebug>
 
 Player::Player()

@@ -3,7 +3,6 @@
 
 Surface::Surface(int xpos, int ypos, QGraphicsItem *parent) : QGraphicsRectItem(0, 0, 32, 32, parent) //HEY !?!?!
 {
-
     setPos(xpos, ypos);
 }
 

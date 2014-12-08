@@ -1,8 +1,8 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <QPainter>
-#include <QGraphicsItem>
+#include "qpainter.h"
+#include "qgraphicsitem.h"
 
 class Player : public QGraphicsItem
 {
