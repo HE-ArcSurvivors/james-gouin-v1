@@ -2,10 +2,14 @@
 #include <QDebug>
 #include <QGraphicsRectItem>
 #include <QGraphicsScene>
-#include <typeinfo.h>
 #include "b_wall.h"
 #include "b_movable.h"
 #include "gameboard.h"
+
+#if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
+#else
+#include <typeinfo.h>
+#endif
 
 B_Movable::B_Movable(int xpos, int ypos, QGraphicsItem *parent) : Surface(xpos, ypos, parent)
 {
