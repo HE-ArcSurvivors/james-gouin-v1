@@ -3,7 +3,6 @@
 
 Surface::Surface(int xpos, int ypos, QGraphicsItem *parent) : QGraphicsRectItem(0, 0, 32, 32, parent) //HEY !?!?!
 {
-
     setPos(xpos, ypos);
 }
 
@@ -11,7 +10,7 @@ Surface::~Surface(){}
 
 void Surface::setPos(int x, int y)
 {
-    QGraphicsRectItem::setPos(x*gameSquare-gameSquare, y*gameSquare-gameSquare);
+    QGraphicsRectItem::setPos(x*gameSquare, y*gameSquare);
 }
 
 int Surface::getWidth(){

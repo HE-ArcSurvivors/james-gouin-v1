@@ -2,6 +2,7 @@
 #include "p_penguin.h"
 #include "b_wall.h"
 #include "b_movable.h"
+#include "b_water.h"
 #include <QList>
 #include <QDebug>
 #include <typeinfo.h>
@@ -35,15 +36,7 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 
     playerView->setHorizontalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
     playerView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    //playerView->setFocus();
     playerView->setSceneRect(viewStartPostionX,viewStartPostionY,viewPositionX,viewPositionX);
-
-//    B_Movable *bd = new B_Movable(15,10);
-//    B_Movable *bd1 = new B_Movable(5,10);
-
-//    bd->addToScene(mainScene);
-//    bd1->addToScene(mainScene);
-
 
     //On ajoute le joueur
     pingouin = new Pingouin(gameSquares);
@@ -147,11 +140,11 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
     for(int i=0; i<CollidingItems.length(); i++)
     {
 
-        if(typeid(*CollidingItems.at(i)).name() == typeid(B_Wall).name())                //SNOW
+        if(typeid(*CollidingItems.at(i)).name() == typeid(B_Wall).name())
         {
             bMove = false;
         }
-        else if(typeid(*CollidingItems.at(i)).name() == typeid(B_Movable).name())  //BLOC_DEPL
+        else if(typeid(*CollidingItems.at(i)).name() == typeid(B_Movable).name())
         {
             B_Movable *b;
             b = dynamic_cast<B_Movable*>(CollidingItems.at(i));
@@ -430,32 +423,76 @@ void Gameboard::populateScene()
         f.close();
     }
 
-//    int Mat_Walls_Blocks[maxBlocksWidth][maxBlocksHeigh];
-//    int Mat_Movable_Blocks[maxBlocksWidth][maxBlocksHeigh];
-//    int Mat_Items[maxBlocksWidth][maxBlocksHeigh];
-//    int Mat_Bonus[maxBlocksWidth][maxBlocksHeigh];
-//    int Mat_Enemies[maxBlocksWidth][maxBlocksHeigh];
-//    int Mat_Scene_Start[maxBlocksWidth][maxBlocksHeigh];
-//    int Mat_Scene_End[maxBlocksWidth][maxBlocksHeigh];
-//    int Mat_Doors[maxBlocksWidth][maxBlocksHeigh];
 //    int Mat_Water_Blocks[maxBlocksWidth][maxBlocksHeigh];
 
     // Populate scene
-    int nitems = 0;
+//    int nitems = 0;
     for (int i = 0; i < maxBlocksHeigh; i++) {
 
         for (int j = 0; j < maxBlocksWidth; j++) {
             if (Mat_Walls_Blocks[i][j] != 0)
             {
-//                qDebug() << "I am in, i= " << i << "j= " << j;
-                QGraphicsItem *item = new B_Wall();
-//                QGraphicsItem *item = new B_Wall();
-                item->setPos(QPointF(i*32, j*32));
+                B_Wall *item = new B_Wall();
+                item->setPos(i,j);
                 mainScene->addItem(item);
-                ++nitems;
+//                ++nitems;
+            }
+            if (Mat_Movable_Blocks[i][j] != 0)
+            {
+                B_Movable *item = new B_Movable(i,j);
+                item->addToScene(mainScene);
+//                ++nitems;
+            }
+//            if (Mat_Items[i][j] != 0)
+//            {
+//                QGraphicsItem *item = new B_Wall();
+//                item->setPos(QPointF(i*gameSquares, j*gameSquares));
+//                mainScene->addItem(item);
+//                ++nitems;
+//            }
+//            if (Mat_Bonus[i][j] != 0)
+//            {
+//                QGraphicsItem *item = new B_Wall();
+//                item->setPos(QPointF(i*gameSquares, j*gameSquares));
+//                mainScene->addItem(item);
+//                ++nitems;
+//            }
+//            if (Mat_Enemies[i][j] != 0)
+//            {
+//                QGraphicsItem *item = new B_Wall();
+//                item->setPos(QPointF(i*gameSquares, j*gameSquares));
+//                mainScene->addItem(item);
+//                ++nitems;
+//            }
+//            if (Mat_Scene_Start[i][j] != 0)
+//            {
+//                QGraphicsItem *item = new B_Wall();
+//                item->setPos(QPointF(i*gameSquares, j*gameSquares));
+//                mainScene->addItem(item);
+//                ++nitems;
+//            }
+//            if (Mat_Scene_End[i][j] != 0)
+//            {
+//                QGraphicsItem *item = new B_Wall();
+//                item->setPos(QPointF(i*gameSquares, j*gameSquares));
+//                mainScene->addItem(item);
+//                ++nitems;
+//            }
+//            if (Mat_Doors[i][j] != 0)
+//            {
+//                QGraphicsItem *item = new B_Wall();
+//                item->setPos(QPointF(i*gameSquares, j*gameSquares));
+//                mainScene->addItem(item);
+//                ++nitems;
+//            }
+            if (Mat_Water_Blocks[i][j] != 0)
+            {
+                B_Water *item = new B_Water();
+                item->setPos(i,j);
+                mainScene->addItem(item);
             }
         }
     }
-    qDebug() << nitems;
+//    qDebug() << nitems;
 }
 
