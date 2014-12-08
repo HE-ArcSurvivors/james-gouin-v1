@@ -13,7 +13,6 @@ TEMPLATE = app
 
 
 SOURCES += \
-    block.cpp \
     player.cpp \
     surface.cpp \
     gameboard.cpp \
@@ -25,7 +24,6 @@ SOURCES += \
     p_penguin.cpp
 
 HEADERS  += \
-    block.h \
     player.h \
     surface.h \
     gameboard.h \
