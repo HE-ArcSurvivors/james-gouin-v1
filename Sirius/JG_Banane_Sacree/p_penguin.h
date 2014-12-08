@@ -15,9 +15,7 @@ private:
     QGraphicsRectItem *bottomCollideBox;
     QGraphicsRectItem *topCollideBox;
 
-    int gameSquare = 32;
-
-//    bool IsMovable(QList<QGraphicsItem *>);
+    int gameSquare;
 
 public:
     Pingouin(int gameSquare);
@@ -26,11 +24,6 @@ public:
     void moveBy(int, int);
 
     void addToScene(QGraphicsScene*);
-
-//    bool IsMovableToLeft();
-//    bool IsMovableToRight();
-//    bool IsMovableToBottom();
-//    bool IsMovableToTop();
 
     QList<QGraphicsItem *> CollidesRight();
     QList<QGraphicsItem *> CollidesLeft();

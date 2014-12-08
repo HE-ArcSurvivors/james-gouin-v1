@@ -3,11 +3,8 @@
 #include <QGraphicsRectItem>
 #include <QPoint>
 #include <QGraphicsScene>
-#include <QBrush>
-#include <QDebug>
 
-//inclusion des surfaces
-//#include "neige.h"
+#include <QDebug>
 
 Pingouin::Pingouin(int gameSquare) : Player()
 {
@@ -52,41 +49,6 @@ void Pingouin::addToScene(QGraphicsScene* Scene)
     Scene->addItem(leftCollideBox);
     Scene->addItem(rightCollideBox);
 }
-
-
-//bool Pingouin::IsMovable(QList<QGraphicsItem *> l)
-//{
-//    bool bMove = true;
-//    for(int i=0; i<l.length(); i++)
-//    {
-//        //QMessageBox m;
-//        //m.setText(typeid(*CollidesRight.at(i)).name());
-//        //m.exec();
-
-//        if(typeid(*l.at(i)).name() == typeid(Neige).name())
-//        {
-//            bMove = false;
-//        }
-//    }
-//    return bMove;
-//}
-
-//bool Pingouin::IsMovableToLeft()
-//{
-//    return IsMovable(leftCollideBox->collidingItems());
-//}
-//bool Pingouin::IsMovableToRight()
-//{
-//    return IsMovable(rightCollideBox->collidingItems());
-//}
-//bool Pingouin::IsMovableToBottom()
-//{
-//    return IsMovable(bottomCollideBox->collidingItems());
-//}
-//bool Pingouin::IsMovableToTop()
-//{
-//    return IsMovable(topCollideBox->collidingItems());
-//}
 
 //Retour des listes des collisions
 QList<QGraphicsItem *> Pingouin::CollidesRight()
