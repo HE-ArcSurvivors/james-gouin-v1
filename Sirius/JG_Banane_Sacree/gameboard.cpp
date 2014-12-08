@@ -34,11 +34,11 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     //playerView->setFocus();
     playerView->setSceneRect(viewStartPostionX,viewStartPostionY,viewPositionX,viewPositionX);
 
-    B_Movable *bd = new B_Movable(15,10);
-    B_Movable *bd1 = new B_Movable(5,10);
+//    B_Movable *bd = new B_Movable(15,10);
+//    B_Movable *bd1 = new B_Movable(5,10);
 
-    bd->addToScene(mainScene);
-    bd1->addToScene(mainScene);
+//    bd->addToScene(mainScene);
+//    bd1->addToScene(mainScene);
 
 
     //On ajoute le joueur
@@ -268,9 +268,9 @@ void Gameboard::populateScene()
 //STEVE: Il faut debeuger ici: B_Wall() avec item->setPos(QPointF(i*32+2, j*32+2));
 //ou B_Wall(i*32+2,j*32+2) devrait marcher, car la c'est du bricolage :(
 //                qDebug() << "I am in, i= " << i << "j= " << j;
-                //QGraphicsItem *item = new B_Wall(i*32+2,j*32+2);
-                QGraphicsItem *item = new B_Wall(0,0);
-                item->setPos(QPointF(i*32+2, j*32+2));
+                QGraphicsItem *item = new B_Wall(000000000,000000000);
+//                QGraphicsItem *item = new B_Wall();
+                item->setPos(QPointF(i*32, j*32));
                 mainScene->addItem(item);
                 ++nitems;
             }
