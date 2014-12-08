@@ -4,6 +4,7 @@
 #include "b_movable.h"
 #include <QList>
 #include <QDebug>
+#include <typeinfo.h>
 
 Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 {

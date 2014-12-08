@@ -1,9 +1,8 @@
-
 #include <QBrush>
 #include <QDebug>
 #include <QGraphicsRectItem>
 #include <QGraphicsScene>
-
+#include <typeinfo.h>
 #include "b_wall.h"
 #include "b_movable.h"
 
