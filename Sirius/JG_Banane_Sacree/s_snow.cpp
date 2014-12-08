@@ -1,5 +1,7 @@
 #include "s_snow.h"
+
 #include <QBrush>
+#include <QGraphicsItem>
 
 S_Snow::S_Snow(int xpos, int ypos, QGraphicsItem *parent) : Surface(xpos, ypos, parent)
 {

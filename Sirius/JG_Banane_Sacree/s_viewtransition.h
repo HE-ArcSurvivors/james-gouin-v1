@@ -1,10 +1,8 @@
 #ifndef S_VIEWTRANSITION_H
 #define S_VIEWTRANSITION_H
 
-#include <QGraphicsItem>
-#include <QPainter>
-
 #include "surface.h"
+#include "qgraphicsitem.h"
 
 class S_ViewTransition : public Surface
 {
