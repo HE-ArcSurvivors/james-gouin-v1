@@ -5,7 +5,13 @@
 #include "b_water.h"
 #include <QList>
 #include <QDebug>
+
+#if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
+#else
 #include <typeinfo.h>
+#endif
+
+
 
 Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 {
