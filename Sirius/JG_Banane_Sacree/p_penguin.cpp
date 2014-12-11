@@ -5,6 +5,7 @@
 #include <QGraphicsScene>
 
 #include <QDebug>
+#include "s_ice.h"
 
 Pingouin::Pingouin(int gameSquare) : Player()
 {
@@ -17,6 +18,11 @@ Pingouin::Pingouin(int gameSquare) : Player()
     rightCollideBox = new QGraphicsRectItem(0,0,BlocsSizeX,BlocsSizeY);
     bottomCollideBox = new QGraphicsRectItem(0,0,BlocsSizeX,BlocsSizeY);
     topCollideBox = new QGraphicsRectItem(0,0,BlocsSizeX,BlocsSizeY);
+
+//    leftCollideBox->setPen(Qt::NoPen);
+//    rightCollideBox->setPen(Qt::NoPen);
+//    bottomCollideBox->setPen(Qt::NoPen);
+//    topCollideBox->setPen(Qt::NoPen);
 
 }
 void Pingouin::setPos(int x, int y)
@@ -48,6 +54,21 @@ void Pingouin::addToScene(QGraphicsScene* Scene)
     Scene->addItem(bottomCollideBox);
     Scene->addItem(leftCollideBox);
     Scene->addItem(rightCollideBox);
+}
+
+bool Pingouin::isSlide()
+{
+    QList<QGraphicsItem *> CollidingItems = this->CollidesCenter();
+    bool slide = false;
+
+    for(int i=0; i<CollidingItems.length(); i++)
+    {
+        if(typeid(*CollidingItems.at(i)).name() == typeid(S_Ice).name())
+        {
+            slide = true;
+        }
+    }
+    return slide;
 }
 
 //Retour des listes des collisions

@@ -17,6 +17,8 @@ private:
 
     int gameSquare;
 
+
+
 public:
     Pingouin(int gameSquare);
 
@@ -24,6 +26,8 @@ public:
     void moveBy(int, int);
 
     void addToScene(QGraphicsScene*);
+
+    bool isSlide();
 
     QList<QGraphicsItem *> CollidesRight();
     QList<QGraphicsItem *> CollidesLeft();

@@ -5,6 +5,7 @@
 #include "b_water.h"
 #include "s_viewtransition.h"
 #include "s_snow.h"
+#include "s_ice.h"
 #include <QList>
 #include <QDebug>
 
@@ -51,10 +52,6 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     playerView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     playerView->setSceneRect(viewStartPostionX,viewStartPostionY,viewPositionX,viewPositionY);
 
-    //On ajoute le joueur
-    pingouin = new Pingouin(gameSquares);
-    pingouin->addToScene(mainScene);
-    pingouin->setPos(startingPoint.x(), startingPoint.y());
 
     populateScene();
 
@@ -62,6 +59,12 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     playerView->setScene(mainScene);
 
     grabKeyboard();
+
+    //On ajoute le joueur
+    pingouin = new Pingouin(gameSquares);
+    pingouin->addToScene(mainScene);
+    pingouin->setPos(startingPoint.x(), startingPoint.y());
+
 
 }
 
@@ -76,7 +79,19 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
     {
         if(MovePingouinToTop())
         {
-            pingouin->moveBy(0, -1);
+            do
+            {
+                pingouin->moveBy(0, -1);
+
+                if(bToDepl != NULL)
+                {
+                    bToDepl->moveBy(0,-1);
+                    bToDepl = NULL;
+                }
+            }
+            while(MovePingouinToTop() && pingouin->isSlide());
+            bToDepl = NULL;
+
             pingouin->setPlayerOrientation("up"); //definir l'orientation du joueur
         }
     }
@@ -84,7 +99,19 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
     {
         if(MovePingouinToBottom())
         {
-            pingouin->moveBy(0, 1);
+            do
+            {
+                pingouin->moveBy(0, 1);
+
+                if(bToDepl != NULL)
+                {
+                    bToDepl->moveBy(0,1);
+                    bToDepl = NULL;
+                }
+            }
+            while(MovePingouinToBottom() && pingouin->isSlide());
+            bToDepl = NULL;
+
             pingouin->setPlayerOrientation("down");
         }
     }
@@ -92,7 +119,20 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
     {
         if(MovePingouinToLeft())
         {
-            pingouin->moveBy(-1, 0);
+
+            do
+            {
+                pingouin->moveBy(-1, 0);
+
+                if(bToDepl != NULL)
+                {
+                    bToDepl->moveBy(-1,0);
+                    bToDepl = NULL;
+                }
+            }
+            while(MovePingouinToLeft() && pingouin->isSlide());
+            bToDepl = NULL;
+
             pingouin->setPlayerOrientation("left");
         }
     }
@@ -100,7 +140,19 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
     {
         if(MovePingouinToRight())
         {
-            pingouin->moveBy(1, 0);
+            do
+            {
+                pingouin->moveBy(1, 0);
+
+                if(bToDepl != NULL)
+                {
+                    bToDepl->moveBy(1,0);
+                    bToDepl = NULL;
+                }
+            }
+            while(MovePingouinToRight() && pingouin->isSlide());
+            bToDepl = NULL;
+
             pingouin->setPlayerOrientation("right");
         }
     }
@@ -179,19 +231,25 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
             B_Movable *b;
             b = dynamic_cast<B_Movable*>(CollidingItems.at(i));
 
-            bMove = true;
-
             if(sensDepl == 'l' && b->IsMovableToLeft() && b->pos().x() > viewStartPostionY){
-                b->moveBy(-1,0);
+                //b->moveBy(-1,0);
+                bToDepl = b;
+                bMove = true;
             }
             else if(sensDepl == 'r' && b->IsMovableToRight() && b->pos().x() < viewPositionX-Gameboard::getGameSquares()){
-                b->moveBy(1,0);
+                //b->moveBy(1,0);
+                bToDepl = b;
+                bMove = true;
             }
             else if(sensDepl == 't' && b->IsMovableToTop() && b->pos().y() > viewStartPostionY){
-                b->moveBy(0,-1);
+                //b->moveBy(0,-1);
+                bToDepl = b;
+                bMove = true;
             }
             else if(sensDepl == 'b' && b->IsMovableToBottom() && b->pos().y() <= viewPositionY-Gameboard::getGameSquares()-8){
-                b->moveBy(0, 1);
+                //b->moveBy(0, 1);
+                bToDepl = b;
+                bMove = true;
             }
             else{
                 bMove=false;

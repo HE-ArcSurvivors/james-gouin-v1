@@ -12,12 +12,13 @@ Player::Player()
     upSkin = ":/characters/characters/player_front.png";
     downSkin = ":/characters/characters/player_front.png";
     playerOrientation = "down"; //Orientation de depart du joueur
+
     setZValue(2);
 }
 
 QRectF Player::boundingRect() const
 {
-    return QRectF(0,0,Gameboard::getGameSquares(),Gameboard::getGameSquares());
+    return QRectF(1,1,Gameboard::getGameSquares()-2,Gameboard::getGameSquares()-2);
 }
 
 void Player::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
