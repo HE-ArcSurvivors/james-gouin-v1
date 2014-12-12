@@ -43,6 +43,8 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     toggleGrabTheWorld = false;
     toggleMenuPause = false;
 
+    bToDepl = NULL;
+
     this->setWindowTitle(windowTitle);
     this->setFixedSize(windowSizeX,windowSizeY);
     this->resize(windowSizeX,windowSizeY);
