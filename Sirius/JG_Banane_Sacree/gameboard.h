@@ -9,6 +9,8 @@
 #include <QKeyEvent>
 #include "p_penguin.h"
 
+#include "b_movable.h"
+
 #include <QMessageBox>
 
 class Gameboard : public QWidget
@@ -48,6 +50,9 @@ private:
     bool MovePingouinToTop();
     bool MovePingouinToBottom();
     bool MovePingouin(QList<QGraphicsItem *>, char);
+
+
+    B_Movable *bToDepl;
 
     void populateScene();
 
