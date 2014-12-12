@@ -1,6 +1,6 @@
 #include "m_pause.h"
 
-M_Pause::M_Pause(QWidget *parent) :
+m_Pause::m_Pause(QWidget *parent) :
     QWidget(parent)
 {
 }

@@ -3,11 +3,11 @@
 
 #include <QWidget>
 
-class M_Pause : public QWidget
+class m_Pause : public QWidget
 {
     Q_OBJECT
 public:
-    explicit M_Pause(QWidget *parent = 0);
+    explicit m_Pause(QWidget *parent = 0);
 
 signals:
 
