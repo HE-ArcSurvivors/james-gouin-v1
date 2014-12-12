@@ -117,8 +117,7 @@ Player* Pingouin::getPlayer(){
      return this;
 }
 
-
-void Pingouin::addObjectToSacoche(QGraphicsItem *object)
+void Pingouin::addObjectToSacoche(Object *object)
 {
     sacoche.append(object);
 }
@@ -127,7 +126,25 @@ void Pingouin::printSacoche()
 {
     qDebug() << "PrintSacoche";
     for (int i = 0; i < sacoche.size(); ++i) {
-        qDebug() << sacoche.at(i);
+        qDebug() << sacoche.at(i)->getName();
     }
 }
+
+Object* Pingouin::getObjectSacoche()
+{
+    return sacoche.at(0);
+}
+
+bool Pingouin::checkObjectSacoche(QString object)
+{
+    for (int i = 0; i < sacoche.size(); ++i)
+    {
+        if (sacoche.at(i)->getName() == object)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 

@@ -19,7 +19,7 @@ private:
 
     int gameSquare;
 
-    QList<QGraphicsItem *> sacoche;
+    QList<Object *> sacoche;
 
 public:
     Pingouin(int gameSquare);
@@ -28,7 +28,9 @@ public:
     void moveBy(int, int);
 
     void addToScene(QGraphicsScene*);
-    void addObjectToSacoche(QGraphicsItem* object);
+    void addObjectToSacoche(Object *object);
+    bool checkObjectSacoche(QString object);
+    Object* getObjectSacoche();
     void printSacoche();
 
     bool isSlide();

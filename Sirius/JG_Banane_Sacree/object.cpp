@@ -32,3 +32,8 @@ void Object::setDesign()
 
     setBrush(*objectSkin);
 }
+
+QString Object::getName()
+{
+    return *nom;
+}

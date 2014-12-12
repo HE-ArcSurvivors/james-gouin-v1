@@ -14,16 +14,10 @@ public:
     Object(int xpos, int ypos, QGraphicsItem *parent);
     Object(QString new_nom, QGraphicsItem *parent = 0);
     void setDesign();
-
-    //void setName(QString name);
-    //void setPos(int x, int y);
-    //QGraphicsPixmapItem *getImage();
-    //QPixmap *getPicture();
-    QBrush *objectSkin;
+    QString getName();
 
 private:
-    //QGraphicsPixmapItem* image;
-    //QPixmap* picture;
+    QBrush* objectSkin;
     QString* nom;
 
 };
