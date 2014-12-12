@@ -22,12 +22,11 @@ SOURCES += \
     s_viewtransition.cpp \
     b_wall.cpp \
     p_penguin.cpp \
-    b_water.cpp \
+ 	b_water.cpp \
     profil.cpp \
     m_menustart.cpp \
-    object.cpp
-
-HEADERS  += \
+    object.cpp \
+	m_pause.cppHEADERS  += \
     player.h \
     surface.h \
     gameboard.h \
@@ -39,8 +38,8 @@ HEADERS  += \
     b_water.h \
     profil.h \
     m_menustart.h \
-    object.h
-
+    object.h \
+ 	m_pause.h
 RESOURCES += \
     images.qrc \
     ItemsPopulation.qrc

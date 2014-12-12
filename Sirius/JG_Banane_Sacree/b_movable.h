@@ -20,6 +20,8 @@ public:
     bool IsMovableToBottom();
     bool IsMovableToTop();
 
+    bool IsSunk;
+
 private:
     QGraphicsRectItem *leftCollideBox;
     QGraphicsRectItem *rightCollideBox;

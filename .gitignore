@@ -162,3 +162,7 @@ Playground/margaux/SaveAndLoad/build-SaveAndLoadBIS-Desktop_Qt_5_3_clang_64bit-D
 Playground/margaux/SaveAndLoad/build-SaveAndLoadBIS-Desktop_Qt_5_3_clang_64bit-Debug/SaveAndLoadBIS.app/Contents/PkgInfo
 Playground/margaux/SaveAndLoad/build-SaveAndLoadBIS-Desktop_Qt_5_3_clang_64bit-Debug/SaveAndLoadBIS.app/Contents/MacOS/SaveAndLoadBIS
 Playground/margaux/SaveAndLoad/build-SaveAndLoadBIS-Desktop_Qt_5_3_clang_64bit-Debug/SaveAndLoadBIS.app/Contents/Resources/empty.lproj
+b_water.o
+moc_m_pause.o
+moc_m_pause.cpp
+m_pause.o
