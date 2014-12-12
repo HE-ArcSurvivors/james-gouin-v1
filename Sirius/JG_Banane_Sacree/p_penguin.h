@@ -1,10 +1,12 @@
 #ifndef P_PINGOUIN_H
 #define P_PINGOUIN_H
 #include "player.h"
+#include "object.h"
+#include <QList>
 
-#include "qgraphicsitem.h"
-#include "qpoint.h"
-#include "qgraphicsscene.h"
+class QGraphicsItem;
+class QPoint;
+class QGraphicsScene;
 
 class Pingouin  : public Player
 {
@@ -17,7 +19,7 @@ private:
 
     int gameSquare;
 
-
+    QList<QGraphicsItem *> sacoche;
 
 public:
     Pingouin(int gameSquare);
@@ -26,6 +28,8 @@ public:
     void moveBy(int, int);
 
     void addToScene(QGraphicsScene*);
+    void addObjectToSacoche(QGraphicsItem* object);
+    void printSacoche();
 
     bool isSlide();
 

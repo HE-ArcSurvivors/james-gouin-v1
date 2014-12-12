@@ -3,9 +3,15 @@
 #include <QGraphicsRectItem>
 #include <QPoint>
 #include <QGraphicsScene>
-
+#include <QList>
 #include <QDebug>
 #include "s_ice.h"
+#include "object.h"
+
+#if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
+#else
+#include <typeinfo.h>
+#endif
 
 Pingouin::Pingouin(int gameSquare) : Player()
 {
@@ -110,3 +116,18 @@ QGraphicsRectItem* Pingouin::getBottomCB(){
 Player* Pingouin::getPlayer(){
      return this;
 }
+
+
+void Pingouin::addObjectToSacoche(QGraphicsItem *object)
+{
+    sacoche.append(object);
+}
+
+void Pingouin::printSacoche()
+{
+    qDebug() << "PrintSacoche";
+    for (int i = 0; i < sacoche.size(); ++i) {
+        qDebug() << sacoche.at(i);
+    }
+}
+

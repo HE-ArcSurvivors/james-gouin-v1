@@ -42,7 +42,7 @@ private:
 
     int maxBlocksHeigh;
     int maxBlocksWidth;
-    int transition = 0;
+    int transition;
     QPoint viewRequested;
     QPoint exit;
     void setView(QPoint);

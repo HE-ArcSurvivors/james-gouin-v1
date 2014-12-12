@@ -68,10 +68,9 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     pingouin->addToScene(mainScene);
     pingouin->setPos(startingPoint.x(), startingPoint.y());
 
-
-//    Object *poisson = new Object("Poisson");
-//    poisson->setPos(8,8);
-//    mainScene->addItem(poisson);
+    Object *poisson = new Object("Poisson");
+    poisson->setPos(8,6);
+    mainScene->addItem(poisson);
 
     populateScene();
 
@@ -222,8 +221,9 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
         }
         if(event->key() == Qt::Key_0)
         {
-            MenuStart* menuStart = new MenuStart();
-            mainScene->addWidget(menuStart);
+            /*MenuStart* menuStart = new MenuStart();
+            mainScene->addWidget(menuStart);*/
+            pingouin->printSacoche();
         }
     }
     if(event->key() == Qt::Key_Escape)
@@ -324,6 +324,16 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
             }
 
         }
+        else if(typeid(*CollidingItems.at(i)).name() == typeid(Object).name())
+        {
+            qDebug() << "Object";
+            qDebug() << typeid(*CollidingItems.at(i)).name();
+
+            //pingouin->addObjectToSacoche(new Object(CollidingItems.at(i)));
+            mainScene->removeItem(CollidingItems.at(i));
+
+        }
+
 //        if (typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
 //        {
 //            transition++;
