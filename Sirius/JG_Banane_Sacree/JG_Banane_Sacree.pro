@@ -26,7 +26,8 @@ SOURCES += \
     profil.cpp \
     m_menustart.cpp \
     object.cpp \
-	m_pause.cppHEADERS  += \
+        m_pause.cpp
+HEADERS  += \
     player.h \
     surface.h \
     gameboard.h \
