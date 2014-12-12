@@ -3,6 +3,8 @@
 #include "b_wall.h"
 #include "b_movable.h"
 #include "b_water.h"
+#include "m_menustart.h"
+#include "object.h"
 #include "s_viewtransition.h"
 #include "s_snow.h"
 #include "s_ice.h"
@@ -16,19 +18,18 @@
 #endif
 
 
-
 int Gameboard::gameSquares = 32;
 
 Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 {
     // Les Variables par default du jeu
     windowTitle = tr("James Gouin et la Banane Sacrée");
-    windowSizeX = 640;
-    windowSizeY = 480;
+    windowSizeX = 20*gameSquares;
+    windowSizeY = 15*gameSquares;
     viewStartPostionX = 1;
     viewStartPostionY = 1;
-    viewPositionX = 640;
-    viewPositionY = 480;
+    viewPositionX = 20*gameSquares;
+    viewPositionY = 15*gameSquares;
     maxBlocksHeigh = 30;
     viewRequested = QPoint (1,1);
     exit = QPoint (20,6);
@@ -39,7 +40,7 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     QString sceneToLoad = ":/maps/maps/tutorial.png";
 
     this->setWindowTitle(windowTitle);
-    //this->setFixedSize(windowSizeX,windowSizeY);
+    this->setFixedSize(windowSizeX,windowSizeY);
     this->resize(windowSizeX,windowSizeY);
 
     mainScene = new QGraphicsScene(this);
@@ -66,6 +67,15 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     pingouin->addToScene(mainScene);
     pingouin->setPos(startingPoint.x(), startingPoint.y());
 
+
+    Object *poisson = new Object("Poisson");
+    poisson->setPos(8,8);
+    mainScene->addItem(poisson);
+
+ populateScene();
+
+    //On position la vue
+    playerView->setScene(mainScene);
 
 }
 
@@ -206,6 +216,11 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
 
             pingouin->setPlayerOrientation("right");
         }
+    }
+    if(event->key() == Qt::Key_0)
+    {
+        MenuStart* menuStart = new MenuStart();
+        mainScene->addWidget(menuStart);
     }
 }
 
