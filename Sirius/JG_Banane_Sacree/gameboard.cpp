@@ -3,6 +3,8 @@
 #include "b_wall.h"
 #include "b_movable.h"
 #include "b_water.h"
+#include "m_menustart.h"
+#include "object.h"
 #include <QList>
 #include <QDebug>
 
@@ -12,26 +14,25 @@
 #endif
 
 
-
 int Gameboard::gameSquares = 32;
 
 Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 {
     // Les Variables par default du jeu
     windowTitle = tr("James Gouin et la Banane Sacrée");
-    windowSizeX = 640;
-    windowSizeY = 480;
+    windowSizeX = 20*gameSquares;
+    windowSizeY = 15*gameSquares;
     viewStartPostionX = 1;
     viewStartPostionY = 1;
-    viewPositionX = 640;
-    viewPositionY = 480;
+    viewPositionX = 20*gameSquares;
+    viewPositionY = 15*gameSquares;
     maxBlocksHeigh = 30;
     maxBlocksWidth = 60;
     startingPoint = QPoint (10,10); // 20x15
     QString sceneToLoad = ":/maps/maps/tutorial.png";
 
     this->setWindowTitle(windowTitle);
-    //this->setFixedSize(windowSizeX,windowSizeY);
+    this->setFixedSize(windowSizeX,windowSizeY);
     this->resize(windowSizeX,windowSizeY);
 
     mainScene = new QGraphicsScene(this);
@@ -43,15 +44,18 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 
     playerView->setHorizontalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
     playerView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    playerView->setSceneRect(viewStartPostionX,viewStartPostionY,viewPositionX,viewPositionX);
+    playerView->setSceneRect(viewStartPostionX,viewStartPostionY,viewPositionX,viewPositionY);
 
     //On ajoute le joueur
     pingouin = new Pingouin(gameSquares);
     pingouin->addToScene(mainScene);
     pingouin->setPos(startingPoint.x(), startingPoint.y());
 
-    populateScene();
+    Object *poisson = new Object("Poisson");
+    poisson->setPos(8,8);
+    mainScene->addItem(poisson);
 
+    populateScene();
 
     //On position la vue
     playerView->setScene(mainScene);
@@ -96,6 +100,11 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
             pingouin->moveBy(1, 0);
             pingouin->setPlayerOrientation("right");
         }
+    }
+    if(event->key() == Qt::Key_0)
+    {
+        MenuStart* menuStart = new MenuStart();
+        mainScene->addWidget(menuStart);
     }
 }
 

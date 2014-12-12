@@ -22,7 +22,10 @@ SOURCES += \
     s_viewtransition.cpp \
     b_wall.cpp \
     p_penguin.cpp \
-    b_water.cpp
+    b_water.cpp \
+    profil.cpp \
+    m_menustart.cpp \
+    object.cpp
 
 HEADERS  += \
     player.h \
@@ -33,7 +36,10 @@ HEADERS  += \
     s_viewtransition.h \
     s_snow.h \
     p_penguin.h \
-    b_water.h
+    b_water.h \
+    profil.h \
+    m_menustart.h \
+    object.h
 
 RESOURCES += \
     images.qrc \
