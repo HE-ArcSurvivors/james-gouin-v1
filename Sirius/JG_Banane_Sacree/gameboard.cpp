@@ -38,6 +38,10 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     transition = 0;
     startingPoint = QPoint (10,10); // 20x15
     QString sceneToLoad = ":/maps/maps/tutorial.png";
+    menuPauseSizeX = 400;
+    menuPauseSizeY = 400;
+    toggleGrabTheWorld = false;
+    toggleMenuPause = false;
 
     this->setWindowTitle(windowTitle);
     this->setFixedSize(windowSizeX,windowSizeY);
@@ -54,9 +58,6 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     playerView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     playerView->setSceneRect(viewStartPostionX,viewStartPostionY,viewPositionX,viewPositionY);
 
-
-    populateScene();
-
     //On position la vue
     playerView->setScene(mainScene);
 
@@ -68,11 +69,11 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     pingouin->setPos(startingPoint.x(), startingPoint.y());
 
 
-    Object *poisson = new Object("Poisson");
-    poisson->setPos(8,8);
-    mainScene->addItem(poisson);
+//    Object *poisson = new Object("Poisson");
+//    poisson->setPos(8,8);
+//    mainScene->addItem(poisson);
 
- populateScene();
+    populateScene();
 
     //On position la vue
     playerView->setScene(mainScene);
@@ -132,95 +133,103 @@ void Gameboard::ChangeView()
 //http://doc.qt.digia.com/4.6/qt.html#Key-enum
 void Gameboard::keyPressEvent(QKeyEvent *event)
 {
-    if(event->key() == Qt::Key_W || event->key() == Qt::Key_Up)
+    if(!toggleMenuPause)
     {
-        if(MovePingouinToTop())
+        if(event->key() == Qt::Key_W || event->key() == Qt::Key_Up)
         {
-            do
+            if(MovePingouinToTop())
             {
-                pingouin->moveBy(0, -1);
-
-                if(bToDepl != NULL)
+                do
                 {
-                    bToDepl->moveBy(0,-1);
-                    SinkMovable(bToDepl);
-                    bToDepl = NULL;
-                }
-            }
-            while(MovePingouinToTop() && pingouin->isSlide());
-            bToDepl = NULL;
+                    pingouin->moveBy(0, -1);
 
-            pingouin->setPlayerOrientation("up"); //definir l'orientation du joueur
+                    if(bToDepl != NULL)
+                    {
+                        bToDepl->moveBy(0,-1);
+                        SinkMovable(bToDepl);
+                        bToDepl = NULL;
+                    }
+                }
+                while(MovePingouinToTop() && pingouin->isSlide());
+                bToDepl = NULL;
+
+                pingouin->setPlayerOrientation("up"); //definir l'orientation du joueur
+            }
+        }
+        if(event->key() == Qt::Key_S || event->key() == Qt::Key_Down)
+        {
+            if(MovePingouinToBottom())
+            {
+                do
+                {
+                    pingouin->moveBy(0, 1);
+
+                    if(bToDepl != NULL)
+                    {
+                        bToDepl->moveBy(0,1);
+                        SinkMovable(bToDepl);
+                        bToDepl = NULL;
+                    }
+                }
+                while(MovePingouinToBottom() && pingouin->isSlide());
+                bToDepl = NULL;
+
+                pingouin->setPlayerOrientation("down");
+            }
+        }
+        if(event->key() == Qt::Key_A || event->key() == Qt::Key_Left)
+        {
+            if(MovePingouinToLeft())
+            {
+
+                do
+                {
+                    pingouin->moveBy(-1, 0);
+
+                    if(bToDepl != NULL)
+                    {
+                        bToDepl->moveBy(-1,0);
+                        SinkMovable(bToDepl);
+                        bToDepl = NULL;
+                    }
+                }
+                while(MovePingouinToLeft() && pingouin->isSlide());
+                bToDepl = NULL;
+
+                pingouin->setPlayerOrientation("left");
+            }
+        }
+        if(event->key() == Qt::Key_D || event->key() == Qt::Key_Right)
+        {
+            if(MovePingouinToRight())
+            {
+                do
+                {
+                    pingouin->moveBy(1, 0);
+
+                    if(bToDepl != NULL)
+                    {
+                        bToDepl->moveBy(1,0);
+                        SinkMovable(bToDepl);
+                        bToDepl = NULL;
+                    }
+                }
+                while(MovePingouinToRight() && pingouin->isSlide());
+                bToDepl = NULL;
+
+                pingouin->setPlayerOrientation("right");
+            }
+        }
+        if(event->key() == Qt::Key_0)
+        {
+            MenuStart* menuStart = new MenuStart();
+            mainScene->addWidget(menuStart);
         }
     }
-    if(event->key() == Qt::Key_S || event->key() == Qt::Key_Down)
+    if(event->key() == Qt::Key_Escape)
     {
-        if(MovePingouinToBottom())
-        {
-            do
-            {
-                pingouin->moveBy(0, 1);
-
-                if(bToDepl != NULL)
-                {
-                    bToDepl->moveBy(0,1);
-                    SinkMovable(bToDepl);
-                    bToDepl = NULL;
-                }
-            }
-            while(MovePingouinToBottom() && pingouin->isSlide());
-            bToDepl = NULL;
-
-            pingouin->setPlayerOrientation("down");
-        }
-    }
-    if(event->key() == Qt::Key_A || event->key() == Qt::Key_Left)
-    {
-        if(MovePingouinToLeft())
-        {
-
-            do
-            {
-                pingouin->moveBy(-1, 0);
-
-                if(bToDepl != NULL)
-                {
-                    bToDepl->moveBy(-1,0);
-                    SinkMovable(bToDepl);
-                    bToDepl = NULL;
-                }
-            }
-            while(MovePingouinToLeft() && pingouin->isSlide());
-            bToDepl = NULL;
-
-            pingouin->setPlayerOrientation("left");
-        }
-    }
-    if(event->key() == Qt::Key_D || event->key() == Qt::Key_Right)
-    {
-        if(MovePingouinToRight())
-        {
-            do
-            {
-                pingouin->moveBy(1, 0);
-
-                if(bToDepl != NULL)
-                {
-                    bToDepl->moveBy(1,0);
-                    SinkMovable(bToDepl);
-                    bToDepl = NULL;
-                }
-            }
-            while(MovePingouinToRight() && pingouin->isSlide());
-            bToDepl = NULL;
-
-            pingouin->setPlayerOrientation("right");
-        }
-    }
-    if(event->key() == Qt::Key_0)
-    {
-        MenuStart* menuStart = new MenuStart();
-        mainScene->addWidget(menuStart);
+        //        qDebug()<<"Escape Menu";
+        pauseMenu();
     }
 }
 
@@ -286,7 +295,7 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
         }
         else if(typeid(*CollidingItems.at(i)).name() == typeid(B_Movable).name())
         {
-            qDebug() << "bloc moves";
+//            qDebug() << "bloc moves";
             B_Movable *b;
             b = dynamic_cast<B_Movable*>(CollidingItems.at(i));
 
@@ -720,4 +729,94 @@ void Gameboard::setView(QPoint viewPoint)
 int Gameboard::getGameSquares()
 {
     return gameSquares;
+}
+
+void Gameboard::pauseMenu()
+{
+    toggleMenuPause = !toggleMenuPause;
+    grabTheWorld();
+    if(toggleMenuPause)
+    {
+        layoutMenuPause = new QFormLayout;
+        groupBoxMenuPause = new QGroupBox;
+        titleMenuPause = new QLabel(tr("Menu PAUSE"));
+        titleMenuPause->setAlignment(Qt::AlignCenter);
+        titleMenuPause->setStyleSheet("margin-left: auto; margin-right : auto; color: blue; font: bold 20px;");
+        groupBoxMenuPause->setStyleSheet("text-align: center; color: blue; background-color: lightblue;");
+        groupBoxMenuPause->setGeometry(viewStartPostionX+windowSizeX/2-menuPauseSizeX/2,viewStartPostionY+windowSizeY/2-menuPauseSizeY/2,menuPauseSizeX,menuPauseSizeY);
+        layoutMenuPause->addRow(titleMenuPause);
+        btnMenuPauseResume = new QPushButton(tr("Resume"));
+        btnMenuPauseConfigure = new QPushButton(tr("Configure"));
+        btnMenuPauseQuit = new QPushButton(tr("Quit"));
+        connect(btnMenuPauseQuit, SIGNAL(clicked()),this, SLOT(close()));
+        connect(btnMenuPauseResume, SIGNAL(clicked()),this, SLOT(resumeGame()));
+        layoutMenuPause->addRow(btnMenuPauseResume);
+        layoutMenuPause->addRow(btnMenuPauseConfigure);
+        layoutMenuPause->addRow(btnMenuPauseQuit);
+        groupBoxMenuPause->setLayout(layoutMenuPause);
+        menuPauseOnTop = mainScene->addWidget(groupBoxMenuPause);
+//        menuPauseOnTop = mainScene->addWidget(M_Pause);
+
+    }else{
+
+    }
+
+}
+
+void Gameboard::grabTheWorld()
+{
+    toggleGrabTheWorld = !toggleGrabTheWorld;
+
+    if(toggleGrabTheWorld)
+    {
+        QList<QGraphicsItem *> items = mainScene->items();
+
+        foreach( QGraphicsItem *item, items )
+        {
+            if(typeid(*item).name() == typeid(S_Snow).name())
+            {
+                item->setZValue(-1);
+            }
+            if(typeid(*item).name() == typeid(B_Movable).name())
+            {
+                item->setZValue(0);
+            }
+            if(typeid(*item).name() == typeid(Pingouin).name())
+            {
+                item->setZValue(0);
+            }
+//            if(typeid(*item).name() == typeid(Object).name())
+//            {
+//                item->setZValue(0);
+//            }
+        }
+    }else{
+        QList<QGraphicsItem *> items = mainScene->items();
+
+        foreach( QGraphicsItem *item, items )
+        {
+            if(typeid(*item).name() == typeid(S_Snow).name())
+            {
+                item->setZValue(0);
+            }
+            if(typeid(*item).name() == typeid(B_Movable).name())
+            {
+                item->setZValue(1);
+            }
+            if(typeid(*item).name() == typeid(Pingouin).name())
+            {
+                item->setZValue(2);
+            }
+//            if(typeid(*item).name() == typeid(Object).name())
+//            {
+//                item->setZValue(2);
+//            }
+        }
+    }
+
+}
+
+void Gameboard::resumeGame()
+{
+    pauseMenu();
 }

@@ -8,10 +8,12 @@
 #include <QPixmap>
 #include <QKeyEvent>
 #include "p_penguin.h"
-
+#include <QFormLayout>
 #include "b_movable.h"
-
+#include <QGroupBox>
 #include <QMessageBox>
+#include <QLabel>
+#include <QPushButton>
 
 class Gameboard : public QWidget
 {
@@ -59,12 +61,34 @@ private:
 
     void populateScene();
 
+    void pauseMenu();
+
+    int menuPauseSizeX;
+    int menuPauseSizeY;
+
+    bool toggleGrabTheWorld;
+    bool toggleMenuPause;
+
+    void grabTheWorld();
+
+    QGraphicsProxyWidget *menuPauseOnTop;
+
+    QFormLayout *layoutMenuPause;
+    QGroupBox *groupBoxMenuPause;
+    QLabel *titleMenuPause;
+
+    QPushButton *btnMenuPauseResume;
+    QPushButton *btnMenuPauseConfigure;
+    QPushButton *btnMenuPauseQuit;
+
 protected:
 
 
 signals:
 
 public slots:
+    void resumeGame();
+
 
 };
 
