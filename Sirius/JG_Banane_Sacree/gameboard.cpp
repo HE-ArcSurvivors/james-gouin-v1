@@ -8,6 +8,7 @@
 #include "s_ice.h"
 #include <QList>
 #include <QDebug>
+#include <QGraphicsItemGroup>
 
 #if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
 #else
@@ -71,7 +72,53 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 Gameboard::~Gameboard(){
 
 }
+void Gameboard::SinkMovable(B_Movable *b)
+{
+    QList<QGraphicsItem *> CollidingItems = b->CollidesCenter();
 
+    for(int i=0; i<CollidingItems.length(); i++)
+    {
+        if(typeid(*CollidingItems.at(i)).name() == typeid(B_Water).name())
+        {
+            //SINK IT !
+            QPoint p = b->getPos();
+            qDebug() << "Sink it ! : " << p.x() << " " << p.y();
+
+            b->removeFromScene(mainScene);
+            mainScene->removeItem(CollidingItems.at(i));
+
+            S_Snow *sunk = new S_Snow(p.x(),p.y());
+            mainScene->addItem(sunk);
+        }
+    }
+
+}
+
+void Gameboard::ChangeView()
+{
+    QList<QGraphicsItem *> CollidingItems = pingouin->CollidesCenter();
+
+    for(int i=0; i<CollidingItems.length(); i++)
+    {
+        if(typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
+        {
+            //CHANGE VIEW !
+
+            qDebug() << "Change view !";
+
+            transition++;
+            if (transition == 2)
+            {
+                viewRequested.setX(viewRequested.x()+1);
+                setView(viewRequested);
+
+                viewPositionX += windowSizeX;
+                viewStartPostionX += windowSizeX;
+                transition = 0;
+            }
+        }
+    }
+}
 //http://doc.qt.digia.com/4.6/qt.html#Key-enum
 void Gameboard::keyPressEvent(QKeyEvent *event)
 {
@@ -86,6 +133,7 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
                 if(bToDepl != NULL)
                 {
                     bToDepl->moveBy(0,-1);
+                    SinkMovable(bToDepl);
                     bToDepl = NULL;
                 }
             }
@@ -106,6 +154,7 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
                 if(bToDepl != NULL)
                 {
                     bToDepl->moveBy(0,1);
+                    SinkMovable(bToDepl);
                     bToDepl = NULL;
                 }
             }
@@ -127,6 +176,7 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
                 if(bToDepl != NULL)
                 {
                     bToDepl->moveBy(-1,0);
+                    SinkMovable(bToDepl);
                     bToDepl = NULL;
                 }
             }
@@ -147,6 +197,7 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
                 if(bToDepl != NULL)
                 {
                     bToDepl->moveBy(1,0);
+                    SinkMovable(bToDepl);
                     bToDepl = NULL;
                 }
             }
@@ -166,6 +217,7 @@ bool Gameboard::MovePingouinToLeft()
         return MovePingouin(pingouin->CollidesLeft(), 'l');
     }
     else{
+        ChangeView();
         return false;
     }
 }
@@ -176,6 +228,7 @@ bool Gameboard::MovePingouinToRight()
         return MovePingouin(pingouin->CollidesRight(), 'r');
     }
     else{
+        ChangeView();
         return false;
     }
 }
@@ -187,6 +240,7 @@ bool Gameboard::MovePingouinToTop()
         return MovePingouin(pingouin->CollidesTop(), 't');
     }
     else{
+        ChangeView();
         return false;
     }
 }
@@ -197,32 +251,22 @@ bool Gameboard::MovePingouinToBottom()
         return MovePingouin(pingouin->CollidesBottom(), 'b');
     }
     else{
+        ChangeView();
         return false;
     }
 }
 bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDepl)
 {
-    bool water_toggeled = false;
-    bool movable_toggled = false;
     bool bMove = true;
     for(int i=0; i<CollidingItems.length(); i++)
     {
 
-        if(movable_toggled)
-        {
-            if(typeid(*CollidingItems.at(i)).name() == typeid(B_Water).name())
-            {
-                bMove = true;
-                qDebug() << "water + movable";
-            }
-        }
-        else if(typeid(*CollidingItems.at(i)).name() == typeid(B_Wall).name())
+        if(typeid(*CollidingItems.at(i)).name() == typeid(B_Wall).name())
         {
             bMove = false;
         }
         else if(typeid(*CollidingItems.at(i)).name() == typeid(B_Water).name())
         {
-            water_toggeled = true;
             bMove = false;
         }
         else if(typeid(*CollidingItems.at(i)).name() == typeid(B_Movable).name())
@@ -254,7 +298,7 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
             else{
                 bMove=false;
             }
-            movable_toggled = true;
+
         }
 //        if (typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
 //        {
@@ -621,12 +665,12 @@ void Gameboard::populateScene()
 //                item->setPos(QPointF(i*gameSquares, j*gameSquares));
 //                mainScene->addItem(item);
 //            }
-//            if (Mat_Doors[i][j] != 0)
-//            {
-//                S_ViewTransition *item = new S_ViewTransition();
-//                item->setPos(i,j);
-//                mainScene->addItem(item);
-//            }
+            if (Mat_Doors[i][j] != 0)
+            {
+                S_ViewTransition *item = new S_ViewTransition();
+                item->setPos(i,j);
+                mainScene->addItem(item);
+            }
             if (Mat_Water_Blocks[i][j] != 0)
             {
                 B_Water *item = new B_Water();

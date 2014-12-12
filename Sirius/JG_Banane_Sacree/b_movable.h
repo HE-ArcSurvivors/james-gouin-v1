@@ -4,6 +4,7 @@
 
 #include "qgraphicsitem.h"
 #include "qgraphicsscene.h"
+#include "qlist.h"
 
 class B_Movable : public Surface
 {
@@ -12,15 +13,17 @@ public:
     B_Movable(QGraphicsItem *parent = 0);
 
     void addToScene(QGraphicsScene*);
+    void removeFromScene(QGraphicsScene*);
 
     void moveBy(int, int);
+    void setPos(int, int);
 
     bool IsMovableToLeft();
     bool IsMovableToRight();
     bool IsMovableToBottom();
     bool IsMovableToTop();
 
-    bool IsSunk;
+    QList<QGraphicsItem *> CollidesCenter();
 
 private:
     QGraphicsRectItem *leftCollideBox;
