@@ -23,7 +23,8 @@ SOURCES += \
     b_wall.cpp \
     p_penguin.cpp \
     b_water.cpp \
-    m_pause.cpp
+    m_pause.cpp \
+    s_ice.cpp
 
 HEADERS  += \
     player.h \
@@ -35,7 +36,8 @@ HEADERS  += \
     s_snow.h \
     p_penguin.h \
     b_water.h \
-    m_pause.h
+    m_pause.h \
+    s_ice.h
 
 RESOURCES += \
     images.qrc \
