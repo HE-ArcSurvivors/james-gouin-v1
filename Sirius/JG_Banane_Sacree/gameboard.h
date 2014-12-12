@@ -51,6 +51,9 @@ private:
     bool MovePingouinToBottom();
     bool MovePingouin(QList<QGraphicsItem *>, char);
 
+    void SinkMovable(B_Movable *b);
+    void ChangeView();
+
 
     B_Movable *bToDepl;
 

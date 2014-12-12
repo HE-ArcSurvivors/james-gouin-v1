@@ -19,10 +19,10 @@ Pingouin::Pingouin(int gameSquare) : Player()
     bottomCollideBox = new QGraphicsRectItem(0,0,BlocsSizeX,BlocsSizeY);
     topCollideBox = new QGraphicsRectItem(0,0,BlocsSizeX,BlocsSizeY);
 
-//    leftCollideBox->setPen(Qt::NoPen);
-//    rightCollideBox->setPen(Qt::NoPen);
-//    bottomCollideBox->setPen(Qt::NoPen);
-//    topCollideBox->setPen(Qt::NoPen);
+    leftCollideBox->setPen(Qt::NoPen);
+    rightCollideBox->setPen(Qt::NoPen);
+    bottomCollideBox->setPen(Qt::NoPen);
+    topCollideBox->setPen(Qt::NoPen);
 
 }
 void Pingouin::setPos(int x, int y)
