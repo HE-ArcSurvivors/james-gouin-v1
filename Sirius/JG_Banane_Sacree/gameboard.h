@@ -14,6 +14,7 @@
 #include <QMessageBox>
 #include <QLabel>
 #include <QPushButton>
+#include "m_pause.h"
 
 class Gameboard : public QWidget
 {
@@ -80,6 +81,8 @@ private:
     QPushButton *btnMenuPauseResume;
     QPushButton *btnMenuPauseConfigure;
     QPushButton *btnMenuPauseQuit;
+
+    M_Pause *menuPauseTest;
 
 protected:
 
