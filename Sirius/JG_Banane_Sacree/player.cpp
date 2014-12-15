@@ -9,7 +9,7 @@ Player::Player()
 {
     leftSkin = ":/characters/characters/player_left.png";
     rightSkin = ":/characters/characters/player_right.png";
-    upSkin = ":/characters/characters/player_front.png";
+    upSkin = ":/characters/characters/player_back.png";
     downSkin = ":/characters/characters/player_front.png";
     playerOrientation = "down"; //Orientation de depart du joueur
 

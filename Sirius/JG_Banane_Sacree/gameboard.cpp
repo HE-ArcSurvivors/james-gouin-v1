@@ -19,7 +19,6 @@
 #include <typeinfo.h>
 #endif
 
-
 int Gameboard::gameSquares = 32;
 
 Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
@@ -45,6 +44,8 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     toggleGrabTheWorld = false;
     toggleMenuPause = false;
 
+    bToDepl = NULL;
+
     this->setWindowTitle(windowTitle);
     this->setFixedSize(windowSizeX,windowSizeY);
     this->resize(windowSizeX,windowSizeY);
@@ -69,11 +70,6 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     pingouin = new Pingouin(gameSquares);
     pingouin->addToScene(mainScene);
     pingouin->setPos(startingPoint.x(), startingPoint.y());
-
-
-//    Object *poisson = new Object("Poisson");
-//    poisson->setPos(8,8);
-//    mainScene->addItem(poisson);
 
     populateScene();
 
@@ -225,13 +221,15 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
         }
         if(event->key() == Qt::Key_0)
         {
-            MenuStart* menuStart = new MenuStart();
-            mainScene->addWidget(menuStart);
+            /*MenuStart* menuStart = new MenuStart();
+            mainScene->addWidget(menuStart);*/
+
+            pingouin->printSacoche();
         }
     }
     if(event->key() == Qt::Key_Escape)
     {
-        //        qDebug()<<"Escape Menu";
+        //qDebug()<<"Escape Menu";
         pauseMenu();
     }
 }
@@ -325,8 +323,26 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
             else{
                 bMove=false;
             }
-
         }
+        else if(typeid(*CollidingItems.at(i)).name() == typeid(Object).name())
+        {
+            Object *objet = dynamic_cast<Object*>(CollidingItems.at(i));
+
+            pingouin->addObjectToSacoche(new Object(objet->getName()));
+            mainScene->removeItem(CollidingItems.at(i));
+        }
+        else if(typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
+        {
+            if(pingouin->checkObjectSacoche("Poisson"))
+            {
+                qDebug() << "OK";
+            }
+            else
+            {
+                qDebug() << "Pas encore de poisson !";
+            }
+        }
+
 //        if (typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
 //        {
 //            transition++;
@@ -662,18 +678,18 @@ void Gameboard::populateScene()
                 B_Movable *item = new B_Movable(i,j);
                 item->addToScene(mainScene);
             }
-//            if (Mat_Items[i][j] != 0)
-//            {
-//                QGraphicsItem *item = new B_Wall();
-//                item->setPos(QPointF(i*gameSquares, j*gameSquares));
-//                mainScene->addItem(item);
-//            }
-//            if (Mat_Bonus[i][j] != 0)
-//            {
-//                QGraphicsItem *item = new B_Wall();
-//                item->setPos(QPointF(i*gameSquares, j*gameSquares));
-//                mainScene->addItem(item);
-//            }
+            if (Mat_Items[i][j] != 0)
+            {
+                Object *item = new Object("Poisson");
+                item->setPos(i, j);
+                mainScene->addItem(item);
+            }
+            if (Mat_Bonus[i][j] != 0)
+            {
+                Object *item = new Object("Oeuf");
+                item->setPos(i, j);
+                mainScene->addItem(item);
+            }
 //            if (Mat_Enemies[i][j] != 0)
 //            {
 //                QGraphicsItem *item = new B_Wall();

@@ -5,6 +5,7 @@
         <file>characters/player_right.png</file>
         <file>characters/baleine.png</file>
         <file>characters/oeuf.png</file>
+        <file>characters/player_back.png</file>
     </qresource>
     <qresource prefix="/maps">
         <file>maps/tutorial.png</file>
