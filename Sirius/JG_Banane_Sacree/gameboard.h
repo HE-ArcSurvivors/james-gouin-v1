@@ -83,7 +83,7 @@ private:
     QPushButton *btnMenuPauseConfigure;
     QPushButton *btnMenuPauseQuit;
 
-    M_Pause *menuPauseTest;
+    M_Pause *menuPauseInGame;
 
     QGraphicsProxyWidget *proxy;
 
@@ -95,7 +95,7 @@ signals:
 public slots:
     void resumeGame();
 
-
+    void exitGame();
 };
 
 #endif // GAMEBOARD_H

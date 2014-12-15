@@ -31,6 +31,8 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     viewStartPostionY = 1;
     viewPositionX = 20*gameSquares;
     viewPositionY = 15*gameSquares;
+//    viewPositionX = 60*gameSquares;
+//    viewPositionY = 30*gameSquares;
     maxBlocksHeigh = 30;
     viewRequested = QPoint (1,1);
     exit = QPoint (20,6);
@@ -76,10 +78,9 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     //On position la vue
     playerView->setScene(mainScene);
 
-    menuPauseTest = new M_Pause();
-    menuPauseTest->setGeometry(viewStartPostionX+windowSizeX/2-menuPauseSizeX/2,viewStartPostionY+windowSizeY/2-menuPauseSizeY/2,menuPauseSizeX,menuPauseSizeY);
-    proxy = mainScene->addWidget(menuPauseTest);
-//    mainScene.addItem(proxy);
+    menuPauseInGame = new M_Pause(this);
+    menuPauseInGame->setGeometry(viewStartPostionX+windowSizeX/2-menuPauseSizeX/2,viewStartPostionY+windowSizeY/2-menuPauseSizeY/2,menuPauseSizeX,menuPauseSizeY);
+    proxy = mainScene->addWidget(menuPauseInGame);
     proxy->hide();
 }
 
@@ -667,9 +668,9 @@ void Gameboard::populateScene()
     }
 
     // Populate scene
-    for (int i = 0; i < maxBlocksHeigh; i++) {
+    for (int i = 0; i < maxBlocksWidth; i++) {
 
-        for (int j = 0; j < maxBlocksWidth; j++) {
+        for (int j = 0; j < maxBlocksHeigh; j++) {
             if (Mat_Walls_Blocks[i][j] != 0)
             {
                 B_Wall *item = new B_Wall();
@@ -822,4 +823,30 @@ void Gameboard::grabTheWorld()
 void Gameboard::resumeGame()
 {
     pauseMenu();
+}
+
+void Gameboard::exitGame()
+{
+    QMessageBox msgBox;
+    msgBox.setText(tr("Vous êtes sur le point de quitter le jeu"));
+    msgBox.setInformativeText("Voulez vous sauvegarder ?");
+    msgBox.addButton("Ne pas Sauvegarder", QMessageBox::DestructiveRole);
+    msgBox.addButton("Annuler", QMessageBox::RejectRole);
+    msgBox.addButton("Sauvegarder", QMessageBox::AcceptRole);
+
+    int ret = msgBox.exec();
+    switch (ret) {
+    case QMessageBox::AcceptRole:
+        close();
+        break;
+    case QMessageBox::RejectRole:
+
+        break;
+    case QMessageBox::DestructiveRole:
+        close();
+        break;
+    default:
+        // should never be reached
+        break;
+    }
 }

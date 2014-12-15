@@ -4,7 +4,6 @@
 #include <QWidget>
 #include <QLabel>
 #include <QPushButton>
-#include <QGroupBox>
 #include <QFormLayout>
 
 
@@ -13,11 +12,10 @@ class M_Pause : public QWidget
 {
     Q_OBJECT
 public:
-    M_Pause();
+    M_Pause(QWidget *parent);
 
 private:
     QFormLayout *layoutMenuPause;
-    QGroupBox *groupBoxMenuPause;
     QLabel *titleMenuPause;
 
     QPushButton *btnMenuPauseResume;
