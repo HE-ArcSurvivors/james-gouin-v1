@@ -47,7 +47,7 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     bToDepl = NULL;
 
     this->setWindowTitle(windowTitle);
-    this->setFixedSize(windowSizeX,windowSizeY);
+//    this->setFixedSize(windowSizeX,windowSizeY);
     this->resize(windowSizeX,windowSizeY);
 
     mainScene = new QGraphicsScene(this);
@@ -76,8 +76,11 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     //On position la vue
     playerView->setScene(mainScene);
 
-    menuPauseTest = new M_Pause(this, viewStartPostionX, viewStartPostionY, windowSizeX, windowSizeY, menuPauseSizeX, menuPauseSizeY);
-
+    menuPauseTest = new M_Pause();
+    menuPauseTest->setGeometry(viewStartPostionX+windowSizeX/2-menuPauseSizeX/2,viewStartPostionY+windowSizeY/2-menuPauseSizeY/2,menuPauseSizeX,menuPauseSizeY);
+    proxy = mainScene->addWidget(menuPauseTest);
+//    mainScene.addItem(proxy);
+    proxy->hide();
 }
 
 Gameboard::~Gameboard(){
@@ -756,10 +759,9 @@ void Gameboard::pauseMenu()
     grabTheWorld();
     if(toggleMenuPause)
     {
-//        topWidget = QApplication:topLevelAt(yourWidget->mapToGlobal(QPoint()));
-//        menuPauseOnTop = QApplication:topLevelAt(mainScene->addWidget(menuPauseTest));
+        proxy->show();
     }else{
-
+        proxy->hide();
     }
 
 }
@@ -786,10 +788,10 @@ void Gameboard::grabTheWorld()
             {
                 item->setZValue(0);
             }
-//            if(typeid(*item).name() == typeid(Object).name())
-//            {
-//                item->setZValue(0);
-//            }
+            if(typeid(*item).name() == typeid(Object).name())
+            {
+                item->setZValue(0);
+            }
         }
     }else{
         QList<QGraphicsItem *> items = mainScene->items();
@@ -808,10 +810,10 @@ void Gameboard::grabTheWorld()
             {
                 item->setZValue(2);
             }
-//            if(typeid(*item).name() == typeid(Object).name())
-//            {
-//                item->setZValue(2);
-//            }
+            if(typeid(*item).name() == typeid(Object).name())
+            {
+                item->setZValue(2);
+            }
         }
     }
 

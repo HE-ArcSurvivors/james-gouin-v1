@@ -15,6 +15,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include "m_pause.h"
+#include <QGraphicsProxyWidget>
 
 class Gameboard : public QWidget
 {
@@ -83,6 +84,8 @@ private:
     QPushButton *btnMenuPauseQuit;
 
     M_Pause *menuPauseTest;
+
+    QGraphicsProxyWidget *proxy;
 
 protected:
 
