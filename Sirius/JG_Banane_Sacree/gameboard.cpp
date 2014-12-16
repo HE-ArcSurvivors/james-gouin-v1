@@ -12,7 +12,7 @@
 #include <QList>
 #include <QDebug>
 #include <QGraphicsItemGroup>
-#include <QGraphicsView>
+#include <QApplication>#include <QGraphicsView>
 #include <QKeyEvent>
 #include <QFile>
 #include <QFormLayout>
@@ -38,10 +38,9 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     viewStartPostionY = 1;
     viewPositionX = 20*gameSquares;
     viewPositionY = 15*gameSquares;
-    maxBlocksHeight = 30;
+	maxBlocksHeight = 30;
     maxBlocksWidth = 60;
-    viewRequested = QPoint(1,1);
-    exit = QPoint (20,6);
+    viewRequested = QPoint(1,1);    exit = QPoint (20,6);
 
     gameSquares = 32;
     transition = 0;
@@ -56,7 +55,7 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     checkpoint = new QPoint();
 
     this->setWindowTitle(windowTitle);
-    this->setFixedSize(windowSizeX,windowSizeY);
+//    this->setFixedSize(windowSizeX,windowSizeY);
     this->resize(windowSizeX,windowSizeY);
 
     mainScene = new QGraphicsScene(this);
@@ -84,6 +83,10 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 
     //On position la vue
     playerView->setScene(mainScene);
+    menuPauseInGame = new M_Pause(this);
+    menuPauseInGame->setGeometry(viewStartPostionX+windowSizeX/2-menuPauseSizeX/2,viewStartPostionY+windowSizeY/2-menuPauseSizeY/2,menuPauseSizeX,menuPauseSizeY);
+    proxy = mainScene->addWidget(menuPauseInGame);
+    proxy->hide();
 }
 
 Gameboard::~Gameboard(){
@@ -269,8 +272,7 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
         {
             if(MovePingouinToLeft())
             {
-                pingouin->setPlayerOrientation("left");
-                do
+				pingouin->setPlayerOrientation("left");                do
                 {
                     pingouin->moveBy(-1, 0);
                     if(!CheckGameOver())
@@ -729,8 +731,7 @@ void Gameboard::populateScene()
     // Populate scene
     for (int i = 0; i < maxBlocksWidth; i++) {
 
-        for (int j = 0; j < maxBlocksHeight; j++) {
-            if (Mat_Walls_Blocks[i][j] != 0)
+        for (int j = 0; j < maxBlocksWidth; j++) {for (int j = 0; j < maxBlocksHeight; j++) {            if (Mat_Walls_Blocks[i][j] != 0)
             {
                 B_Wall *item = new B_Wall();
                 item->setPos(i,j);
@@ -819,28 +820,9 @@ void Gameboard::pauseMenu()
     grabTheWorld();
     if(toggleMenuPause)
     {
-        layoutMenuPause = new QFormLayout;
-        groupBoxMenuPause = new QGroupBox;
-        titleMenuPause = new QLabel(tr("Menu PAUSE"));
-        titleMenuPause->setAlignment(Qt::AlignCenter);
-        titleMenuPause->setStyleSheet("margin-left: auto; margin-right : auto; color: blue; font: bold 20px;");
-        groupBoxMenuPause->setStyleSheet("text-align: center; color: blue; background-color: lightblue;");
-        groupBoxMenuPause->setGeometry(viewStartPostionX+windowSizeX/2-menuPauseSizeX/2,viewStartPostionY+windowSizeY/2-menuPauseSizeY/2,menuPauseSizeX,menuPauseSizeY);
-        layoutMenuPause->addRow(titleMenuPause);
-        btnMenuPauseResume = new QPushButton(tr("Resume"));
-        btnMenuPauseConfigure = new QPushButton(tr("Configure"));
-        btnMenuPauseQuit = new QPushButton(tr("Quit"));
-        connect(btnMenuPauseQuit, SIGNAL(clicked()),this, SLOT(close()));
-        connect(btnMenuPauseResume, SIGNAL(clicked()),this, SLOT(resumeGame()));
-        layoutMenuPause->addRow(btnMenuPauseResume);
-        layoutMenuPause->addRow(btnMenuPauseConfigure);
-        layoutMenuPause->addRow(btnMenuPauseQuit);
-        groupBoxMenuPause->setLayout(layoutMenuPause);
-        menuPauseOnTop = mainScene->addWidget(groupBoxMenuPause);
-//        menuPauseOnTop = mainScene->addWidget(M_Pause);
-
+        proxy->show();
     }else{
-
+        proxy->hide();
     }
 
 }
@@ -889,10 +871,10 @@ void Gameboard::grabTheWorld()
             {
                 item->setZValue(2);
             }
-//            if(typeid(*item).name() == typeid(Object).name())
-//            {
-//                item->setZValue(2);
-//            }
+            if(typeid(*item).name() == typeid(Object).name())
+            {
+                item->setZValue(2);
+            }
         }
     }
 
@@ -902,7 +884,31 @@ void Gameboard::resumeGame()
 {
     pauseMenu();
 }
+void Gameboard::exitGame()
+{
+    QMessageBox msgBox;
+    msgBox.setText(tr("Vous êtes sur le point de quitter le jeu"));
+    msgBox.setInformativeText("Voulez vous sauvegarder ?");
+    msgBox.addButton("Ne pas Sauvegarder", QMessageBox::DestructiveRole);
+    msgBox.addButton("Annuler", QMessageBox::RejectRole);
+    msgBox.addButton("Sauvegarder", QMessageBox::AcceptRole);
 
+    int ret = msgBox.exec();
+    switch (ret) {
+    case QMessageBox::AcceptRole:
+        close();
+        break;
+    case QMessageBox::RejectRole:
+
+        break;
+    case QMessageBox::DestructiveRole:
+        close();
+        break;
+    default:
+        // should never be reached
+        break;
+    }
+}
 
 QPoint* Gameboard::getCheckPoint()
 {
@@ -921,3 +927,4 @@ void Gameboard::loadCheckpoint()
     pingouin->setPos((checkpoint->x()+gameSquares)/gameSquares,(checkpoint->y()+gameSquares)/gameSquares);
     qDebug() << "LOAD CHECKPOINT" << (checkpoint->x()+gameSquares)/gameSquares << " " << (checkpoint->y()+gameSquares)/gameSquares;
 }
+

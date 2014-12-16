@@ -4,6 +4,8 @@
 #include <QWidget>
 #include "p_penguin.h"
 #include "b_movable.h"
+#include "m_pause.h"
+#include <QGraphicsProxyWidget>
 
 class QGraphicsScene;
 class QGraphicsView;
@@ -89,7 +91,9 @@ private:
     void saveCheckpoint();
     void loadCheckpoint();
 
-protected:
+	M_Pause *menuPauseInGame;
+
+    QGraphicsProxyWidget *proxy;protected:
 
 
 signals:
@@ -97,7 +101,7 @@ signals:
 public slots:
     void resumeGame();
 
-
+    void exitGame();
 };
 
 #endif // GAMEBOARD_H

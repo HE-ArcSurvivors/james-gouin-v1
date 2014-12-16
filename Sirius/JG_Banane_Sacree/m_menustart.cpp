@@ -15,6 +15,7 @@
 #include <QLineEdit>
 #include <QHBoxLayout>
 #include <QDir>
+#include "m_pause.h"
 
 MenuStart::MenuStart(QWidget *parent) :
     QWidget(parent)
