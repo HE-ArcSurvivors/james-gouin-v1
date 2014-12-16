@@ -12,7 +12,8 @@
 #include <QList>
 #include <QDebug>
 #include <QGraphicsItemGroup>
-#include <QApplication>#include <QGraphicsView>
+#include <QApplication>
+#include <QGraphicsView>
 #include <QKeyEvent>
 #include <QFile>
 #include <QFormLayout>
@@ -20,6 +21,8 @@
 #include <QLabel>
 #include <QPoint>
 #include <QPushButton>
+#include <QMessageBox>
+
 
 #if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
 #else
@@ -798,6 +801,7 @@ void Gameboard::populateScene()
             }
         }
     }
+}
 }
 
 void Gameboard::setView(QPoint viewPoint)
