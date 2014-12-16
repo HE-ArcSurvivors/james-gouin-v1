@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/maps">
         <file>maps/tutorial.txt</file>
+        <file>maps/sceneTutorial_v3.txt</file>
     </qresource>
 </RCC>

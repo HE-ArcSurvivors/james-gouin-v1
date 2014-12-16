@@ -146,5 +146,3 @@ bool Pingouin::checkObjectSacoche(QString object)
     }
     return false;
 }
-
-

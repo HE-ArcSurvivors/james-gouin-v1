@@ -50,3 +50,13 @@ void Player::setPlayerOrientation(QString orientation)
 {
     playerOrientation = orientation;
 }
+
+QString Player::getPlayerOrientation()
+{
+    return playerOrientation;
+}
+
+QPoint* Player::getPos()
+{
+    return new QPoint(xPos, yPos);
+}

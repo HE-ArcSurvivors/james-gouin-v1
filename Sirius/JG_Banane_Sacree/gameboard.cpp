@@ -8,9 +8,18 @@
 #include "s_viewtransition.h"
 #include "s_snow.h"
 #include "s_ice.h"
+
 #include <QList>
 #include <QDebug>
 #include <QGraphicsItemGroup>
+#include <QGraphicsView>
+#include <QKeyEvent>
+#include <QFile>
+#include <QFormLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QPoint>
+#include <QPushButton>
 
 #if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
 #else
@@ -29,13 +38,14 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     viewStartPostionY = 1;
     viewPositionX = 20*gameSquares;
     viewPositionY = 15*gameSquares;
-    maxBlocksHeigh = 30;
-    viewRequested = QPoint (1,1);
-    exit = QPoint (20,6);
+    maxBlocksHeight = 30;
     maxBlocksWidth = 60;
+    viewRequested = QPoint(1,1);
+    exit = QPoint (20,6);
+
     gameSquares = 32;
     transition = 0;
-    startingPoint = QPoint (10,10); // 20x15
+    startingPoint = QPoint(20,6); // 20x15
     QString sceneToLoad = ":/maps/maps/tutorial.png";
     menuPauseSizeX = 400;
     menuPauseSizeY = 400;
@@ -43,6 +53,7 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     toggleMenuPause = false;
 
     bToDepl = NULL;
+    checkpoint = new QPoint();
 
     this->setWindowTitle(windowTitle);
     this->setFixedSize(windowSizeX,windowSizeY);
@@ -61,7 +72,6 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 
     //On position la vue
     playerView->setScene(mainScene);
-
     grabKeyboard();
 
     //On ajoute le joueur
@@ -69,20 +79,20 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     pingouin->addToScene(mainScene);
     pingouin->setPos(startingPoint.x(), startingPoint.y());
 
+    saveCheckpoint();
     populateScene();
 
     //On position la vue
     playerView->setScene(mainScene);
-
 }
 
 Gameboard::~Gameboard(){
 
 }
+
 void Gameboard::SinkMovable(B_Movable *b)
 {
     QList<QGraphicsItem *> CollidingItems = b->CollidesCenter();
-
     for(int i=0; i<CollidingItems.length(); i++)
     {
         if(typeid(*CollidingItems.at(i)).name() == typeid(B_Water).name())
@@ -98,34 +108,106 @@ void Gameboard::SinkMovable(B_Movable *b)
             mainScene->addItem(sunk);
         }
     }
-
 }
 
-void Gameboard::ChangeView()
+bool Gameboard::CheckGameOver()
 {
     QList<QGraphicsItem *> CollidingItems = pingouin->CollidesCenter();
 
     for(int i=0; i<CollidingItems.length(); i++)
     {
-        if(typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
+        if(typeid(*CollidingItems.at(i)).name() == typeid(B_Water).name())
         {
-            //CHANGE VIEW !
+            pingouin->setPlayerOrientation("down");
+            loadCheckpoint();
+            return true;
+        }
+    }
+    return false;
+}
 
-            qDebug() << "Change view !";
+void Gameboard::CheckItem()
+{
+    QList<QGraphicsItem *> CollidingItems = pingouin->CollidesCenter();
 
-            transition++;
-            if (transition == 2)
-            {
-                viewRequested.setX(viewRequested.x()+1);
-                setView(viewRequested);
+    for(int i=0; i<CollidingItems.length(); i++)
+    {
+        if(typeid(*CollidingItems.at(i)).name() == typeid(Object).name())
+        {
+            Object *objet = dynamic_cast<Object*>(CollidingItems.at(i));
 
-                viewPositionX += windowSizeX;
-                viewStartPostionX += windowSizeX;
-                transition = 0;
-            }
+            pingouin->addObjectToSacoche(new Object(objet->getName()));
+            mainScene->removeItem(CollidingItems.at(i));
         }
     }
 }
+
+void Gameboard::CheckChangeView(QKeyEvent *event)
+{
+    QList<QGraphicsItem *> CollidingItems = pingouin->CollidesCenter();
+    for(int i=0; i<CollidingItems.length(); i++)
+    {
+        if(typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
+        {
+            if(pingouin->checkObjectSacoche("Poisson"))
+            {
+                qDebug() << "OK";
+                qDebug() << pingouin->x() << " " << pingouin->y();
+                checkpoint->setX(pingouin->x());
+                checkpoint->setY(pingouin->y());
+                qDebug() << "Nouveau Checkpoint : " << checkpoint->x() << " " << checkpoint->y();
+            }
+            else
+            {
+                qDebug() << "Pas encore de poisson !";
+            }
+
+            qDebug() << pingouin->x() << " " << pingouin->y();
+            saveCheckpoint();
+
+            qDebug() << "ViewRequested : " << viewRequested.x() << " " << viewRequested.y();
+
+            if(event->key() == Qt::Key_W || event->key() == Qt::Key_Up)
+            {
+                if(!CheckGameOver())
+                {
+                    qDebug() << "Up";
+                    this-> checkpoint->setY(checkpoint->y()-gameSquares);
+                    viewRequested.setY(viewRequested.y()-1);
+                }
+            }
+            if(event->key() == Qt::Key_S || event->key() == Qt::Key_Down)
+            {
+                qDebug() << "Down";
+                this->checkpoint->setY(checkpoint->y()+gameSquares);
+                viewRequested.setY(viewRequested.y()+1);
+            }
+            if(event->key() == Qt::Key_A || event->key() == Qt::Key_Left)
+            {
+                qDebug() << "Left";
+                this->checkpoint->setX(checkpoint->x()-gameSquares);
+                viewRequested.setX(viewRequested.x()-1);
+            }
+            if(event->key() == Qt::Key_D || event->key() == Qt::Key_Right)
+            {
+                qDebug() << "Right";
+
+                this->checkpoint->setX(checkpoint->x()+gameSquares);
+                viewRequested.setX(viewRequested.x()+1);
+            }
+
+            qDebug() << "ViewRequested : " << viewRequested.x() << " " << viewRequested.y();
+            loadCheckpoint();
+            setView(viewRequested);
+
+            viewPositionX += windowSizeX;
+            viewStartPostionX += windowSizeX;
+            transition = 0;
+        }
+    }
+}
+
+
 //http://doc.qt.digia.com/4.6/qt.html#Key-enum
 void Gameboard::keyPressEvent(QKeyEvent *event)
 {
@@ -135,85 +217,102 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
         {
             if(MovePingouinToTop())
             {
+                pingouin->setPlayerOrientation("up");
+
                 do
                 {
                     pingouin->moveBy(0, -1);
-
-                    if(bToDepl != NULL)
+                    if(!CheckGameOver())
                     {
-                        bToDepl->moveBy(0,-1);
-                        SinkMovable(bToDepl);
-                        bToDepl = NULL;
+                        CheckItem();
+                        CheckChangeView(event);
+
+                        if(bToDepl != NULL)
+                        {
+                            bToDepl->moveBy(0,-1);
+                            SinkMovable(bToDepl);
+                            bToDepl = NULL;
+                        }
                     }
                 }
                 while(MovePingouinToTop() && pingouin->isSlide());
                 bToDepl = NULL;
-
-                pingouin->setPlayerOrientation("up"); //definir l'orientation du joueur
             }
         }
         if(event->key() == Qt::Key_S || event->key() == Qt::Key_Down)
         {
             if(MovePingouinToBottom())
             {
+                pingouin->setPlayerOrientation("down");
+
                 do
                 {
                     pingouin->moveBy(0, 1);
-
-                    if(bToDepl != NULL)
+                    if(!CheckGameOver())
                     {
-                        bToDepl->moveBy(0,1);
-                        SinkMovable(bToDepl);
-                        bToDepl = NULL;
+                        CheckItem();
+                        CheckChangeView(event);
+
+                        if(bToDepl != NULL)
+                        {
+                            bToDepl->moveBy(0,1);
+                            SinkMovable(bToDepl);
+                            bToDepl = NULL;
+                        }
                     }
                 }
                 while(MovePingouinToBottom() && pingouin->isSlide());
                 bToDepl = NULL;
-
-                pingouin->setPlayerOrientation("down");
             }
         }
         if(event->key() == Qt::Key_A || event->key() == Qt::Key_Left)
         {
             if(MovePingouinToLeft())
             {
-
+                pingouin->setPlayerOrientation("left");
                 do
                 {
                     pingouin->moveBy(-1, 0);
-
-                    if(bToDepl != NULL)
+                    if(!CheckGameOver())
                     {
-                        bToDepl->moveBy(-1,0);
-                        SinkMovable(bToDepl);
-                        bToDepl = NULL;
+                        CheckItem();
+                        CheckChangeView(event);
+
+                        if(bToDepl != NULL)
+                        {
+                            bToDepl->moveBy(-1,0);
+                            SinkMovable(bToDepl);
+                            bToDepl = NULL;
+                        }
                     }
                 }
                 while(MovePingouinToLeft() && pingouin->isSlide());
                 bToDepl = NULL;
-
-                pingouin->setPlayerOrientation("left");
             }
         }
         if(event->key() == Qt::Key_D || event->key() == Qt::Key_Right)
         {
             if(MovePingouinToRight())
             {
+                pingouin->setPlayerOrientation("right");
                 do
                 {
                     pingouin->moveBy(1, 0);
-
-                    if(bToDepl != NULL)
+                    if(!CheckGameOver())
                     {
-                        bToDepl->moveBy(1,0);
-                        SinkMovable(bToDepl);
-                        bToDepl = NULL;
+                        CheckItem();
+                        CheckChangeView(event);
+
+                        if(bToDepl != NULL)
+                        {
+                            bToDepl->moveBy(1,0);
+                            SinkMovable(bToDepl);
+                            bToDepl = NULL;
+                        }
                     }
                 }
                 while(MovePingouinToRight() && pingouin->isSlide());
                 bToDepl = NULL;
-
-                pingouin->setPlayerOrientation("right");
             }
         }
         if(event->key() == Qt::Key_0)
@@ -231,65 +330,38 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
     }
 }
 
-
 bool Gameboard::MovePingouinToLeft()
 {
-    if (pingouin->pos().x() > viewStartPostionY)
-    {
-        return MovePingouin(pingouin->CollidesLeft(), 'l');
-    }
-    else{
-        ChangeView();
-        return false;
-    }
+    return MovePingouin(pingouin->CollidesLeft(), 'l');
 }
+
 bool Gameboard::MovePingouinToRight()
 {
-    if (pingouin->pos().x() < viewPositionX-Gameboard::getGameSquares())
-    {
-        return MovePingouin(pingouin->CollidesRight(), 'r');
-    }
-    else{
-        ChangeView();
-        return false;
-    }
+    return MovePingouin(pingouin->CollidesRight(), 'r');
 }
+
 bool Gameboard::MovePingouinToTop()
 {
-    // Determiner si le joueur sort de la vue
-    if (pingouin->pos().y() > viewStartPostionY)
-    {
-        return MovePingouin(pingouin->CollidesTop(), 't');
-    }
-    else{
-        ChangeView();
-        return false;
-    }
+    return MovePingouin(pingouin->CollidesTop(), 't');
 }
+
 bool Gameboard::MovePingouinToBottom()
 {
-    if (pingouin->pos().y() <= viewPositionY-Gameboard::getGameSquares()-8)
-    {
-        return MovePingouin(pingouin->CollidesBottom(), 'b');
-    }
-    else{
-        ChangeView();
-        return false;
-    }
+    return MovePingouin(pingouin->CollidesBottom(), 'b');
 }
+
 bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDepl)
 {
     bool bMove = true;
     for(int i=0; i<CollidingItems.length(); i++)
     {
-
         if(typeid(*CollidingItems.at(i)).name() == typeid(B_Wall).name())
         {
             bMove = false;
         }
         else if(typeid(*CollidingItems.at(i)).name() == typeid(B_Water).name())
         {
-            bMove = false;
+            //bMove = false;
         }
         else if(typeid(*CollidingItems.at(i)).name() == typeid(B_Movable).name())
         {
@@ -321,24 +393,17 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
                 bMove=false;
             }
         }
-        else if(typeid(*CollidingItems.at(i)).name() == typeid(Object).name())
-        {
-            Object *objet = dynamic_cast<Object*>(CollidingItems.at(i));
+//        else if(typeid(*CollidingItems.at(i)).name() == typeid(Object).name())
+//        {
+//            Object *objet = dynamic_cast<Object*>(CollidingItems.at(i));
 
-            pingouin->addObjectToSacoche(new Object(objet->getName()));
-            mainScene->removeItem(CollidingItems.at(i));
-        }
-        else if(typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
+//            pingouin->addObjectToSacoche(new Object(objet->getName()));
+//            mainScene->removeItem(CollidingItems.at(i));
+//        }
+        /*else if(typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
         {
-            if(pingouin->checkObjectSacoche("Poisson"))
-            {
-                qDebug() << "OK";
-            }
-            else
-            {
-                qDebug() << "Pas encore de poisson !";
-            }
-        }
+
+        }*/
 
 //        if (typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
 //        {
@@ -364,21 +429,22 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
     return bMove;
 }
 
+
 void Gameboard::populateScene()
 {
-    int Mat_Walls_Blocks[maxBlocksWidth][maxBlocksHeigh];
-    int Mat_Movable_Blocks[maxBlocksWidth][maxBlocksHeigh];
-    int Mat_Items[maxBlocksWidth][maxBlocksHeigh];
-    int Mat_Bonus[maxBlocksWidth][maxBlocksHeigh];
-    int Mat_Enemies[maxBlocksWidth][maxBlocksHeigh];
-    int Mat_Scene_Start[maxBlocksWidth][maxBlocksHeigh];
-    int Mat_Scene_End[maxBlocksWidth][maxBlocksHeigh];
-    int Mat_Doors[maxBlocksWidth][maxBlocksHeigh];
-    int Mat_Water_Blocks[maxBlocksWidth][maxBlocksHeigh];
-    int Mat_Snow_Surface[maxBlocksWidth][maxBlocksHeigh];
-    int Mat_Ice_Surface[maxBlocksWidth][maxBlocksHeigh];
+    int Mat_Walls_Blocks[maxBlocksWidth][maxBlocksHeight];
+    int Mat_Movable_Blocks[maxBlocksWidth][maxBlocksHeight];
+    int Mat_Items[maxBlocksWidth][maxBlocksHeight];
+    int Mat_Bonus[maxBlocksWidth][maxBlocksHeight];
+    int Mat_Enemies[maxBlocksWidth][maxBlocksHeight];
+    int Mat_Scene_Start[maxBlocksWidth][maxBlocksHeight];
+    int Mat_Scene_End[maxBlocksWidth][maxBlocksHeight];
+    int Mat_Doors[maxBlocksWidth][maxBlocksHeight];
+    int Mat_Water_Blocks[maxBlocksWidth][maxBlocksHeight];
+    int Mat_Snow_Surface[maxBlocksWidth][maxBlocksHeight];
+    int Mat_Ice_Surface[maxBlocksWidth][maxBlocksHeight];
 
-    QFile f(":/maps/maps/tutorial.txt");
+    QFile f(":/maps/maps/sceneTutorial_v3.txt");
     if(f.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QTextStream t(&f);
@@ -399,7 +465,7 @@ void Gameboard::populateScene()
                 line_count ++;
                 line[line_count]=t.readLine();
 //                qDebug() << "Found Layer: " << line[line_count] << " at: " << line_count;
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
+                for (matY = 0; matY < maxBlocksHeight; matY++)
                 {
                     QStringList values = line[line_count].split(",");
 
@@ -421,7 +487,7 @@ void Gameboard::populateScene()
                 line[line_count]=t.readLine();
                 line_count ++;
                 line[line_count]=t.readLine();
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
+                for (matY = 0; matY < maxBlocksHeight; matY++)
                 {
                     QStringList values = line[line_count].split(",");
 
@@ -441,7 +507,7 @@ void Gameboard::populateScene()
                 line_count ++;
                 line[line_count]=t.readLine();
 
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
+                for (matY = 0; matY < maxBlocksHeight; matY++)
                 {
                     QStringList values = line[line_count].split(",");
 
@@ -461,7 +527,7 @@ void Gameboard::populateScene()
                 line_count ++;
                 line[line_count]=t.readLine();
 
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
+                for (matY = 0; matY < maxBlocksHeight; matY++)
                 {
                     QStringList values = line[line_count].split(",");
 
@@ -481,7 +547,7 @@ void Gameboard::populateScene()
                 line_count ++;
                 line[line_count]=t.readLine();
 
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
+                for (matY = 0; matY < maxBlocksHeight; matY++)
                 {
                     QStringList values = line[line_count].split(",");
 
@@ -501,7 +567,7 @@ void Gameboard::populateScene()
                 line_count ++;
                 line[line_count]=t.readLine();
 
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
+                for (matY = 0; matY < maxBlocksHeight; matY++)
                 {
                     QStringList values = line[line_count].split(",");
 
@@ -521,7 +587,7 @@ void Gameboard::populateScene()
                 line_count ++;
                 line[line_count]=t.readLine();
 
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
+                for (matY = 0; matY < maxBlocksHeight; matY++)
                 {
                     QStringList values = line[line_count].split(",");
 
@@ -541,7 +607,7 @@ void Gameboard::populateScene()
                 line_count ++;
                 line[line_count]=t.readLine();
 
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
+                for (matY = 0; matY < maxBlocksHeight; matY++)
                 {
                     QStringList values = line[line_count].split(",");
 
@@ -560,7 +626,7 @@ void Gameboard::populateScene()
                 line_count ++;
                 line[line_count]=t.readLine();
 
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
+                for (matY = 0; matY < maxBlocksHeight; matY++)
                 {
                     QStringList values = line[line_count].split(",");
 
@@ -579,7 +645,7 @@ void Gameboard::populateScene()
                 line[line_count]=t.readLine();
                 line_count ++;
                 line[line_count]=t.readLine();
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
+                for (matY = 0; matY < maxBlocksHeight; matY++)
                 {
                     QStringList values = line[line_count].split(",");
 
@@ -599,7 +665,7 @@ void Gameboard::populateScene()
                 line_count ++;
                 line[line_count]=t.readLine();
 
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
+                for (matY = 0; matY < maxBlocksHeight; matY++)
                 {
                     QStringList values = line[line_count].split(",");
 
@@ -620,7 +686,7 @@ void Gameboard::populateScene()
                 line_count ++;
                 line[line_count]=t.readLine();
 
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
+                for (matY = 0; matY < maxBlocksHeight; matY++)
                 {
                     QStringList values = line[line_count].split(",");
 
@@ -640,7 +706,7 @@ void Gameboard::populateScene()
                 line_count ++;
                 line[line_count]=t.readLine();
 
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
+                for (matY = 0; matY < maxBlocksHeight; matY++)
                 {
                     QStringList values = line[line_count].split(",");
 
@@ -661,9 +727,9 @@ void Gameboard::populateScene()
     }
 
     // Populate scene
-    for (int i = 0; i < maxBlocksHeigh; i++) {
+    for (int i = 0; i < maxBlocksWidth; i++) {
 
-        for (int j = 0; j < maxBlocksWidth; j++) {
+        for (int j = 0; j < maxBlocksHeight; j++) {
             if (Mat_Walls_Blocks[i][j] != 0)
             {
                 B_Wall *item = new B_Wall();
@@ -733,11 +799,10 @@ void Gameboard::populateScene()
     }
 }
 
-
 void Gameboard::setView(QPoint viewPoint)
 {
-    int viewStartPostionXTemp = viewStartPostionX+(viewPoint.x()-1)*windowSizeX;
-    int viewStartPostionYTemp = viewStartPostionY+(viewPoint.y()-1)*windowSizeY;
+    int viewStartPostionXTemp = (viewPoint.x()-1)*windowSizeX;
+    int viewStartPostionYTemp = (viewPoint.y()-1)*windowSizeY;
 
     playerView->setSceneRect(viewStartPostionXTemp,viewStartPostionYTemp,windowSizeX,windowSizeY);
 }
@@ -746,6 +811,7 @@ int Gameboard::getGameSquares()
 {
     return gameSquares;
 }
+
 
 void Gameboard::pauseMenu()
 {
@@ -801,10 +867,10 @@ void Gameboard::grabTheWorld()
             {
                 item->setZValue(0);
             }
-//            if(typeid(*item).name() == typeid(Object).name())
-//            {
-//                item->setZValue(0);
-//            }
+            if(typeid(*item).name() == typeid(Object).name())
+            {
+                item->setZValue(0);
+            }
         }
     }else{
         QList<QGraphicsItem *> items = mainScene->items();
@@ -835,4 +901,23 @@ void Gameboard::grabTheWorld()
 void Gameboard::resumeGame()
 {
     pauseMenu();
+}
+
+
+QPoint* Gameboard::getCheckPoint()
+{
+    return this->checkpoint;
+}
+
+void Gameboard::saveCheckpoint()
+{
+    checkpoint->setX(pingouin->x());
+    checkpoint->setY(pingouin->y());
+    qDebug() << "SAVE Checkpoint" << (checkpoint->x()+gameSquares)/gameSquares << " " << (checkpoint->y()+gameSquares)/gameSquares;
+}
+
+void Gameboard::loadCheckpoint()
+{
+    pingouin->setPos((checkpoint->x()+gameSquares)/gameSquares,(checkpoint->y()+gameSquares)/gameSquares);
+    qDebug() << "LOAD CHECKPOINT" << (checkpoint->x()+gameSquares)/gameSquares << " " << (checkpoint->y()+gameSquares)/gameSquares;
 }

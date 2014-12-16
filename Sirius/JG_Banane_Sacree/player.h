@@ -15,6 +15,8 @@ public:
     QBrush *playerSkin;
 
     void setPlayerOrientation(QString orientation);
+    QString getPlayerOrientation();
+    QPoint *getPos();
 
 protected:
     int xPos;

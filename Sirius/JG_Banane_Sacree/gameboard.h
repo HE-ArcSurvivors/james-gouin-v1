@@ -2,18 +2,20 @@
 #define GAMEBOARD_H
 
 #include <QWidget>
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QGraphicsItem>
-#include <QPixmap>
-#include <QKeyEvent>
 #include "p_penguin.h"
-#include <QFormLayout>
 #include "b_movable.h"
-#include <QGroupBox>
-#include <QMessageBox>
-#include <QLabel>
-#include <QPushButton>
+
+class QGraphicsScene;
+class QGraphicsView;
+class QGraphicsItem;
+class QPixmap;
+class QKeyEvent;
+class QFormLayout;
+class QGroupBox;
+class QMessageBox;
+class QLabel;
+class QPushButton;
+class QPoint;
 
 class Gameboard : public QWidget
 {
@@ -23,6 +25,7 @@ public:
     ~Gameboard();
 
     static int getGameSquares();
+    QPoint *getCheckPoint();
 
 private:
     QGraphicsScene *mainScene;
@@ -40,7 +43,7 @@ private:
     QString windowTitle;
     QPoint startingPoint;
 
-    int maxBlocksHeigh;
+    int maxBlocksHeight;
     int maxBlocksWidth;
     int transition;
     QPoint viewRequested;
@@ -54,8 +57,9 @@ private:
     bool MovePingouin(QList<QGraphicsItem *>, char);
 
     void SinkMovable(B_Movable *b);
-    void ChangeView();
-
+    void CheckChangeView(QKeyEvent *event);
+    bool CheckGameOver();
+    void CheckItem();
 
     B_Movable *bToDepl;
 
@@ -80,6 +84,10 @@ private:
     QPushButton *btnMenuPauseResume;
     QPushButton *btnMenuPauseConfigure;
     QPushButton *btnMenuPauseQuit;
+
+    QPoint* checkpoint;
+    void saveCheckpoint();
+    void loadCheckpoint();
 
 protected:
 
