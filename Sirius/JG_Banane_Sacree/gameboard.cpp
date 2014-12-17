@@ -41,9 +41,10 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     viewStartPostionY = 1;
     viewPositionX = 20*gameSquares;
     viewPositionY = 15*gameSquares;
-	maxBlocksHeight = 30;
+    maxBlocksHeight = 30;
     maxBlocksWidth = 60;
-    viewRequested = QPoint(1,1);    exit = QPoint (20,6);
+    viewRequested = QPoint(1,1);
+    exit = QPoint (20,6);
 
     gameSquares = 32;
     transition = 0;
@@ -58,7 +59,7 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     checkpoint = new QPoint();
 
     this->setWindowTitle(windowTitle);
-//    this->setFixedSize(windowSizeX,windowSizeY);
+    this->setFixedSize(windowSizeX,windowSizeY);
     this->resize(windowSizeX,windowSizeY);
 
     mainScene = new QGraphicsScene(this);
@@ -84,12 +85,10 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     saveCheckpoint();
     populateScene();
 
-    //On position la vue
-    playerView->setScene(mainScene);
-    menuPauseInGame = new M_Pause(this);
+    /*menuPauseInGame = new M_Pause(this);
     menuPauseInGame->setGeometry(viewStartPostionX+windowSizeX/2-menuPauseSizeX/2,viewStartPostionY+windowSizeY/2-menuPauseSizeY/2,menuPauseSizeX,menuPauseSizeY);
     proxy = mainScene->addWidget(menuPauseInGame);
-    proxy->hide();
+    proxy->hide();*/
 }
 
 Gameboard::~Gameboard(){
@@ -275,7 +274,8 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
         {
             if(MovePingouinToLeft())
             {
-				pingouin->setPlayerOrientation("left");                do
+                pingouin->setPlayerOrientation("left");
+                do
                 {
                     pingouin->moveBy(-1, 0);
                     if(!CheckGameOver())
@@ -374,23 +374,19 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
             B_Movable *b;
             b = dynamic_cast<B_Movable*>(CollidingItems.at(i));
 
-            if(sensDepl == 'l' && b->IsMovableToLeft() && b->pos().x() > viewStartPostionY){
-                //b->moveBy(-1,0);
+            if(sensDepl == 'l' && b->IsMovableToLeft()){
                 bToDepl = b;
                 bMove = true;
             }
-            else if(sensDepl == 'r' && b->IsMovableToRight() && b->pos().x() < viewPositionX-Gameboard::getGameSquares()){
-                //b->moveBy(1,0);
+            else if(sensDepl == 'r' && b->IsMovableToRight()){
                 bToDepl = b;
                 bMove = true;
             }
-            else if(sensDepl == 't' && b->IsMovableToTop() && b->pos().y() > viewStartPostionY){
-                //b->moveBy(0,-1);
+            else if(sensDepl == 't' && b->IsMovableToTop()){
                 bToDepl = b;
                 bMove = true;
             }
-            else if(sensDepl == 'b' && b->IsMovableToBottom() && b->pos().y() <= viewPositionY-Gameboard::getGameSquares()-8){
-                //b->moveBy(0, 1);
+            else if(sensDepl == 'b' && b->IsMovableToBottom()){
                 bToDepl = b;
                 bMove = true;
             }
@@ -435,6 +431,118 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
 }
 
 
+
+
+void Gameboard::setView(QPoint viewPoint)
+{
+    int viewStartPostionXTemp = (viewPoint.x()-1)*windowSizeX;
+    int viewStartPostionYTemp = (viewPoint.y()-1)*windowSizeY;
+
+    playerView->setSceneRect(viewStartPostionXTemp,viewStartPostionYTemp,windowSizeX,windowSizeY);
+}
+
+int Gameboard::getGameSquares()
+{
+    return gameSquares;
+}
+
+
+void Gameboard::pauseMenu()
+{
+    toggleMenuPause = !toggleMenuPause;
+    grabTheWorld();
+    if(toggleMenuPause)
+    {
+        proxy->show();
+    }else{
+        proxy->hide();
+    }
+
+}
+
+void Gameboard::grabTheWorld()
+{
+    toggleGrabTheWorld = !toggleGrabTheWorld;
+
+    if(toggleGrabTheWorld)
+    {
+        QList<QGraphicsItem *> items = mainScene->items();
+
+        foreach( QGraphicsItem *item, items )
+        {
+            if(typeid(*item).name() == typeid(S_Snow).name())
+            {
+                item->setZValue(-1);
+            }
+            if(typeid(*item).name() == typeid(B_Movable).name())
+            {
+                item->setZValue(0);
+            }
+            if(typeid(*item).name() == typeid(Pingouin).name())
+            {
+                item->setZValue(0);
+            }
+            if(typeid(*item).name() == typeid(Object).name())
+            {
+                item->setZValue(0);
+            }
+        }
+    }else{
+        QList<QGraphicsItem *> items = mainScene->items();
+
+        foreach( QGraphicsItem *item, items )
+        {
+            if(typeid(*item).name() == typeid(S_Snow).name())
+            {
+                item->setZValue(0);
+            }
+            if(typeid(*item).name() == typeid(B_Movable).name())
+            {
+                item->setZValue(1);
+            }
+            if(typeid(*item).name() == typeid(Pingouin).name())
+            {
+                item->setZValue(2);
+            }
+            if(typeid(*item).name() == typeid(Object).name())
+            {
+                item->setZValue(2);
+            }
+        }
+    }
+
+}
+
+void Gameboard::resumeGame()
+{
+    pauseMenu();
+}
+void Gameboard::exitGame()
+{
+    QMessageBox msgBox;
+    msgBox.setText(tr("Vous êtes sur le point de quitter le jeu"));
+    msgBox.setInformativeText("Voulez vous sauvegarder ?");
+    msgBox.addButton("Ne pas Sauvegarder", QMessageBox::DestructiveRole);
+    msgBox.addButton("Annuler", QMessageBox::RejectRole);
+    msgBox.addButton("Sauvegarder", QMessageBox::AcceptRole);
+
+    int ret = msgBox.exec();
+    switch (ret) {
+    case QMessageBox::AcceptRole:
+        close();
+        break;
+    case QMessageBox::RejectRole:
+
+        break;
+    case QMessageBox::DestructiveRole:
+        close();
+        break;
+    default:
+        // should never be reached
+        break;
+    }
+}
+
 void Gameboard::populateScene()
 {
     int Mat_Walls_Blocks[maxBlocksWidth][maxBlocksHeight];
@@ -449,7 +557,7 @@ void Gameboard::populateScene()
     int Mat_Snow_Surface[maxBlocksWidth][maxBlocksHeight];
     int Mat_Ice_Surface[maxBlocksWidth][maxBlocksHeight];
 
-    QFile f(":/maps/maps/sceneTutorial_v3.txt");
+    QFile f(":/maps/maps/tutorial.txt");
     if(f.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QTextStream t(&f);
@@ -734,7 +842,8 @@ void Gameboard::populateScene()
     // Populate scene
     for (int i = 0; i < maxBlocksWidth; i++) {
 
-        for (int j = 0; j < maxBlocksWidth; j++) {for (int j = 0; j < maxBlocksHeight; j++) {            if (Mat_Walls_Blocks[i][j] != 0)
+        for (int j = 0; j < maxBlocksHeight; j++) {
+            if (Mat_Walls_Blocks[i][j] != 0)
             {
                 B_Wall *item = new B_Wall();
                 item->setPos(i,j);
@@ -802,118 +911,6 @@ void Gameboard::populateScene()
         }
     }
 }
-}
-
-void Gameboard::setView(QPoint viewPoint)
-{
-    int viewStartPostionXTemp = (viewPoint.x()-1)*windowSizeX;
-    int viewStartPostionYTemp = (viewPoint.y()-1)*windowSizeY;
-
-    playerView->setSceneRect(viewStartPostionXTemp,viewStartPostionYTemp,windowSizeX,windowSizeY);
-}
-
-int Gameboard::getGameSquares()
-{
-    return gameSquares;
-}
-
-
-void Gameboard::pauseMenu()
-{
-    toggleMenuPause = !toggleMenuPause;
-    grabTheWorld();
-    if(toggleMenuPause)
-    {
-        proxy->show();
-    }else{
-        proxy->hide();
-    }
-
-}
-
-void Gameboard::grabTheWorld()
-{
-    toggleGrabTheWorld = !toggleGrabTheWorld;
-
-    if(toggleGrabTheWorld)
-    {
-        QList<QGraphicsItem *> items = mainScene->items();
-
-        foreach( QGraphicsItem *item, items )
-        {
-            if(typeid(*item).name() == typeid(S_Snow).name())
-            {
-                item->setZValue(-1);
-            }
-            if(typeid(*item).name() == typeid(B_Movable).name())
-            {
-                item->setZValue(0);
-            }
-            if(typeid(*item).name() == typeid(Pingouin).name())
-            {
-                item->setZValue(0);
-            }
-            if(typeid(*item).name() == typeid(Object).name())
-            {
-                item->setZValue(0);
-            }
-        }
-    }else{
-        QList<QGraphicsItem *> items = mainScene->items();
-
-        foreach( QGraphicsItem *item, items )
-        {
-            if(typeid(*item).name() == typeid(S_Snow).name())
-            {
-                item->setZValue(0);
-            }
-            if(typeid(*item).name() == typeid(B_Movable).name())
-            {
-                item->setZValue(1);
-            }
-            if(typeid(*item).name() == typeid(Pingouin).name())
-            {
-                item->setZValue(2);
-            }
-            if(typeid(*item).name() == typeid(Object).name())
-            {
-                item->setZValue(2);
-            }
-        }
-    }
-
-}
-
-void Gameboard::resumeGame()
-{
-    pauseMenu();
-}
-void Gameboard::exitGame()
-{
-    QMessageBox msgBox;
-    msgBox.setText(tr("Vous êtes sur le point de quitter le jeu"));
-    msgBox.setInformativeText("Voulez vous sauvegarder ?");
-    msgBox.addButton("Ne pas Sauvegarder", QMessageBox::DestructiveRole);
-    msgBox.addButton("Annuler", QMessageBox::RejectRole);
-    msgBox.addButton("Sauvegarder", QMessageBox::AcceptRole);
-
-    int ret = msgBox.exec();
-    switch (ret) {
-    case QMessageBox::AcceptRole:
-        close();
-        break;
-    case QMessageBox::RejectRole:
-
-        break;
-    case QMessageBox::DestructiveRole:
-        close();
-        break;
-    default:
-        // should never be reached
-        break;
-    }
-}
-
 QPoint* Gameboard::getCheckPoint()
 {
     return this->checkpoint;
