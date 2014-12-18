@@ -33,24 +33,24 @@ int Gameboard::gameSquares = 32;
 
 Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 {
+    /* Quantité de blos / Taille de fenêtre / Etc */
+    sizeX = 20;
+    sizeY = 15;
+
     // Les Variables par default du jeu
     windowTitle = tr("James Gouin et la Banane Sacrée");
-    windowSizeX = 20*gameSquares;
-    windowSizeY = 15*gameSquares;
+    windowSizeX = sizeX*gameSquares;
+    windowSizeY = sizeY*gameSquares;
 
-    viewStartPostionX = 1;
-    viewStartPostionY = 15*gameSquares;
+    maxBlocksHeight = 2*sizeY;
+    maxBlocksWidth = 3*sizeX;
 
-    viewPositionX = 20*gameSquares;
-    viewPositionY = 15*gameSquares;
-    maxBlocksHeight = 30;
-    maxBlocksWidth = 60;
+    /* StartPosition */
     viewRequested = QPoint(1,2);
-    exit = QPoint (20,6);
+    setViewPosition();
+    startingPoint = QPoint(15,21);
 
-    gameSquares = 32;
-    transition = 0;
-    startingPoint = QPoint(15,21); // 20x15
+    //exit = QPoint(20,6);
     QString sceneToLoad = ":/maps/maps/tutorial.png";
     menuPauseSizeX = 400;
     menuPauseSizeY = 400;
@@ -75,7 +75,7 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 
     playerView->setHorizontalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
     playerView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    playerView->setSceneRect(viewStartPostionX,viewStartPostionY,viewPositionX,viewPositionY);
+    playerView->setSceneRect(viewPositionX,viewPositionY,sizeX*gameSquares,sizeY*gameSquares);
 
     //On position la vue
     playerView->setScene(mainScene);
@@ -90,13 +90,35 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     populateScene();
 
     menuPauseInGame = new M_Pause(this);
-    menuPauseInGame->setGeometry(viewStartPostionX+windowSizeX/2-menuPauseSizeX/2,viewStartPostionY+windowSizeY/2-menuPauseSizeY/2,menuPauseSizeX,menuPauseSizeY);
+    menuPauseInGame->setGeometry(viewPositionX+windowSizeX/2-menuPauseSizeX/2,viewPositionY+windowSizeY/2-menuPauseSizeY/2,menuPauseSizeX,menuPauseSizeY);
     proxy = mainScene->addWidget(menuPauseInGame);
     proxy->hide();
 }
 
 Gameboard::~Gameboard(){
 
+}
+
+
+void Gameboard::setViewPosition()
+{
+    int x = viewRequested.x();
+    int y = viewRequested.y();
+
+    if(x==1) { viewPositionX = 1; }
+    else
+    {
+        viewPositionX = (x-1)*20*gameSquares;
+    }
+
+    if(y==1)
+    {
+        viewPositionY = 1;
+    }
+    else
+    {
+        viewPositionY = (y-1)*15*gameSquares;
+    }
 }
 
 void Gameboard::SinkMovable(B_Movable *b)
@@ -206,11 +228,9 @@ void Gameboard::CheckChangeView(QKeyEvent *event)
 
                 qDebug() << "ViewRequested : " << viewRequested.x() << " " << viewRequested.y();
                 loadCheckpoint();
-                setView(viewRequested);
+                setViewPosition();
+                playerView->setSceneRect(viewPositionX,viewPositionY,windowSizeX,windowSizeY);
 
-                viewPositionX += windowSizeX;
-                viewStartPostionX += windowSizeX;
-                transition = 0;
             /*}
             else
             {
@@ -439,22 +459,10 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
     return bMove;
 }
 
-
-
-
-void Gameboard::setView(QPoint viewPoint)
-{
-    int viewStartPostionXTemp = (viewPoint.x()-1)*windowSizeX;
-    int viewStartPostionYTemp = (viewPoint.y()-1)*windowSizeY;
-
-    playerView->setSceneRect(viewStartPostionXTemp,viewStartPostionYTemp,windowSizeX,windowSizeY);
-}
-
 int Gameboard::getGameSquares()
 {
     return gameSquares;
 }
-
 
 void Gameboard::pauseMenu()
 {

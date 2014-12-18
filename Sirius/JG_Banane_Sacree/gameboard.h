@@ -35,22 +35,21 @@ private:
     QGraphicsView *playerView;
     Pingouin *pingouin;
     void keyPressEvent(QKeyEvent *event);
-    int viewPositionX;
-    int viewPositionY;
     int windowSizeY;
     int windowSizeX;
-    int viewStartPostionX;
-    int viewStartPostionY;
+    int viewPositionX;
+    int viewPositionY;
     static int gameSquares;
     QString windowTitle;
     QPoint startingPoint;
+
+    void setViewPosition();
 
     int maxBlocksHeight;
     int maxBlocksWidth;
     int transition;
     QPoint viewRequested;
     QPoint exit;
-    void setView(QPoint);
 
     bool MovePingouinToLeft();
     bool MovePingouinToRight();
@@ -97,6 +96,8 @@ private:
 
     QGraphicsProxyWidget *proxy;protected:
 
+    int sizeX;
+    int sizeY;
 
 signals:
 
