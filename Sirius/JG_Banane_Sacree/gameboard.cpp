@@ -52,7 +52,8 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     setViewPosition();
     startingPoint = QPoint(15,21);
 
-//exit = QPoint(20,6);    QString sceneToLoad = ":/maps/maps/tutorial.png";
+//exit = QPoint(20,6);
+    QString sceneToLoad = ":/maps/maps/tutorial.png";
     menuPauseSizeX = 400;
     menuPauseSizeY = 400;
     toggleGrabTheWorld = false;
