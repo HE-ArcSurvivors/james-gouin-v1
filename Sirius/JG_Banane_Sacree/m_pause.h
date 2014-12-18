@@ -2,12 +2,25 @@
 #define M_PAUSE_H
 
 #include <QWidget>
+#include <QLabel>
+#include <QPushButton>
+#include <QFormLayout>
 
-class m_Pause : public QWidget
+
+
+class M_Pause : public QWidget
 {
     Q_OBJECT
 public:
-    explicit m_Pause(QWidget *parent = 0);
+    M_Pause(QWidget *parent);
+
+private:
+    QFormLayout *layoutMenuPause;
+    QLabel *titleMenuPause;
+
+    QPushButton *btnMenuPauseResume;
+    QPushButton *btnMenuPauseConfigure;
+    QPushButton *btnMenuPauseQuit;
 
 signals:
 

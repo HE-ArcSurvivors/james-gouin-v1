@@ -2,20 +2,22 @@
 #define GAMEBOARD_H
 
 #include <QWidget>
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QGraphicsItem>
-#include <QPixmap>
-#include <QKeyEvent>
 #include "p_penguin.h"
-#include <QFormLayout>
 #include "b_movable.h"
-#include <QGroupBox>
-#include <QMessageBox>
-#include <QLabel>
-#include <QPushButton>
-#include <QTimer>
-#include <QList>
+#include "m_pause.h"
+#include <QGraphicsProxyWidget>
+
+class QGraphicsScene;
+class QGraphicsView;
+class QGraphicsItem;
+class QPixmap;
+class QKeyEvent;
+class QFormLayout;
+class QGroupBox;
+class QMessageBox;
+class QLabel;
+class QPushButton;
+class QPoint;
 
 struct slideBloc{
     B_Movable *slidingMovable;
@@ -30,6 +32,7 @@ public:
     ~Gameboard();
 
     static int getGameSquares();
+    QPoint *getCheckPoint();
 
 private:
 
@@ -52,7 +55,7 @@ private:
     QString windowTitle;
     QPoint startingPoint;
 
-    int maxBlocksHeigh;
+    int maxBlocksHeight;
     int maxBlocksWidth;
     int transition;
     QPoint viewRequested;
@@ -69,9 +72,13 @@ private:
 
     void SinkMovable(B_Movable *b);
     void ChangeView();
+    void CheckChangeView(QKeyEvent *event);
+    bool CheckGameOver();
+    void CheckItem();
 
     B_Movable *moveBloc;
     QList<slideBloc> listSlindingBlocs;
+    QString* neededItem;
 
     void populateScene();
 
@@ -95,7 +102,13 @@ private:
     QPushButton *btnMenuPauseConfigure;
     QPushButton *btnMenuPauseQuit;
 
-protected:
+    QPoint* checkpoint;
+    void saveCheckpoint();
+    void loadCheckpoint();
+
+	M_Pause *menuPauseInGame;
+
+    QGraphicsProxyWidget *proxy;protected:
 
 
 signals:
@@ -105,7 +118,7 @@ public slots:
     void SlidePingouin();
     void SlideBloc();
 
-
+    void exitGame();
 };
 
 #endif // GAMEBOARD_H
