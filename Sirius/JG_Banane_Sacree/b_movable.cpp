@@ -9,6 +9,8 @@
 #include "b_water.h"
 #include "gameboard.h"
 
+#include "s_ice.h"
+
 #if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
 #else
 #include <typeinfo.h>
@@ -109,6 +111,22 @@ bool B_Movable::IsMovable(QList<QGraphicsItem *> l)
     }
     return bMove;
 }
+
+bool B_Movable::isSlide()
+{
+    QList<QGraphicsItem *> CollidingItems = this->CollidesCenter();
+    bool slide = false;
+
+    for(int i=0; i<CollidingItems.length(); i++)
+    {
+        if(typeid(*CollidingItems.at(i)).name() == typeid(S_Ice).name())
+        {
+            slide = true;
+        }
+    }
+    return slide;
+}
+
 bool B_Movable::IsMovableToLeft(){
     return IsMovable(leftCollideBox->collidingItems());
 }

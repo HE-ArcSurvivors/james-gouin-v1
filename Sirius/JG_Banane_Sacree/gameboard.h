@@ -14,6 +14,13 @@
 #include <QMessageBox>
 #include <QLabel>
 #include <QPushButton>
+#include <QTimer>
+#include <QList>
+
+struct slideBloc{
+    B_Movable *slidingMovable;
+    char sens; //l, r, t, b
+};
 
 class Gameboard : public QWidget
 {
@@ -25,6 +32,11 @@ public:
     static int getGameSquares();
 
 private:
+
+    QTimer *timerPingouinSlide;
+    QTimer *timerBlocDeplSlide;
+    char cSensPingouinSlide;
+
     QGraphicsScene *mainScene;
     QGraphicsScene *preloadedScene;
     QGraphicsView *playerView;
@@ -53,11 +65,13 @@ private:
     bool MovePingouinToBottom();
     bool MovePingouin(QList<QGraphicsItem *>, char);
 
+    void MoveBloc(char);
+
     void SinkMovable(B_Movable *b);
     void ChangeView();
 
-
-    B_Movable *bToDepl;
+    B_Movable *moveBloc;
+    QList<slideBloc> listSlindingBlocs;
 
     void populateScene();
 
@@ -88,6 +102,8 @@ signals:
 
 public slots:
     void resumeGame();
+    void SlidePingouin();
+    void SlideBloc();
 
 
 };

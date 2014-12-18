@@ -8,6 +8,8 @@
 #include "s_ice.h"
 #include "object.h"
 
+#include <QPropertyAnimation>
+
 #if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
 #else
 #include <typeinfo.h>
@@ -46,6 +48,15 @@ void Pingouin::setPos(int x, int y)
 
 void Pingouin::moveBy(int x, int y)
 {
+
+
+//    QPropertyAnimation *animation = new QPropertyAnimation(this, "pos");
+//    animation->setDuration(1000);
+//    animation->setStartValue(QPoint(this->pos().x(), this->pos().y()));
+//    animation->setEndValue(QPoint(this->pos().x() + x*gameSquare, this->pos().y() + y*gameSquare));
+
+//    animation->start();
+
     Player::moveBy(x*gameSquare,y*gameSquare);
     leftCollideBox->moveBy(x*gameSquare,y*gameSquare);
     rightCollideBox->moveBy(x*gameSquare,y*gameSquare);
@@ -74,7 +85,7 @@ bool Pingouin::isSlide()
             slide = true;
         }
     }
-    return slide;
+    return false;
 }
 
 //Retour des listes des collisions

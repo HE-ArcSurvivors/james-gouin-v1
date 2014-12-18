@@ -12,6 +12,8 @@
 #include <QDebug>
 #include <QGraphicsItemGroup>
 
+#define SLIDE_SPEED (80)
+
 #if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
 #else
 #include <typeinfo.h>
@@ -42,7 +44,7 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     toggleGrabTheWorld = false;
     toggleMenuPause = false;
 
-    bToDepl = NULL;
+    moveBloc = NULL;
 
     this->setWindowTitle(windowTitle);
     this->setFixedSize(windowSizeX,windowSizeY);
@@ -74,6 +76,169 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     //On position la vue
     playerView->setScene(mainScene);
 
+    //initialisation des timer
+    timerPingouinSlide = new QTimer();
+    timerBlocDeplSlide = new QTimer();
+    connect(timerPingouinSlide, SIGNAL(timeout()), this, SLOT(SlidePingouin()));
+    connect(timerBlocDeplSlide, SIGNAL(timeout()), this, SLOT(SlideBloc()));
+}
+void Gameboard::SlideBloc()
+{
+    for(int i=0; i<listSlindingBlocs.size(); i++)
+    {
+        B_Movable* SlidingBloc = listSlindingBlocs.at(i).slidingMovable;
+
+        bool removeBloc = true;
+
+        if(SlidingBloc->isSlide())
+        {
+            switch (listSlindingBlocs.at(i).sens)
+            {
+            case 't':
+
+                if(SlidingBloc->IsMovableToTop()) //&& Qu'il ne sorte pas de la view
+                {
+                    SlidingBloc->moveBy(0,-1);
+                    SinkMovable(SlidingBloc);
+                    removeBloc = false;
+                }
+
+                break;
+
+            case 'b':
+
+                if(SlidingBloc->IsMovableToBottom())
+                {
+                    SlidingBloc->moveBy(0,1);
+                    SinkMovable(SlidingBloc);
+                    removeBloc = false;
+                }
+
+                break;
+
+            case 'l':
+
+                if(SlidingBloc->IsMovableToLeft())
+                {
+                    SlidingBloc->moveBy(-1,0);
+                    SinkMovable(SlidingBloc);
+                    removeBloc = false;
+                }
+
+                break;
+
+            case 'r':
+
+                if(SlidingBloc->IsMovableToRight())
+                {
+                    SlidingBloc->moveBy(1,0);
+                    SinkMovable(SlidingBloc);
+                    removeBloc = false;
+                }
+
+                break;
+
+            default:
+                break;
+            }
+        }
+
+        if(removeBloc)
+        {
+            listSlindingBlocs.removeAt(i);
+        }
+    }
+
+    if(listSlindingBlocs.size() == 0)
+    {
+        timerBlocDeplSlide->stop();
+    }
+}
+
+void Gameboard::SlidePingouin()
+{
+    bool endSlide = true;
+
+    switch (cSensPingouinSlide)
+    {
+    case 't':
+
+        if(MovePingouinToTop() && pingouin->isSlide())
+        {
+            pingouin->moveBy(0, -1);
+
+            if(moveBloc != NULL)
+            {
+                moveBloc->moveBy(0,-1);
+                SinkMovable(moveBloc);
+                moveBloc = NULL;
+            }
+
+            endSlide = false;
+        }
+
+        break;
+
+    case 'b':
+
+        if(MovePingouinToBottom() && pingouin->isSlide())
+        {
+            pingouin->moveBy(0, 1);
+
+            if(moveBloc != NULL)
+            {
+                moveBloc->moveBy(0,1);
+                SinkMovable(moveBloc);
+                moveBloc = NULL;
+            }
+
+            endSlide = false;
+        }
+        break;
+
+    case 'l':
+
+        if(MovePingouinToLeft() && pingouin->isSlide())
+        {
+            pingouin->moveBy(-1, 0);
+
+            if(moveBloc != NULL)
+            {
+                moveBloc->moveBy(-1,0);
+                SinkMovable(moveBloc);
+                moveBloc = NULL;
+            }
+
+            endSlide = false;
+        }
+        break;
+
+    case 'r':
+
+        if(MovePingouinToRight() && pingouin->isSlide())
+        {
+            pingouin->moveBy(1, 0);
+
+           if(moveBloc != NULL)
+            {
+                moveBloc->moveBy(1,0);
+                SinkMovable(moveBloc);
+                moveBloc = NULL;
+            }
+
+           endSlide = false;
+        }
+        break;
+    default:
+        break;
+    }
+
+    if(endSlide)
+    {
+        timerPingouinSlide->stop();
+        toggleMenuPause=false;
+    }
+
 }
 
 Gameboard::~Gameboard(){
@@ -98,7 +263,6 @@ void Gameboard::SinkMovable(B_Movable *b)
             mainScene->addItem(sunk);
         }
     }
-
 }
 
 void Gameboard::ChangeView()
@@ -126,6 +290,43 @@ void Gameboard::ChangeView()
         }
     }
 }
+
+void Gameboard::MoveBloc(char sens)
+{
+    switch(sens)
+    {
+        case 't':
+            moveBloc->moveBy(0,-1);
+        break;
+        case 'b':
+            moveBloc->moveBy(0,1);
+        break;
+        case 'l':
+            moveBloc->moveBy(-1,0);
+        break;
+        case 'r':
+            moveBloc->moveBy(1,0);
+        break;
+    }
+
+    SinkMovable(moveBloc);
+
+
+    if(moveBloc->isSlide())
+    {
+        slideBloc sb;
+        sb.slidingMovable = moveBloc;
+        sb.sens = sens;
+
+
+        listSlindingBlocs.append(sb);
+
+        timerBlocDeplSlide->start(SLIDE_SPEED);
+    }
+
+    moveBloc = NULL;
+}
+
 //http://doc.qt.digia.com/4.6/qt.html#Key-enum
 void Gameboard::keyPressEvent(QKeyEvent *event)
 {
@@ -135,19 +336,18 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
         {
             if(MovePingouinToTop())
             {
-                do
-                {
-                    pingouin->moveBy(0, -1);
+                pingouin->moveBy(0, -1);
 
-                    if(bToDepl != NULL)
-                    {
-                        bToDepl->moveBy(0,-1);
-                        SinkMovable(bToDepl);
-                        bToDepl = NULL;
-                    }
+                if(moveBloc != NULL)
+                {
+                    MoveBloc('t');
                 }
-                while(MovePingouinToTop() && pingouin->isSlide());
-                bToDepl = NULL;
+                if(pingouin->isSlide())
+                {
+                    toggleMenuPause=true;
+                    cSensPingouinSlide = 't';
+                    timerPingouinSlide->start(SLIDE_SPEED);
+                }
 
                 pingouin->setPlayerOrientation("up"); //definir l'orientation du joueur
             }
@@ -156,19 +356,18 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
         {
             if(MovePingouinToBottom())
             {
-                do
-                {
-                    pingouin->moveBy(0, 1);
+                pingouin->moveBy(0, 1);
 
-                    if(bToDepl != NULL)
-                    {
-                        bToDepl->moveBy(0,1);
-                        SinkMovable(bToDepl);
-                        bToDepl = NULL;
-                    }
+                if(moveBloc != NULL)
+                {
+                    MoveBloc('b');
                 }
-                while(MovePingouinToBottom() && pingouin->isSlide());
-                bToDepl = NULL;
+                if(pingouin->isSlide())
+                {
+                    toggleMenuPause=true;
+                    cSensPingouinSlide = 'b';
+                    timerPingouinSlide->start(SLIDE_SPEED);
+                }
 
                 pingouin->setPlayerOrientation("down");
             }
@@ -177,20 +376,18 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
         {
             if(MovePingouinToLeft())
             {
+                pingouin->moveBy(-1, 0);
 
-                do
+                if(moveBloc != NULL)
                 {
-                    pingouin->moveBy(-1, 0);
-
-                    if(bToDepl != NULL)
-                    {
-                        bToDepl->moveBy(-1,0);
-                        SinkMovable(bToDepl);
-                        bToDepl = NULL;
-                    }
+                    MoveBloc('l');
                 }
-                while(MovePingouinToLeft() && pingouin->isSlide());
-                bToDepl = NULL;
+                if(pingouin->isSlide())
+                {
+                    toggleMenuPause=true;
+                    cSensPingouinSlide = 'l';
+                    timerPingouinSlide->start(SLIDE_SPEED);
+                }
 
                 pingouin->setPlayerOrientation("left");
             }
@@ -199,19 +396,18 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
         {
             if(MovePingouinToRight())
             {
-                do
-                {
-                    pingouin->moveBy(1, 0);
+                pingouin->moveBy(1, 0);
 
-                    if(bToDepl != NULL)
-                    {
-                        bToDepl->moveBy(1,0);
-                        SinkMovable(bToDepl);
-                        bToDepl = NULL;
-                    }
+                if(moveBloc != NULL)
+                {
+                    MoveBloc('r');
                 }
-                while(MovePingouinToRight() && pingouin->isSlide());
-                bToDepl = NULL;
+                if(pingouin->isSlide())
+                {
+                    toggleMenuPause=true;
+                    cSensPingouinSlide = 'r';
+                    timerPingouinSlide->start(SLIDE_SPEED);
+                }
 
                 pingouin->setPlayerOrientation("right");
             }
@@ -230,6 +426,7 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
         pauseMenu();
     }
 }
+
 
 
 bool Gameboard::MovePingouinToLeft()
@@ -293,28 +490,23 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
         }
         else if(typeid(*CollidingItems.at(i)).name() == typeid(B_Movable).name())
         {
-//            qDebug() << "bloc moves";
             B_Movable *b;
             b = dynamic_cast<B_Movable*>(CollidingItems.at(i));
 
             if(sensDepl == 'l' && b->IsMovableToLeft() && b->pos().x() > viewStartPostionY){
-                //b->moveBy(-1,0);
-                bToDepl = b;
+                moveBloc = b;
                 bMove = true;
             }
             else if(sensDepl == 'r' && b->IsMovableToRight() && b->pos().x() < viewPositionX-Gameboard::getGameSquares()){
-                //b->moveBy(1,0);
-                bToDepl = b;
+                moveBloc = b;
                 bMove = true;
             }
             else if(sensDepl == 't' && b->IsMovableToTop() && b->pos().y() > viewStartPostionY){
-                //b->moveBy(0,-1);
-                bToDepl = b;
+                moveBloc = b;
                 bMove = true;
             }
             else if(sensDepl == 'b' && b->IsMovableToBottom() && b->pos().y() <= viewPositionY-Gameboard::getGameSquares()-8){
-                //b->moveBy(0, 1);
-                bToDepl = b;
+                moveBloc = b;
                 bMove = true;
             }
             else{
@@ -719,13 +911,13 @@ void Gameboard::populateScene()
             }
             if (Mat_Snow_Surface[i][j] != 0)
             {
-                S_Snow *item = new S_Snow();
+                S_Ice *item = new S_Ice();
                 item->setPos(i,j);
                 mainScene->addItem(item);
             }
             if (Mat_Ice_Surface[i][j] != 0)
             {
-                S_Snow *item = new S_Snow();
+                S_Ice *item = new S_Ice();
                 item->setPos(i,j);
                 mainScene->addItem(item);
             }
