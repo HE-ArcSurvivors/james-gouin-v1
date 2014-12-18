@@ -30,6 +30,8 @@ Pingouin::Pingouin(int gameSquare) : Player()
     bottomCollideBox->setPen(Qt::NoPen);
     topCollideBox->setPen(Qt::NoPen);
 
+    lastMove = new QPoint(0,0);
+
 }
 void Pingouin::setPos(int x, int y)
 {
@@ -51,6 +53,16 @@ void Pingouin::moveBy(int x, int y)
     rightCollideBox->moveBy(x*gameSquare,y*gameSquare);
     bottomCollideBox->moveBy(x*gameSquare,y*gameSquare);
     topCollideBox->moveBy(x*gameSquare,y*gameSquare);
+
+    lastMove->setX(x);
+    lastMove->setY(y);
+}
+
+void Pingouin::moveBack()
+{
+    moveBy(-lastMove->x(),-lastMove->y());
+    lastMove->setX(0);
+    lastMove->setY(0);
 }
 
 void Pingouin::addToScene(QGraphicsScene* Scene)
@@ -120,6 +132,18 @@ Player* Pingouin::getPlayer(){
 void Pingouin::addObjectToSacoche(Object *object)
 {
     sacoche.append(object);
+}
+
+void Pingouin::removeObjectToSacoche(QString object)
+{
+    for (int i = 0; i < sacoche.size(); ++i)
+    {
+        if (sacoche.at(i)->getName() == object)
+        {
+            sacoche.removeAt(i);
+            return;
+        }
+    }
 }
 
 void Pingouin::printSacoche()

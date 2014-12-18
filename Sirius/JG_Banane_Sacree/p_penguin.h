@@ -20,15 +20,18 @@ private:
     int gameSquare;
 
     QList<Object *> sacoche;
+    QPoint* lastMove;
 
 public:
     Pingouin(int gameSquare);
 
     void setPos(int, int);
     void moveBy(int, int);
+    void moveBack();
 
     void addToScene(QGraphicsScene*);
     void addObjectToSacoche(Object *object);
+    void removeObjectToSacoche(QString object);
     bool checkObjectSacoche(QString object);
     Object* getObjectSacoche();
     void printSacoche();

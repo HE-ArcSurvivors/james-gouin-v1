@@ -63,6 +63,8 @@ private:
     bool CheckGameOver();
     void CheckItem();
 
+    QString* neededItem;
+
     B_Movable *bToDepl;
 
     void populateScene();

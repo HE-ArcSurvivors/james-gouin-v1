@@ -37,23 +37,27 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     windowTitle = tr("James Gouin et la Banane Sacrée");
     windowSizeX = 20*gameSquares;
     windowSizeY = 15*gameSquares;
+
     viewStartPostionX = 1;
-    viewStartPostionY = 1;
+    viewStartPostionY = 15*gameSquares;
+
     viewPositionX = 20*gameSquares;
     viewPositionY = 15*gameSquares;
     maxBlocksHeight = 30;
     maxBlocksWidth = 60;
-    viewRequested = QPoint(1,1);
+    viewRequested = QPoint(1,2);
     exit = QPoint (20,6);
 
     gameSquares = 32;
     transition = 0;
-    startingPoint = QPoint(20,6); // 20x15
+    startingPoint = QPoint(15,21); // 20x15
     QString sceneToLoad = ":/maps/maps/tutorial.png";
     menuPauseSizeX = 400;
     menuPauseSizeY = 400;
     toggleGrabTheWorld = false;
     toggleMenuPause = false;
+
+    neededItem = new QString("Poisson");
 
     bToDepl = NULL;
     checkpoint = new QPoint();
@@ -85,10 +89,10 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     saveCheckpoint();
     populateScene();
 
-    /*menuPauseInGame = new M_Pause(this);
+    menuPauseInGame = new M_Pause(this);
     menuPauseInGame->setGeometry(viewStartPostionX+windowSizeX/2-menuPauseSizeX/2,viewStartPostionY+windowSizeY/2-menuPauseSizeY/2,menuPauseSizeX,menuPauseSizeY);
     proxy = mainScene->addWidget(menuPauseInGame);
-    proxy->hide();*/
+    proxy->hide();
 }
 
 Gameboard::~Gameboard(){
@@ -100,10 +104,10 @@ void Gameboard::SinkMovable(B_Movable *b)
     QList<QGraphicsItem *> CollidingItems = b->CollidesCenter();
     for(int i=0; i<CollidingItems.length(); i++)
     {
+        QPoint p = b->getPos();
         if(typeid(*CollidingItems.at(i)).name() == typeid(B_Water).name())
         {
             //SINK IT !
-            QPoint p = b->getPos();
             qDebug() << "Sink it ! : " << p.x() << " " << p.y();
 
             b->removeFromScene(mainScene);
@@ -112,6 +116,18 @@ void Gameboard::SinkMovable(B_Movable *b)
             S_Snow *sunk = new S_Snow(p.x(),p.y());
             mainScene->addItem(sunk);
         }
+//        if(typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
+//        {
+//            b->removeFromScene(mainScene);
+//            mainScene->removeItem(CollidingItems.at(i));
+
+//            B_Wall *wall = new B_Wall(p.x(),p.y());
+//            mainScene->addItem(wall);
+//        }
+//        if(typeid(*CollidingItems.at(i)).name() == typeid(Object).name())
+//        {
+//            mainScene->removeItem(CollidingItems.at(i));
+//        }
     }
 }
 
@@ -154,60 +170,53 @@ void Gameboard::CheckChangeView(QKeyEvent *event)
     {
         if(typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
         {
-            if(pingouin->checkObjectSacoche("Poisson"))
+            /*if(pingouin->checkObjectSacoche(neededItem))
             {
-                qDebug() << "OK";
+                //pingouin->removeObjectToSacoche(neededItem);*/
                 qDebug() << pingouin->x() << " " << pingouin->y();
-                checkpoint->setX(pingouin->x());
-                checkpoint->setY(pingouin->y());
-                qDebug() << "Nouveau Checkpoint : " << checkpoint->x() << " " << checkpoint->y();
-            }
-            else
-            {
-                qDebug() << "Pas encore de poisson !";
-            }
+                saveCheckpoint();
 
-            qDebug() << pingouin->x() << " " << pingouin->y();
-            saveCheckpoint();
+                qDebug() << "ViewRequested : " << viewRequested.x() << " " << viewRequested.y();
 
-            qDebug() << "ViewRequested : " << viewRequested.x() << " " << viewRequested.y();
-
-            if(event->key() == Qt::Key_W || event->key() == Qt::Key_Up)
-            {
-                if(!CheckGameOver())
+                if(event->key() == Qt::Key_W || event->key() == Qt::Key_Up)
                 {
                     qDebug() << "Up";
                     this-> checkpoint->setY(checkpoint->y()-gameSquares);
                     viewRequested.setY(viewRequested.y()-1);
                 }
-            }
-            if(event->key() == Qt::Key_S || event->key() == Qt::Key_Down)
-            {
-                qDebug() << "Down";
-                this->checkpoint->setY(checkpoint->y()+gameSquares);
-                viewRequested.setY(viewRequested.y()+1);
-            }
-            if(event->key() == Qt::Key_A || event->key() == Qt::Key_Left)
-            {
-                qDebug() << "Left";
-                this->checkpoint->setX(checkpoint->x()-gameSquares);
-                viewRequested.setX(viewRequested.x()-1);
-            }
-            if(event->key() == Qt::Key_D || event->key() == Qt::Key_Right)
-            {
-                qDebug() << "Right";
+                if(event->key() == Qt::Key_S || event->key() == Qt::Key_Down)
+                {
+                    qDebug() << "Down";
+                    this->checkpoint->setY(checkpoint->y()+gameSquares);
+                    viewRequested.setY(viewRequested.y()+1);
+                }
+                if(event->key() == Qt::Key_A || event->key() == Qt::Key_Left)
+                {
+                    qDebug() << "Left";
+                    this->checkpoint->setX(checkpoint->x()-gameSquares);
+                    viewRequested.setX(viewRequested.x()-1);
+                }
+                if(event->key() == Qt::Key_D || event->key() == Qt::Key_Right)
+                {
+                    qDebug() << "Right";
 
-                this->checkpoint->setX(checkpoint->x()+gameSquares);
-                viewRequested.setX(viewRequested.x()+1);
-            }
+                    this->checkpoint->setX(checkpoint->x()+gameSquares);
+                    viewRequested.setX(viewRequested.x()+1);
+                }
 
-            qDebug() << "ViewRequested : " << viewRequested.x() << " " << viewRequested.y();
-            loadCheckpoint();
-            setView(viewRequested);
+                qDebug() << "ViewRequested : " << viewRequested.x() << " " << viewRequested.y();
+                loadCheckpoint();
+                setView(viewRequested);
 
-            viewPositionX += windowSizeX;
-            viewStartPostionX += windowSizeX;
-            transition = 0;
+                viewPositionX += windowSizeX;
+                viewStartPostionX += windowSizeX;
+                transition = 0;
+            /*}
+            else
+            {
+                qDebug() << "Pas encore de " << neededItem << " ! ";
+                pingouin->moveBack();
+            }*/
         }
     }
 }
@@ -557,7 +566,7 @@ void Gameboard::populateScene()
     int Mat_Snow_Surface[maxBlocksWidth][maxBlocksHeight];
     int Mat_Ice_Surface[maxBlocksWidth][maxBlocksHeight];
 
-    QFile f(":/maps/maps/tutorial.txt");
+    QFile f(":/maps/maps/sceneTutorial_v3.txt");
     if(f.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QTextStream t(&f);
@@ -856,7 +865,7 @@ void Gameboard::populateScene()
             }
             if (Mat_Items[i][j] != 0)
             {
-                Object *item = new Object("Poisson");
+                Object *item = new Object(*neededItem);
                 item->setPos(i, j);
                 mainScene->addItem(item);
             }

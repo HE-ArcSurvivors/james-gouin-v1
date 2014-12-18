@@ -13,8 +13,10 @@ class Object : public Surface
 public:
     Object(int xpos, int ypos, QGraphicsItem *parent);
     Object(QString new_nom, QGraphicsItem *parent = 0);
+
     void setDesign();
     QString getName();
+    void action();
 
 private:
     QBrush* objectSkin;
