@@ -97,7 +97,7 @@ bool Pingouin::isSlide()
             slide = true;
         }
     }
-    return false;
+    return slide;
 }
 
 //Retour des listes des collisions

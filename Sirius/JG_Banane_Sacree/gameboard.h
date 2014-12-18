@@ -18,6 +18,7 @@ class QMessageBox;
 class QLabel;
 class QPushButton;
 class QPoint;
+class QTimer;
 
 struct slideBloc{
     B_Movable *slidingMovable;
@@ -71,8 +72,7 @@ private:
     void MoveBloc(char);
 
     void SinkMovable(B_Movable *b);
-    void ChangeView();
-    void CheckChangeView(QKeyEvent *event);
+    void CheckChangeView(char);
     bool CheckGameOver();
     void CheckItem();
 
