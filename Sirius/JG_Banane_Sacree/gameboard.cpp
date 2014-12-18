@@ -50,7 +50,7 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     /* StartPosition */
     viewRequested = QPoint(1,2);
     setViewPosition();
-    startingPoint = QPoint(15,21);
+    startingPoint = QPoint(15,23);
 
 //exit = QPoint(20,6);
     QString sceneToLoad = ":/maps/maps/tutorial.png";
@@ -254,9 +254,9 @@ void Gameboard::SlidePingouin()
         {
             if(!CheckGameOver())
             {
+               pingouin->moveBy(1, 0);
                CheckItem();
                CheckChangeView(cSensPingouinSlide);
-               pingouin->moveBy(1, 0);
 
                if(moveBloc != NULL)
                 {
@@ -275,6 +275,8 @@ void Gameboard::SlidePingouin()
 
     if(endSlide)
     {
+        CheckItem();
+        CheckChangeView(cSensPingouinSlide);
         timerPingouinSlide->stop();
         toggleMenuPause=false;
     }
@@ -325,18 +327,18 @@ void Gameboard::SinkMovable(B_Movable *b)
             S_Snow *sunk = new S_Snow(p.x(),p.y());
             mainScene->addItem(sunk);
         }
-//        if(typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
-//        {
-//            b->removeFromScene(mainScene);
-//            mainScene->removeItem(CollidingItems.at(i));
+        if(typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
+        {
+            b->removeFromScene(mainScene);
+            mainScene->removeItem(CollidingItems.at(i));
 
-//            B_Wall *wall = new B_Wall(p.x(),p.y());
-//            mainScene->addItem(wall);
-//        }
-//        if(typeid(*CollidingItems.at(i)).name() == typeid(Object).name())
-//        {
-//            mainScene->removeItem(CollidingItems.at(i));
-//        }
+            B_Wall *wall = new B_Wall(p.x(),p.y());
+            mainScene->addItem(wall);
+        }
+        if(typeid(*CollidingItems.at(i)).name() == typeid(Object).name())
+        {
+            mainScene->removeItem(CollidingItems.at(i));
+        }
     }
 }
 
