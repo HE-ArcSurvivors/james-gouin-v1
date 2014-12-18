@@ -91,4 +91,9 @@
    eJztlsEOwCAIQ3fx/395pyWG2ILOA0WbmCjo4hugPk9uNdCYj7Xssnu8vPV4dzYVsRpG8yO2bLrxxQy2P6r17JqJ2eXV5bXjCHsVXuvv57FzvBrvyI6+k1Wn8qI7lNlH87Jr9S2hyrsqZbaZnGbntaoivMyuptHevXtXiXfmzKqQx3+YFLk9nr7P6lhB0diid5hqfNH+o/9BjdeOG/DZNUqcnzzeSKyVuCO8Xi2r8XrxOpW3Qj7v1AvRgAcs
   </data>
  </layer>
+ <layer name="Item_Shoes" width="60" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztzjENAAAIA7CZwr81DOwlPK2CJgAAAAAANPMdAIADC4iPADY=
+  </data>
+ </layer>
 </map>
