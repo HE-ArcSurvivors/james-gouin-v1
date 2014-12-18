@@ -22,7 +22,9 @@
 #include <QPoint>
 #include <QPushButton>
 #include <QMessageBox>
+#include <QTimer>
 
+#define SLIDE_SPEED (80)
 
 #if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
 #else
@@ -50,16 +52,15 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     setViewPosition();
     startingPoint = QPoint(15,21);
 
-    //exit = QPoint(20,6);
-    QString sceneToLoad = ":/maps/maps/tutorial.png";
+//exit = QPoint(20,6);    QString sceneToLoad = ":/maps/maps/tutorial.png";
     menuPauseSizeX = 400;
     menuPauseSizeY = 400;
     toggleGrabTheWorld = false;
     toggleMenuPause = false;
 
+    moveBloc = NULL;
     neededItem = new QString("Poisson");
 
-    bToDepl = NULL;
     checkpoint = new QPoint();
 
     this->setWindowTitle(windowTitle);
@@ -93,6 +94,190 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     menuPauseInGame->setGeometry(viewPositionX+windowSizeX/2-menuPauseSizeX/2,viewPositionY+windowSizeY/2-menuPauseSizeY/2,menuPauseSizeX,menuPauseSizeY);
     proxy = mainScene->addWidget(menuPauseInGame);
     proxy->hide();
+   
+    //initialisation des timer
+    timerPingouinSlide = new QTimer();
+    timerBlocDeplSlide = new QTimer();
+    connect(timerPingouinSlide, SIGNAL(timeout()), this, SLOT(SlidePingouin()));
+    connect(timerBlocDeplSlide, SIGNAL(timeout()), this, SLOT(SlideBloc()));
+}
+void Gameboard::SlideBloc()
+{
+    for(int i=0; i<listSlindingBlocs.size(); i++)
+    {
+        B_Movable* SlidingBloc = listSlindingBlocs.at(i).slidingMovable;
+
+        bool removeBloc = true;
+
+        if(SlidingBloc->isSlide())
+        {
+            switch (listSlindingBlocs.at(i).sens)
+            {
+            case 't':
+
+                if(SlidingBloc->IsMovableToTop()) //&& Qu'il ne sorte pas de la view
+                {
+                    SlidingBloc->moveBy(0,-1);
+                    SinkMovable(SlidingBloc);
+                    removeBloc = false;
+                }
+
+                break;
+
+            case 'b':
+
+                if(SlidingBloc->IsMovableToBottom())
+                {
+                    SlidingBloc->moveBy(0,1);
+                    SinkMovable(SlidingBloc);
+                    removeBloc = false;
+                }
+
+                break;
+
+            case 'l':
+
+                if(SlidingBloc->IsMovableToLeft())
+                {
+                    SlidingBloc->moveBy(-1,0);
+                    SinkMovable(SlidingBloc);
+                    removeBloc = false;
+                }
+
+                break;
+
+            case 'r':
+
+                if(SlidingBloc->IsMovableToRight())
+                {
+                    SlidingBloc->moveBy(1,0);
+                    SinkMovable(SlidingBloc);
+                    removeBloc = false;
+                }
+
+                break;
+
+            default:
+                break;
+            }
+        }
+
+        if(removeBloc)
+        {
+            listSlindingBlocs.removeAt(i);
+        }
+    }
+
+    if(listSlindingBlocs.size() == 0)
+    {
+        timerBlocDeplSlide->stop();
+    }
+}
+
+void Gameboard::SlidePingouin()
+{
+    bool endSlide = true;
+
+    switch (cSensPingouinSlide)
+    {
+    case 't':
+
+        if(MovePingouinToTop() && pingouin->isSlide())
+        {
+            if(!CheckGameOver())
+            {
+                CheckItem();
+                CheckChangeView(cSensPingouinSlide);
+                pingouin->moveBy(0, -1);
+
+                if(moveBloc != NULL)
+                {
+                    moveBloc->moveBy(0,-1);
+                    SinkMovable(moveBloc);
+                    moveBloc = NULL;
+                }
+            }
+
+            endSlide = false;
+        }
+
+        break;
+
+    case 'b':
+
+        if(MovePingouinToBottom() && pingouin->isSlide())
+        {
+            if(!CheckGameOver())
+            {
+                CheckItem();
+                CheckChangeView(cSensPingouinSlide);
+                pingouin->moveBy(0, 1);
+
+                if(moveBloc != NULL)
+                {
+                    moveBloc->moveBy(0,1);
+                    SinkMovable(moveBloc);
+                    moveBloc = NULL;
+                }
+            }
+
+            endSlide = false;
+        }
+        break;
+
+    case 'l':
+
+        if(MovePingouinToLeft() && pingouin->isSlide())
+        {
+            if(!CheckGameOver())
+            {
+                CheckItem();
+                CheckChangeView(cSensPingouinSlide);
+                pingouin->moveBy(-1, 0);
+
+                if(moveBloc != NULL)
+                {
+                    moveBloc->moveBy(-1,0);
+                    SinkMovable(moveBloc);
+                    moveBloc = NULL;
+                }
+            }
+
+            endSlide = false;
+        }
+        break;
+
+    case 'r':
+
+        if(MovePingouinToRight() && pingouin->isSlide())
+        {
+            if(!CheckGameOver())
+            {
+               CheckItem();
+               CheckChangeView(cSensPingouinSlide);
+               pingouin->moveBy(1, 0);
+
+               if(moveBloc != NULL)
+                {
+                    moveBloc->moveBy(1,0);
+                    SinkMovable(moveBloc);
+                    moveBloc = NULL;
+                }
+             }
+
+           endSlide = false;
+        }
+        break;
+    default:
+        break;
+    }
+
+    if(endSlide)
+    {
+        timerPingouinSlide->stop();
+        toggleMenuPause=false;
+    }
+
 }
 
 Gameboard::~Gameboard(){
@@ -130,6 +315,7 @@ void Gameboard::SinkMovable(B_Movable *b)
         if(typeid(*CollidingItems.at(i)).name() == typeid(B_Water).name())
         {
             //SINK IT !
+        
             qDebug() << "Sink it ! : " << p.x() << " " << p.y();
 
             b->removeFromScene(mainScene);
@@ -185,7 +371,7 @@ void Gameboard::CheckItem()
     }
 }
 
-void Gameboard::CheckChangeView(QKeyEvent *event)
+void Gameboard::CheckChangeView(char sens)
 {
     QList<QGraphicsItem *> CollidingItems = pingouin->CollidesCenter();
     for(int i=0; i<CollidingItems.length(); i++)
@@ -200,25 +386,25 @@ void Gameboard::CheckChangeView(QKeyEvent *event)
 
                 qDebug() << "ViewRequested : " << viewRequested.x() << " " << viewRequested.y();
 
-                if(event->key() == Qt::Key_W || event->key() == Qt::Key_Up)
+                if(sens == 't')
                 {
                     qDebug() << "Up";
                     this-> checkpoint->setY(checkpoint->y()-gameSquares);
                     viewRequested.setY(viewRequested.y()-1);
                 }
-                if(event->key() == Qt::Key_S || event->key() == Qt::Key_Down)
+                if(sens == 'b')
                 {
                     qDebug() << "Down";
                     this->checkpoint->setY(checkpoint->y()+gameSquares);
                     viewRequested.setY(viewRequested.y()+1);
                 }
-                if(event->key() == Qt::Key_A || event->key() == Qt::Key_Left)
+                if(sens == 'l')
                 {
                     qDebug() << "Left";
                     this->checkpoint->setX(checkpoint->x()-gameSquares);
                     viewRequested.setX(viewRequested.x()-1);
                 }
-                if(event->key() == Qt::Key_D || event->key() == Qt::Key_Right)
+                if(sens == 'r')
                 {
                     qDebug() << "Right";
 
@@ -241,6 +427,41 @@ void Gameboard::CheckChangeView(QKeyEvent *event)
     }
 }
 
+void Gameboard::MoveBloc(char sens)
+{
+    switch(sens)
+    {
+        case 't':
+            moveBloc->moveBy(0,-1);
+        break;
+        case 'b':
+            moveBloc->moveBy(0,1);
+        break;
+        case 'l':
+            moveBloc->moveBy(-1,0);
+        break;
+        case 'r':
+            moveBloc->moveBy(1,0);
+        break;
+    }
+
+    SinkMovable(moveBloc);
+
+
+    if(moveBloc->isSlide())
+    {
+        slideBloc sb;
+        sb.slidingMovable = moveBloc;
+        sb.sens = sens;
+
+
+        listSlindingBlocs.append(sb);
+
+        timerBlocDeplSlide->start(SLIDE_SPEED);
+    }
+
+    moveBloc = NULL;
+}
 
 //http://doc.qt.digia.com/4.6/qt.html#Key-enum
 void Gameboard::keyPressEvent(QKeyEvent *event)
@@ -249,104 +470,105 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
     {
         if(event->key() == Qt::Key_W || event->key() == Qt::Key_Up)
         {
+            pingouin->setPlayerOrientation("up"); //definir l'orientation du joueur
+
             if(MovePingouinToTop())
             {
-                pingouin->setPlayerOrientation("up");
-
-                do
+                pingouin->moveBy(0, -1);
+                if(!CheckGameOver())
                 {
-                    pingouin->moveBy(0, -1);
-                    if(!CheckGameOver())
-                    {
-                        CheckItem();
-                        CheckChangeView(event);
+                    CheckItem();
+                    CheckChangeView('t');
 
-                        if(bToDepl != NULL)
-                        {
-                            bToDepl->moveBy(0,-1);
-                            SinkMovable(bToDepl);
-                            bToDepl = NULL;
-                        }
+                    if(moveBloc != NULL)
+                    {
+                        MoveBloc('t');
+                    }
+                    if(pingouin->isSlide())
+                    {
+                        toggleMenuPause=true;
+                        cSensPingouinSlide = 't';
+                        timerPingouinSlide->start(SLIDE_SPEED);
                     }
                 }
-                while(MovePingouinToTop() && pingouin->isSlide());
-                bToDepl = NULL;
             }
+
+
+
         }
         if(event->key() == Qt::Key_S || event->key() == Qt::Key_Down)
         {
+            pingouin->setPlayerOrientation("down");
+
             if(MovePingouinToBottom())
             {
-                pingouin->setPlayerOrientation("down");
+                pingouin->moveBy(0, 1);
 
-                do
+                if(!CheckGameOver())
                 {
-                    pingouin->moveBy(0, 1);
-                    if(!CheckGameOver())
+                    CheckItem();
+                    CheckChangeView('b');
+                    if(moveBloc != NULL)
                     {
-                        CheckItem();
-                        CheckChangeView(event);
-
-                        if(bToDepl != NULL)
-                        {
-                            bToDepl->moveBy(0,1);
-                            SinkMovable(bToDepl);
-                            bToDepl = NULL;
-                        }
+                        MoveBloc('b');
+                    }
+                    if(pingouin->isSlide())
+                    {
+                        toggleMenuPause=true;
+                        cSensPingouinSlide = 'b';
+                        timerPingouinSlide->start(SLIDE_SPEED);
                     }
                 }
-                while(MovePingouinToBottom() && pingouin->isSlide());
-                bToDepl = NULL;
             }
         }
         if(event->key() == Qt::Key_A || event->key() == Qt::Key_Left)
         {
+            pingouin->setPlayerOrientation("left");
+
             if(MovePingouinToLeft())
             {
-                pingouin->setPlayerOrientation("left");
-                do
-                {
-                    pingouin->moveBy(-1, 0);
-                    if(!CheckGameOver())
-                    {
-                        CheckItem();
-                        CheckChangeView(event);
+                pingouin->moveBy(-1, 0);
 
-                        if(bToDepl != NULL)
-                        {
-                            bToDepl->moveBy(-1,0);
-                            SinkMovable(bToDepl);
-                            bToDepl = NULL;
-                        }
+                if(!CheckGameOver())
+                {
+                    CheckItem();
+                    CheckChangeView('l');
+                    if(moveBloc != NULL)
+                    {
+                        MoveBloc('l');
+                    }
+                    if(pingouin->isSlide())
+                    {
+                        toggleMenuPause=true;
+                        cSensPingouinSlide = 'l';
+                        timerPingouinSlide->start(SLIDE_SPEED);
                     }
                 }
-                while(MovePingouinToLeft() && pingouin->isSlide());
-                bToDepl = NULL;
             }
         }
         if(event->key() == Qt::Key_D || event->key() == Qt::Key_Right)
         {
+            pingouin->setPlayerOrientation("right");
+
             if(MovePingouinToRight())
             {
-                pingouin->setPlayerOrientation("right");
-                do
-                {
-                    pingouin->moveBy(1, 0);
-                    if(!CheckGameOver())
-                    {
-                        CheckItem();
-                        CheckChangeView(event);
+                pingouin->moveBy(1, 0);
 
-                        if(bToDepl != NULL)
-                        {
-                            bToDepl->moveBy(1,0);
-                            SinkMovable(bToDepl);
-                            bToDepl = NULL;
-                        }
+                if(!CheckGameOver())
+                {
+                    CheckItem();
+                    CheckChangeView('r');
+                    if(moveBloc != NULL)
+                    {
+                        MoveBloc('r');
+                    }
+                    if(pingouin->isSlide())
+                    {
+                        toggleMenuPause=true;
+                        cSensPingouinSlide = 'r';
+                        timerPingouinSlide->start(SLIDE_SPEED);
                     }
                 }
-                while(MovePingouinToRight() && pingouin->isSlide());
-                bToDepl = NULL;
             }
         }
         if(event->key() == Qt::Key_0)
@@ -399,24 +621,23 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
         }
         else if(typeid(*CollidingItems.at(i)).name() == typeid(B_Movable).name())
         {
-//            qDebug() << "bloc moves";
             B_Movable *b;
             b = dynamic_cast<B_Movable*>(CollidingItems.at(i));
 
             if(sensDepl == 'l' && b->IsMovableToLeft()){
-                bToDepl = b;
+                moveBloc = b;
                 bMove = true;
             }
             else if(sensDepl == 'r' && b->IsMovableToRight()){
-                bToDepl = b;
+                moveBloc = b;
                 bMove = true;
             }
             else if(sensDepl == 't' && b->IsMovableToTop()){
-                bToDepl = b;
+                moveBloc = b;
                 bMove = true;
             }
             else if(sensDepl == 'b' && b->IsMovableToBottom()){
-                bToDepl = b;
+                moveBloc = b;
                 bMove = true;
             }
             else{
@@ -921,7 +1142,7 @@ void Gameboard::populateScene()
             }
             if (Mat_Ice_Surface[i][j] != 0)
             {
-                S_Snow *item = new S_Snow();
+                S_Ice *item = new S_Ice();
                 item->setPos(i,j);
                 mainScene->addItem(item);
             }

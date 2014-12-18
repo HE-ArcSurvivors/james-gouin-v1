@@ -8,8 +8,11 @@ class QGraphicsItem;
 class QPoint;
 class QGraphicsScene;
 
+
 class Pingouin  : public Player
 {
+//    Q_PROPERTY(QPoint pos READ pos WRITE setPos)
+
 private:
 
     QGraphicsRectItem *leftCollideBox;
