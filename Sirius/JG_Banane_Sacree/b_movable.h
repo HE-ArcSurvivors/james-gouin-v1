@@ -23,6 +23,8 @@ public:
     bool IsMovableToBottom();
     bool IsMovableToTop();
 
+    bool isSlide();
+
     QList<QGraphicsItem *> CollidesCenter();
 
 private:

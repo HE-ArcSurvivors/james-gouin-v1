@@ -37,3 +37,8 @@ QString Object::getName()
 {
     return *nom;
 }
+
+void Object::action()
+{
+
+}

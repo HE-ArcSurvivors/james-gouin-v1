@@ -2,20 +2,28 @@
 #define GAMEBOARD_H
 
 #include <QWidget>
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QGraphicsItem>
-#include <QPixmap>
-#include <QKeyEvent>
 #include "p_penguin.h"
-#include <QFormLayout>
 #include "b_movable.h"
-#include <QGroupBox>
-#include <QMessageBox>
-#include <QLabel>
-#include <QPushButton>
 #include "m_pause.h"
 #include <QGraphicsProxyWidget>
+
+class QGraphicsScene;
+class QGraphicsView;
+class QGraphicsItem;
+class QPixmap;
+class QKeyEvent;
+class QFormLayout;
+class QGroupBox;
+class QMessageBox;
+class QLabel;
+class QPushButton;
+class QPoint;
+class QTimer;
+
+struct slideBloc{
+    B_Movable *slidingMovable;
+    char sens; //l, r, t, b
+};
 
 class Gameboard : public QWidget
 {
@@ -25,29 +33,34 @@ public:
     ~Gameboard();
 
     static int getGameSquares();
+    QPoint *getCheckPoint();
 
 private:
+
+    QTimer *timerPingouinSlide;
+    QTimer *timerBlocDeplSlide;
+    char cSensPingouinSlide;
+
     QGraphicsScene *mainScene;
     QGraphicsScene *preloadedScene;
     QGraphicsView *playerView;
     Pingouin *pingouin;
     void keyPressEvent(QKeyEvent *event);
-    int viewPositionX;
-    int viewPositionY;
     int windowSizeY;
     int windowSizeX;
-    int viewStartPostionX;
-    int viewStartPostionY;
+    int viewPositionX;
+    int viewPositionY;
     static int gameSquares;
     QString windowTitle;
     QPoint startingPoint;
 
-    int maxBlocksHeigh;
+    void setViewPosition();
+
+    int maxBlocksHeight;
     int maxBlocksWidth;
     int transition;
     QPoint viewRequested;
     QPoint exit;
-    void setView(QPoint);
 
     bool MovePingouinToLeft();
     bool MovePingouinToRight();
@@ -55,11 +68,16 @@ private:
     bool MovePingouinToBottom();
     bool MovePingouin(QList<QGraphicsItem *>, char);
 
+    void MoveBloc(char);
+
     void SinkMovable(B_Movable *b);
-    void ChangeView();
+    void CheckChangeView(char);
+    bool CheckGameOver();
+    void CheckItem();
 
-
-    B_Movable *bToDepl;
+    B_Movable *moveBloc;
+    QList<slideBloc> listSlindingBlocs;
+    QString* neededItem;
 
     void populateScene();
 
@@ -83,17 +101,23 @@ private:
     QPushButton *btnMenuPauseConfigure;
     QPushButton *btnMenuPauseQuit;
 
-    M_Pause *menuPauseInGame;
+    QPoint* checkpoint;
+    void saveCheckpoint();
+    void loadCheckpoint();
 
-    QGraphicsProxyWidget *proxy;
+	M_Pause *menuPauseInGame;
 
-protected:
+    QGraphicsProxyWidget *proxy;protected:
 
+    int sizeX;
+    int sizeY;
 
 signals:
 
 public slots:
     void resumeGame();
+    void SlidePingouin();
+    void SlideBloc();
 
     void exitGame();
 };

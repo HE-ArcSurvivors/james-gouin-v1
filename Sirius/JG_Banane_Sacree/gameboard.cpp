@@ -8,11 +8,23 @@
 #include "s_viewtransition.h"
 #include "s_snow.h"
 #include "s_ice.h"
+
 #include <QList>
 #include <QDebug>
 #include <QGraphicsItemGroup>
 #include <QApplication>
+#include <QGraphicsView>
+#include <QKeyEvent>
+#include <QFile>
+#include <QFormLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QPoint>
+#include <QPushButton>
+#include <QMessageBox>
+#include <QTimer>
 
+#define SLIDE_SPEED (80)
 
 #if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
 #else
@@ -23,33 +35,37 @@ int Gameboard::gameSquares = 32;
 
 Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 {
+    /* Quantité de blos / Taille de fenêtre / Etc */
+    sizeX = 20;
+    sizeY = 15;
+
     // Les Variables par default du jeu
     windowTitle = tr("James Gouin et la Banane Sacrée");
-    windowSizeX = 20*gameSquares;
-    windowSizeY = 15*gameSquares;
-    viewStartPostionX = 1;
-    viewStartPostionY = 1;
-    viewPositionX = 20*gameSquares;
-    viewPositionY = 15*gameSquares;
-//    viewPositionX = 60*gameSquares;
-//    viewPositionY = 30*gameSquares;
-    maxBlocksHeigh = 30;
-    viewRequested = QPoint (1,1);
-    exit = QPoint (20,6);
-    maxBlocksWidth = 60;
-    gameSquares = 32;
-    transition = 0;
-    startingPoint = QPoint (10,10); // 20x15
+    windowSizeX = sizeX*gameSquares;
+    windowSizeY = sizeY*gameSquares;
+
+    maxBlocksHeight = 2*sizeY;
+    maxBlocksWidth = 3*sizeX;
+
+    /* StartPosition */
+    viewRequested = QPoint(1,2);
+    setViewPosition();
+    startingPoint = QPoint(15,23);
+
+//exit = QPoint(20,6);
     QString sceneToLoad = ":/maps/maps/tutorial.png";
     menuPauseSizeX = 400;
     menuPauseSizeY = 400;
     toggleGrabTheWorld = false;
     toggleMenuPause = false;
 
-    bToDepl = NULL;
+    moveBloc = NULL;
+    neededItem = new QString("Poisson");
+
+    checkpoint = new QPoint();
 
     this->setWindowTitle(windowTitle);
-//    this->setFixedSize(windowSizeX,windowSizeY);
+    this->setFixedSize(windowSizeX,windowSizeY);
     this->resize(windowSizeX,windowSizeY);
 
     mainScene = new QGraphicsScene(this);
@@ -61,11 +77,10 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 
     playerView->setHorizontalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
     playerView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    playerView->setSceneRect(viewStartPostionX,viewStartPostionY,viewPositionX,viewPositionY);
+    playerView->setSceneRect(viewPositionX,viewPositionY,sizeX*gameSquares,sizeY*gameSquares);
 
     //On position la vue
     playerView->setScene(mainScene);
-
     grabKeyboard();
 
     //On ajoute le joueur
@@ -73,30 +88,237 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     pingouin->addToScene(mainScene);
     pingouin->setPos(startingPoint.x(), startingPoint.y());
 
+    saveCheckpoint();
     populateScene();
 
-    //On position la vue
-    playerView->setScene(mainScene);
-
     menuPauseInGame = new M_Pause(this);
-    menuPauseInGame->setGeometry(viewStartPostionX+windowSizeX/2-menuPauseSizeX/2,viewStartPostionY+windowSizeY/2-menuPauseSizeY/2,menuPauseSizeX,menuPauseSizeY);
+    menuPauseInGame->setGeometry(viewPositionX+windowSizeX/2-menuPauseSizeX/2,viewPositionY+windowSizeY/2-menuPauseSizeY/2,menuPauseSizeX,menuPauseSizeY);
     proxy = mainScene->addWidget(menuPauseInGame);
     proxy->hide();
+   
+    //initialisation des timer
+    timerPingouinSlide = new QTimer();
+    timerBlocDeplSlide = new QTimer();
+    connect(timerPingouinSlide, SIGNAL(timeout()), this, SLOT(SlidePingouin()));
+    connect(timerBlocDeplSlide, SIGNAL(timeout()), this, SLOT(SlideBloc()));
+}
+void Gameboard::SlideBloc()
+{
+    for(int i=0; i<listSlindingBlocs.size(); i++)
+    {
+        B_Movable* SlidingBloc = listSlindingBlocs.at(i).slidingMovable;
+
+        bool removeBloc = true;
+
+        if(SlidingBloc->isSlide())
+        {
+            switch (listSlindingBlocs.at(i).sens)
+            {
+            case 't':
+
+                if(SlidingBloc->IsMovableToTop()) //&& Qu'il ne sorte pas de la view
+                {
+                    SlidingBloc->moveBy(0,-1);
+                    SinkMovable(SlidingBloc);
+                    removeBloc = false;
+                }
+
+                break;
+
+            case 'b':
+
+                if(SlidingBloc->IsMovableToBottom())
+                {
+                    SlidingBloc->moveBy(0,1);
+                    SinkMovable(SlidingBloc);
+                    removeBloc = false;
+                }
+
+                break;
+
+            case 'l':
+
+                if(SlidingBloc->IsMovableToLeft())
+                {
+                    SlidingBloc->moveBy(-1,0);
+                    SinkMovable(SlidingBloc);
+                    removeBloc = false;
+                }
+
+                break;
+
+            case 'r':
+
+                if(SlidingBloc->IsMovableToRight())
+                {
+                    SlidingBloc->moveBy(1,0);
+                    SinkMovable(SlidingBloc);
+                    removeBloc = false;
+                }
+
+                break;
+
+            default:
+                break;
+            }
+        }
+
+        if(removeBloc)
+        {
+            listSlindingBlocs.removeAt(i);
+        }
+    }
+
+    if(listSlindingBlocs.size() == 0)
+    {
+        timerBlocDeplSlide->stop();
+    }
+}
+
+void Gameboard::SlidePingouin()
+{
+    bool endSlide = true;
+
+    switch (cSensPingouinSlide)
+    {
+    case 't':
+
+        if(MovePingouinToTop() && pingouin->isSlide())
+        {
+            if(!CheckGameOver())
+            {
+                CheckItem();
+                CheckChangeView(cSensPingouinSlide);
+                pingouin->moveBy(0, -1);
+
+                if(moveBloc != NULL)
+                {
+                    moveBloc->moveBy(0,-1);
+                    SinkMovable(moveBloc);
+                    moveBloc = NULL;
+                }
+            }
+
+            endSlide = false;
+        }
+
+        break;
+
+    case 'b':
+
+        if(MovePingouinToBottom() && pingouin->isSlide())
+        {
+            if(!CheckGameOver())
+            {
+                CheckItem();
+                CheckChangeView(cSensPingouinSlide);
+                pingouin->moveBy(0, 1);
+
+                if(moveBloc != NULL)
+                {
+                    moveBloc->moveBy(0,1);
+                    SinkMovable(moveBloc);
+                    moveBloc = NULL;
+                }
+            }
+
+            endSlide = false;
+        }
+        break;
+
+    case 'l':
+
+        if(MovePingouinToLeft() && pingouin->isSlide())
+        {
+            if(!CheckGameOver())
+            {
+                CheckItem();
+                CheckChangeView(cSensPingouinSlide);
+                pingouin->moveBy(-1, 0);
+
+                if(moveBloc != NULL)
+                {
+                    moveBloc->moveBy(-1,0);
+                    SinkMovable(moveBloc);
+                    moveBloc = NULL;
+                }
+            }
+
+            endSlide = false;
+        }
+        break;
+
+    case 'r':
+
+        if(MovePingouinToRight() && pingouin->isSlide())
+        {
+            if(!CheckGameOver())
+            {
+               pingouin->moveBy(1, 0);
+               CheckItem();
+               CheckChangeView(cSensPingouinSlide);
+
+               if(moveBloc != NULL)
+                {
+                    moveBloc->moveBy(1,0);
+                    SinkMovable(moveBloc);
+                    moveBloc = NULL;
+                }
+             }
+
+           endSlide = false;
+        }
+        break;
+    default:
+        break;
+    }
+
+    if(endSlide)
+    {
+        CheckItem();
+        CheckChangeView(cSensPingouinSlide);
+        timerPingouinSlide->stop();
+        toggleMenuPause=false;
+    }
+
 }
 
 Gameboard::~Gameboard(){
 
 }
+
+
+void Gameboard::setViewPosition()
+{
+    int x = viewRequested.x();
+    int y = viewRequested.y();
+
+    if(x==1) { viewPositionX = 1; }
+    else
+    {
+        viewPositionX = (x-1)*20*gameSquares;
+    }
+
+    if(y==1)
+    {
+        viewPositionY = 1;
+    }
+    else
+    {
+        viewPositionY = (y-1)*15*gameSquares;
+    }
+}
+
 void Gameboard::SinkMovable(B_Movable *b)
 {
     QList<QGraphicsItem *> CollidingItems = b->CollidesCenter();
-
     for(int i=0; i<CollidingItems.length(); i++)
     {
+        QPoint p = b->getPos();
         if(typeid(*CollidingItems.at(i)).name() == typeid(B_Water).name())
         {
             //SINK IT !
-            QPoint p = b->getPos();
+        
             qDebug() << "Sink it ! : " << p.x() << " " << p.y();
 
             b->removeFromScene(mainScene);
@@ -105,35 +327,145 @@ void Gameboard::SinkMovable(B_Movable *b)
             S_Snow *sunk = new S_Snow(p.x(),p.y());
             mainScene->addItem(sunk);
         }
-    }
+        if(typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
+        {
+            b->removeFromScene(mainScene);
+            mainScene->removeItem(CollidingItems.at(i));
 
+            B_Wall *wall = new B_Wall(p.x(),p.y());
+            mainScene->addItem(wall);
+        }
+        if(typeid(*CollidingItems.at(i)).name() == typeid(Object).name())
+        {
+            mainScene->removeItem(CollidingItems.at(i));
+        }
+    }
 }
 
-void Gameboard::ChangeView()
+bool Gameboard::CheckGameOver()
 {
     QList<QGraphicsItem *> CollidingItems = pingouin->CollidesCenter();
 
     for(int i=0; i<CollidingItems.length(); i++)
     {
-        if(typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
+        if(typeid(*CollidingItems.at(i)).name() == typeid(B_Water).name())
         {
-            //CHANGE VIEW !
+            pingouin->setPlayerOrientation("down");
+            loadCheckpoint();
+            return true;
+        }
+    }
+    return false;
+}
 
-            qDebug() << "Change view !";
+void Gameboard::CheckItem()
+{
+    QList<QGraphicsItem *> CollidingItems = pingouin->CollidesCenter();
 
-            transition++;
-            if (transition == 2)
-            {
-                viewRequested.setX(viewRequested.x()+1);
-                setView(viewRequested);
+    for(int i=0; i<CollidingItems.length(); i++)
+    {
+        if(typeid(*CollidingItems.at(i)).name() == typeid(Object).name())
+        {
+            Object *objet = dynamic_cast<Object*>(CollidingItems.at(i));
 
-                viewPositionX += windowSizeX;
-                viewStartPostionX += windowSizeX;
-                transition = 0;
-            }
+            pingouin->addObjectToSacoche(new Object(objet->getName()));
+            mainScene->removeItem(CollidingItems.at(i));
         }
     }
 }
+
+void Gameboard::CheckChangeView(char sens)
+{
+    QList<QGraphicsItem *> CollidingItems = pingouin->CollidesCenter();
+    for(int i=0; i<CollidingItems.length(); i++)
+    {
+        if(typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
+        {
+            /*if(pingouin->checkObjectSacoche(neededItem))
+            {
+                //pingouin->removeObjectToSacoche(neededItem);*/
+                qDebug() << pingouin->x() << " " << pingouin->y();
+                saveCheckpoint();
+
+                qDebug() << "ViewRequested : " << viewRequested.x() << " " << viewRequested.y();
+
+                if(sens == 't')
+                {
+                    qDebug() << "Up";
+                    this-> checkpoint->setY(checkpoint->y()-gameSquares);
+                    viewRequested.setY(viewRequested.y()-1);
+                }
+                if(sens == 'b')
+                {
+                    qDebug() << "Down";
+                    this->checkpoint->setY(checkpoint->y()+gameSquares);
+                    viewRequested.setY(viewRequested.y()+1);
+                }
+                if(sens == 'l')
+                {
+                    qDebug() << "Left";
+                    this->checkpoint->setX(checkpoint->x()-gameSquares);
+                    viewRequested.setX(viewRequested.x()-1);
+                }
+                if(sens == 'r')
+                {
+                    qDebug() << "Right";
+
+                    this->checkpoint->setX(checkpoint->x()+gameSquares);
+                    viewRequested.setX(viewRequested.x()+1);
+                }
+
+                qDebug() << "ViewRequested : " << viewRequested.x() << " " << viewRequested.y();
+                loadCheckpoint();
+                setViewPosition();
+                playerView->setSceneRect(viewPositionX,viewPositionY,windowSizeX,windowSizeY);
+
+            /*}
+            else
+            {
+                qDebug() << "Pas encore de " << neededItem << " ! ";
+                pingouin->moveBack();
+            }*/
+        }
+    }
+}
+
+void Gameboard::MoveBloc(char sens)
+{
+    switch(sens)
+    {
+        case 't':
+            moveBloc->moveBy(0,-1);
+        break;
+        case 'b':
+            moveBloc->moveBy(0,1);
+        break;
+        case 'l':
+            moveBloc->moveBy(-1,0);
+        break;
+        case 'r':
+            moveBloc->moveBy(1,0);
+        break;
+    }
+
+    SinkMovable(moveBloc);
+
+
+    if(moveBloc->isSlide())
+    {
+        slideBloc sb;
+        sb.slidingMovable = moveBloc;
+        sb.sens = sens;
+
+
+        listSlindingBlocs.append(sb);
+
+        timerBlocDeplSlide->start(SLIDE_SPEED);
+    }
+
+    moveBloc = NULL;
+}
+
 //http://doc.qt.digia.com/4.6/qt.html#Key-enum
 void Gameboard::keyPressEvent(QKeyEvent *event)
 {
@@ -141,86 +473,105 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
     {
         if(event->key() == Qt::Key_W || event->key() == Qt::Key_Up)
         {
+            pingouin->setPlayerOrientation("up"); //definir l'orientation du joueur
+
             if(MovePingouinToTop())
             {
-                do
+                pingouin->moveBy(0, -1);
+                if(!CheckGameOver())
                 {
-                    pingouin->moveBy(0, -1);
+                    CheckItem();
+                    CheckChangeView('t');
 
-                    if(bToDepl != NULL)
+                    if(moveBloc != NULL)
                     {
-                        bToDepl->moveBy(0,-1);
-                        SinkMovable(bToDepl);
-                        bToDepl = NULL;
+                        MoveBloc('t');
+                    }
+                    if(pingouin->isSlide())
+                    {
+                        toggleMenuPause=true;
+                        cSensPingouinSlide = 't';
+                        timerPingouinSlide->start(SLIDE_SPEED);
                     }
                 }
-                while(MovePingouinToTop() && pingouin->isSlide());
-                bToDepl = NULL;
-
-                pingouin->setPlayerOrientation("up"); //definir l'orientation du joueur
             }
+
+
+
         }
         if(event->key() == Qt::Key_S || event->key() == Qt::Key_Down)
         {
+            pingouin->setPlayerOrientation("down");
+
             if(MovePingouinToBottom())
             {
-                do
-                {
-                    pingouin->moveBy(0, 1);
+                pingouin->moveBy(0, 1);
 
-                    if(bToDepl != NULL)
+                if(!CheckGameOver())
+                {
+                    CheckItem();
+                    CheckChangeView('b');
+                    if(moveBloc != NULL)
                     {
-                        bToDepl->moveBy(0,1);
-                        SinkMovable(bToDepl);
-                        bToDepl = NULL;
+                        MoveBloc('b');
+                    }
+                    if(pingouin->isSlide())
+                    {
+                        toggleMenuPause=true;
+                        cSensPingouinSlide = 'b';
+                        timerPingouinSlide->start(SLIDE_SPEED);
                     }
                 }
-                while(MovePingouinToBottom() && pingouin->isSlide());
-                bToDepl = NULL;
-
-                pingouin->setPlayerOrientation("down");
             }
         }
         if(event->key() == Qt::Key_A || event->key() == Qt::Key_Left)
         {
+            pingouin->setPlayerOrientation("left");
+
             if(MovePingouinToLeft())
             {
-                do
-                {
-                    pingouin->moveBy(-1, 0);
+                pingouin->moveBy(-1, 0);
 
-                    if(bToDepl != NULL)
+                if(!CheckGameOver())
+                {
+                    CheckItem();
+                    CheckChangeView('l');
+                    if(moveBloc != NULL)
                     {
-                        bToDepl->moveBy(-1,0);
-                        SinkMovable(bToDepl);
-                        bToDepl = NULL;
+                        MoveBloc('l');
+                    }
+                    if(pingouin->isSlide())
+                    {
+                        toggleMenuPause=true;
+                        cSensPingouinSlide = 'l';
+                        timerPingouinSlide->start(SLIDE_SPEED);
                     }
                 }
-                while(MovePingouinToLeft() && pingouin->isSlide());
-                bToDepl = NULL;
-
-                pingouin->setPlayerOrientation("left");
             }
         }
         if(event->key() == Qt::Key_D || event->key() == Qt::Key_Right)
         {
+            pingouin->setPlayerOrientation("right");
+
             if(MovePingouinToRight())
             {
-                do
-                {
-                    pingouin->moveBy(1, 0);
+                pingouin->moveBy(1, 0);
 
-                    if(bToDepl != NULL)
+                if(!CheckGameOver())
+                {
+                    CheckItem();
+                    CheckChangeView('r');
+                    if(moveBloc != NULL)
                     {
-                        bToDepl->moveBy(1,0);
-                        SinkMovable(bToDepl);
-                        bToDepl = NULL;
+                        MoveBloc('r');
+                    }
+                    if(pingouin->isSlide())
+                    {
+                        toggleMenuPause=true;
+                        cSensPingouinSlide = 'r';
+                        timerPingouinSlide->start(SLIDE_SPEED);
                     }
                 }
-                while(MovePingouinToRight() && pingouin->isSlide());
-                bToDepl = NULL;
-
-                pingouin->setPlayerOrientation("right");
             }
         }
         if(event->key() == Qt::Key_0)
@@ -238,114 +589,75 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
     }
 }
 
-
 bool Gameboard::MovePingouinToLeft()
 {
-    if (pingouin->pos().x() > viewStartPostionY)
-    {
-        return MovePingouin(pingouin->CollidesLeft(), 'l');
-    }
-    else{
-        ChangeView();
-        return false;
-    }
+    return MovePingouin(pingouin->CollidesLeft(), 'l');
 }
+
 bool Gameboard::MovePingouinToRight()
 {
-    if (pingouin->pos().x() < viewPositionX-Gameboard::getGameSquares())
-    {
-        return MovePingouin(pingouin->CollidesRight(), 'r');
-    }
-    else{
-        ChangeView();
-        return false;
-    }
+    return MovePingouin(pingouin->CollidesRight(), 'r');
 }
+
 bool Gameboard::MovePingouinToTop()
 {
-    // Determiner si le joueur sort de la vue
-    if (pingouin->pos().y() > viewStartPostionY)
-    {
-        return MovePingouin(pingouin->CollidesTop(), 't');
-    }
-    else{
-        ChangeView();
-        return false;
-    }
+    return MovePingouin(pingouin->CollidesTop(), 't');
 }
+
 bool Gameboard::MovePingouinToBottom()
 {
-    if (pingouin->pos().y() <= viewPositionY-Gameboard::getGameSquares()-8)
-    {
-        return MovePingouin(pingouin->CollidesBottom(), 'b');
-    }
-    else{
-        ChangeView();
-        return false;
-    }
+    return MovePingouin(pingouin->CollidesBottom(), 'b');
 }
+
 bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDepl)
 {
     bool bMove = true;
     for(int i=0; i<CollidingItems.length(); i++)
     {
-
         if(typeid(*CollidingItems.at(i)).name() == typeid(B_Wall).name())
         {
             bMove = false;
         }
         else if(typeid(*CollidingItems.at(i)).name() == typeid(B_Water).name())
         {
-            bMove = false;
+            //bMove = false;
         }
         else if(typeid(*CollidingItems.at(i)).name() == typeid(B_Movable).name())
         {
-//            qDebug() << "bloc moves";
             B_Movable *b;
             b = dynamic_cast<B_Movable*>(CollidingItems.at(i));
 
-            if(sensDepl == 'l' && b->IsMovableToLeft() && b->pos().x() > viewStartPostionY){
-                //b->moveBy(-1,0);
-                bToDepl = b;
+            if(sensDepl == 'l' && b->IsMovableToLeft()){
+                moveBloc = b;
                 bMove = true;
             }
-            else if(sensDepl == 'r' && b->IsMovableToRight() && b->pos().x() < viewPositionX-Gameboard::getGameSquares()){
-                //b->moveBy(1,0);
-                bToDepl = b;
+            else if(sensDepl == 'r' && b->IsMovableToRight()){
+                moveBloc = b;
                 bMove = true;
             }
-            else if(sensDepl == 't' && b->IsMovableToTop() && b->pos().y() > viewStartPostionY){
-                //b->moveBy(0,-1);
-                bToDepl = b;
+            else if(sensDepl == 't' && b->IsMovableToTop()){
+                moveBloc = b;
                 bMove = true;
             }
-            else if(sensDepl == 'b' && b->IsMovableToBottom() && b->pos().y() <= viewPositionY-Gameboard::getGameSquares()-8){
-                //b->moveBy(0, 1);
-                bToDepl = b;
+            else if(sensDepl == 'b' && b->IsMovableToBottom()){
+                moveBloc = b;
                 bMove = true;
             }
             else{
                 bMove=false;
             }
         }
-        else if(typeid(*CollidingItems.at(i)).name() == typeid(Object).name())
-        {
-            Object *objet = dynamic_cast<Object*>(CollidingItems.at(i));
+//        else if(typeid(*CollidingItems.at(i)).name() == typeid(Object).name())
+//        {
+//            Object *objet = dynamic_cast<Object*>(CollidingItems.at(i));
 
-            pingouin->addObjectToSacoche(new Object(objet->getName()));
-            mainScene->removeItem(CollidingItems.at(i));
-        }
-        else if(typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
+//            pingouin->addObjectToSacoche(new Object(objet->getName()));
+//            mainScene->removeItem(CollidingItems.at(i));
+//        }
+        /*else if(typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
         {
-            if(pingouin->checkObjectSacoche("Poisson"))
-            {
-                qDebug() << "OK";
-            }
-            else
-            {
-                qDebug() << "Pas encore de poisson !";
-            }
-        }
+
+        }*/
 
 //        if (typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
 //        {
@@ -369,384 +681,6 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
 //        }
     }
     return bMove;
-}
-
-void Gameboard::populateScene()
-{
-    int Mat_Walls_Blocks[maxBlocksWidth][maxBlocksHeigh];
-    int Mat_Movable_Blocks[maxBlocksWidth][maxBlocksHeigh];
-    int Mat_Items[maxBlocksWidth][maxBlocksHeigh];
-    int Mat_Bonus[maxBlocksWidth][maxBlocksHeigh];
-    int Mat_Enemies[maxBlocksWidth][maxBlocksHeigh];
-    int Mat_Scene_Start[maxBlocksWidth][maxBlocksHeigh];
-    int Mat_Scene_End[maxBlocksWidth][maxBlocksHeigh];
-    int Mat_Doors[maxBlocksWidth][maxBlocksHeigh];
-    int Mat_Water_Blocks[maxBlocksWidth][maxBlocksHeigh];
-    int Mat_Snow_Surface[maxBlocksWidth][maxBlocksHeigh];
-    int Mat_Ice_Surface[maxBlocksWidth][maxBlocksHeigh];
-
-    QFile f(":/maps/maps/tutorial.txt");
-    if(f.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        QTextStream t(&f);
-        QString line[1000];
-        QString s;
-        int line_count=0;
-
-        int matX, matY;
-
-        while(!t.atEnd())
-        {
-            line_count++;
-            line[line_count]=t.readLine();
-            if(line[line_count].contains("type=Walls_Blocks"))
-            {
-                line_count ++;
-                line[line_count]=t.readLine();
-                line_count ++;
-                line[line_count]=t.readLine();
-//                qDebug() << "Found Layer: " << line[line_count] << " at: " << line_count;
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
-                {
-                    QStringList values = line[line_count].split(",");
-
-//                    qDebug() << "Flaged: " << line[line_count] << " at: " << line_count;
-//                    qDebug() << "Values: " << values;
-                    for (matX = 0; matX < maxBlocksWidth; matX++)
-                    {
-                        Mat_Walls_Blocks[matX][matY] = values.at(matX).toInt();
-//                        qDebug() << "Value: " << Walls[matX][matY];
-                    }
-                    line_count++;
-                    line[line_count]=t.readLine();
-                }
-            }
-
-            if(line[line_count].contains("type=Solid_Blocks"))
-            {
-                line_count ++;
-                line[line_count]=t.readLine();
-                line_count ++;
-                line[line_count]=t.readLine();
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
-                {
-                    QStringList values = line[line_count].split(",");
-
-                    for (matX = 0; matX < maxBlocksWidth; matX++)
-                    {
-                        Mat_Walls_Blocks[matX][matY] += values.at(matX).toInt();
-                    }
-                    line_count++;
-                    line[line_count]=t.readLine();
-                }
-            }
-
-            if(line[line_count].contains("type=Movable_Blocks"))
-            {
-                line_count ++;
-                line[line_count]=t.readLine();
-                line_count ++;
-                line[line_count]=t.readLine();
-
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
-                {
-                    QStringList values = line[line_count].split(",");
-
-                    for (matX = 0; matX < maxBlocksWidth; matX++)
-                    {
-                        Mat_Movable_Blocks[matX][matY] = values.at(matX).toInt();
-                    }
-                    line_count++;
-                    line[line_count]=t.readLine();
-                }
-            }
-
-            if(line[line_count].contains("type=Items"))
-            {
-                line_count ++;
-                line[line_count]=t.readLine();
-                line_count ++;
-                line[line_count]=t.readLine();
-
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
-                {
-                    QStringList values = line[line_count].split(",");
-
-                    for (matX = 0; matX < maxBlocksWidth; matX++)
-                    {
-                        Mat_Items[matX][matY] = values.at(matX).toInt();
-                    }
-                    line_count++;
-                    line[line_count]=t.readLine();
-                }
-            }
-
-            if(line[line_count].contains("type=Bonus"))
-            {
-                line_count ++;
-                line[line_count]=t.readLine();
-                line_count ++;
-                line[line_count]=t.readLine();
-
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
-                {
-                    QStringList values = line[line_count].split(",");
-
-                    for (matX = 0; matX < maxBlocksWidth; matX++)
-                    {
-                        Mat_Bonus[matX][matY] = values.at(matX).toInt();
-                    }
-                    line_count++;
-                    line[line_count]=t.readLine();
-                }
-            }
-
-            if(line[line_count].contains("type=Enemies"))
-            {
-                line_count ++;
-                line[line_count]=t.readLine();
-                line_count ++;
-                line[line_count]=t.readLine();
-
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
-                {
-                    QStringList values = line[line_count].split(",");
-
-                    for (matX = 0; matX < maxBlocksWidth; matX++)
-                    {
-                        Mat_Enemies[matX][matY] = values.at(matX).toInt();
-                    }
-                    line_count++;
-                    line[line_count]=t.readLine();
-                }
-            }
-
-            if(line[line_count].contains("type=Scene_Start"))
-            {
-                line_count ++;
-                line[line_count]=t.readLine();
-                line_count ++;
-                line[line_count]=t.readLine();
-
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
-                {
-                    QStringList values = line[line_count].split(",");
-
-                    for (matX = 0; matX < maxBlocksWidth; matX++)
-                    {
-                        Mat_Scene_Start[matX][matY] = values.at(matX).toInt();
-                    }
-                    line_count++;
-                    line[line_count]=t.readLine();
-                }
-            }
-
-            if(line[line_count].contains("type=Scene_End"))
-            {
-                line_count ++;
-                line[line_count]=t.readLine();
-                line_count ++;
-                line[line_count]=t.readLine();
-
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
-                {
-                    QStringList values = line[line_count].split(",");
-
-                    for (matX = 0; matX < maxBlocksWidth; matX++)
-                    {
-                        Mat_Scene_End[matX][matY] = values.at(matX).toInt();
-                    }
-                    line_count++;
-                    line[line_count]=t.readLine();
-                }
-            }
-            if(line[line_count].contains("type=Doors"))
-            {
-                line_count ++;
-                line[line_count]=t.readLine();
-                line_count ++;
-                line[line_count]=t.readLine();
-
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
-                {
-                    QStringList values = line[line_count].split(",");
-
-                    for (matX = 0; matX < maxBlocksWidth; matX++)
-                    {
-                        Mat_Doors[matX][matY] = values.at(matX).toInt();
-                    }
-                    line_count++;
-                    line[line_count]=t.readLine();
-                }
-            }
-
-            if(line[line_count].contains("type=Water_Blocks"))
-            {
-                line_count ++;
-                line[line_count]=t.readLine();
-                line_count ++;
-                line[line_count]=t.readLine();
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
-                {
-                    QStringList values = line[line_count].split(",");
-
-                    for (matX = 0; matX < maxBlocksWidth; matX++)
-                    {
-                        Mat_Water_Blocks[matX][matY] = values.at(matX).toInt();
-                    }
-                    line_count++;
-                    line[line_count]=t.readLine();
-                }
-            }
-
-            if(line[line_count].contains("type=NoMoves_Blocks"))
-            {
-                line_count ++;
-                line[line_count]=t.readLine();
-                line_count ++;
-                line[line_count]=t.readLine();
-
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
-                {
-                    QStringList values = line[line_count].split(",");
-
-                    for (matX = 0; matX < maxBlocksWidth; matX++)
-                    {
-                        Mat_Walls_Blocks[matX][matY] += values.at(matX).toInt();
-                    }
-                    line_count++;
-                    line[line_count]=t.readLine();
-                }
-            }
-
-
-            if(line[line_count].contains("type=Snow_Surface"))
-            {
-                line_count ++;
-                line[line_count]=t.readLine();
-                line_count ++;
-                line[line_count]=t.readLine();
-
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
-                {
-                    QStringList values = line[line_count].split(",");
-
-                    for (matX = 0; matX < maxBlocksWidth; matX++)
-                    {
-                        Mat_Snow_Surface[matX][matY] = values.at(matX).toInt();
-                    }
-                    line_count++;
-                    line[line_count]=t.readLine();
-                }
-            }
-
-            if(line[line_count].contains("type=Ice_Surface"))
-            {
-                line_count ++;
-                line[line_count]=t.readLine();
-                line_count ++;
-                line[line_count]=t.readLine();
-
-                for (matY = 0; matY < maxBlocksHeigh; matY++)
-                {
-                    QStringList values = line[line_count].split(",");
-
-                    for (matX = 0; matX < maxBlocksWidth; matX++)
-                    {
-                        Mat_Ice_Surface[matX][matY] = values.at(matX).toInt();
-                    }
-                    line_count++;
-                    line[line_count]=t.readLine();
-                }
-            }
-        }
-//        qDebug() << "Total of " << line_count;
-//        qDebug() << "test of 31x11 " << Walls[58][29]; //max 59x29
-        f.resize(0);
-        t << s;
-        f.close();
-    }
-
-    // Populate scene
-    for (int i = 0; i < maxBlocksWidth; i++) {
-
-        for (int j = 0; j < maxBlocksHeigh; j++) {
-            if (Mat_Walls_Blocks[i][j] != 0)
-            {
-                B_Wall *item = new B_Wall();
-                item->setPos(i,j);
-                mainScene->addItem(item);
-            }
-            if (Mat_Movable_Blocks[i][j] != 0)
-            {
-                B_Movable *item = new B_Movable(i,j);
-                item->addToScene(mainScene);
-            }
-            if (Mat_Items[i][j] != 0)
-            {
-                Object *item = new Object("Poisson");
-                item->setPos(i, j);
-                mainScene->addItem(item);
-            }
-            if (Mat_Bonus[i][j] != 0)
-            {
-                Object *item = new Object("Oeuf");
-                item->setPos(i, j);
-                mainScene->addItem(item);
-            }
-//            if (Mat_Enemies[i][j] != 0)
-//            {
-//                QGraphicsItem *item = new B_Wall();
-//                item->setPos(QPointF(i*gameSquares, j*gameSquares));
-//                mainScene->addItem(item);
-//            }
-//            if (Mat_Scene_Start[i][j] != 0)
-//            {
-//                QGraphicsItem *item = new B_Wall();
-//                item->setPos(QPointF(i*gameSquares, j*gameSquares));
-//                mainScene->addItem(item);
-//            }
-//            if (Mat_Scene_End[i][j] != 0)
-//            {
-//                QGraphicsItem *item = new B_Wall();
-//                item->setPos(QPointF(i*gameSquares, j*gameSquares));
-//                mainScene->addItem(item);
-//            }
-            if (Mat_Doors[i][j] != 0)
-            {
-                S_ViewTransition *item = new S_ViewTransition();
-                item->setPos(i,j);
-                mainScene->addItem(item);
-            }
-            if (Mat_Water_Blocks[i][j] != 0)
-            {
-                B_Water *item = new B_Water();
-                item->setPos(i,j);
-                mainScene->addItem(item);
-            }
-            if (Mat_Snow_Surface[i][j] != 0)
-            {
-                S_Snow *item = new S_Snow();
-                item->setPos(i,j);
-                mainScene->addItem(item);
-            }
-            if (Mat_Ice_Surface[i][j] != 0)
-            {
-                S_Snow *item = new S_Snow();
-                item->setPos(i,j);
-                mainScene->addItem(item);
-            }
-        }
-    }
-}
-
-
-void Gameboard::setView(QPoint viewPoint)
-{
-    int viewStartPostionXTemp = viewStartPostionX+(viewPoint.x()-1)*windowSizeX;
-    int viewStartPostionYTemp = viewStartPostionY+(viewPoint.y()-1)*windowSizeY;
-
-    playerView->setSceneRect(viewStartPostionXTemp,viewStartPostionYTemp,windowSizeX,windowSizeY);
 }
 
 int Gameboard::getGameSquares()
@@ -824,7 +758,6 @@ void Gameboard::resumeGame()
 {
     pauseMenu();
 }
-
 void Gameboard::exitGame()
 {
     QMessageBox msgBox;
@@ -850,3 +783,390 @@ void Gameboard::exitGame()
         break;
     }
 }
+
+void Gameboard::populateScene()
+{
+    int Mat_Walls_Blocks[maxBlocksWidth][maxBlocksHeight];
+    int Mat_Movable_Blocks[maxBlocksWidth][maxBlocksHeight];
+    int Mat_Items[maxBlocksWidth][maxBlocksHeight];
+    int Mat_Bonus[maxBlocksWidth][maxBlocksHeight];
+    int Mat_Enemies[maxBlocksWidth][maxBlocksHeight];
+    int Mat_Scene_Start[maxBlocksWidth][maxBlocksHeight];
+    int Mat_Scene_End[maxBlocksWidth][maxBlocksHeight];
+    int Mat_Doors[maxBlocksWidth][maxBlocksHeight];
+    int Mat_Water_Blocks[maxBlocksWidth][maxBlocksHeight];
+    int Mat_Snow_Surface[maxBlocksWidth][maxBlocksHeight];
+    int Mat_Ice_Surface[maxBlocksWidth][maxBlocksHeight];
+
+    QFile f(":/maps/maps/sceneTutorial_v3.txt");
+    if(f.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QTextStream t(&f);
+        QString line[1000];
+        QString s;
+        int line_count=0;
+
+        int matX, matY;
+
+        while(!t.atEnd())
+        {
+            line_count++;
+            line[line_count]=t.readLine();
+            if(line[line_count].contains("type=Walls_Blocks"))
+            {
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+//                qDebug() << "Found Layer: " << line[line_count] << " at: " << line_count;
+                for (matY = 0; matY < maxBlocksHeight; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
+
+//                    qDebug() << "Flaged: " << line[line_count] << " at: " << line_count;
+//                    qDebug() << "Values: " << values;
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
+                    {
+                        Mat_Walls_Blocks[matX][matY] = values.at(matX).toInt();
+//                        qDebug() << "Value: " << Walls[matX][matY];
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
+            }
+
+            if(line[line_count].contains("type=Solid_Blocks"))
+            {
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+                for (matY = 0; matY < maxBlocksHeight; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
+
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
+                    {
+                        Mat_Walls_Blocks[matX][matY] += values.at(matX).toInt();
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
+            }
+
+            if(line[line_count].contains("type=Movable_Blocks"))
+            {
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+
+                for (matY = 0; matY < maxBlocksHeight; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
+
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
+                    {
+                        Mat_Movable_Blocks[matX][matY] = values.at(matX).toInt();
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
+            }
+
+            if(line[line_count].contains("type=Items"))
+            {
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+
+                for (matY = 0; matY < maxBlocksHeight; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
+
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
+                    {
+                        Mat_Items[matX][matY] = values.at(matX).toInt();
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
+            }
+
+            if(line[line_count].contains("type=Bonus"))
+            {
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+
+                for (matY = 0; matY < maxBlocksHeight; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
+
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
+                    {
+                        Mat_Bonus[matX][matY] = values.at(matX).toInt();
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
+            }
+
+            if(line[line_count].contains("type=Enemies"))
+            {
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+
+                for (matY = 0; matY < maxBlocksHeight; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
+
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
+                    {
+                        Mat_Enemies[matX][matY] = values.at(matX).toInt();
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
+            }
+
+            if(line[line_count].contains("type=Scene_Start"))
+            {
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+
+                for (matY = 0; matY < maxBlocksHeight; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
+
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
+                    {
+                        Mat_Scene_Start[matX][matY] = values.at(matX).toInt();
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
+            }
+
+            if(line[line_count].contains("type=Scene_End"))
+            {
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+
+                for (matY = 0; matY < maxBlocksHeight; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
+
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
+                    {
+                        Mat_Scene_End[matX][matY] = values.at(matX).toInt();
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
+            }
+            if(line[line_count].contains("type=Doors"))
+            {
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+
+                for (matY = 0; matY < maxBlocksHeight; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
+
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
+                    {
+                        Mat_Doors[matX][matY] = values.at(matX).toInt();
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
+            }
+
+            if(line[line_count].contains("type=Water_Blocks"))
+            {
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+                for (matY = 0; matY < maxBlocksHeight; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
+
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
+                    {
+                        Mat_Water_Blocks[matX][matY] = values.at(matX).toInt();
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
+            }
+
+            if(line[line_count].contains("type=NoMoves_Blocks"))
+            {
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+
+                for (matY = 0; matY < maxBlocksHeight; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
+
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
+                    {
+                        Mat_Walls_Blocks[matX][matY] += values.at(matX).toInt();
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
+            }
+
+
+            if(line[line_count].contains("type=Snow_Surface"))
+            {
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+
+                for (matY = 0; matY < maxBlocksHeight; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
+
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
+                    {
+                        Mat_Snow_Surface[matX][matY] = values.at(matX).toInt();
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
+            }
+
+            if(line[line_count].contains("type=Ice_Surface"))
+            {
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+
+                for (matY = 0; matY < maxBlocksHeight; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
+
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
+                    {
+                        Mat_Ice_Surface[matX][matY] = values.at(matX).toInt();
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
+            }
+        }
+//        qDebug() << "Total of " << line_count;
+//        qDebug() << "test of 31x11 " << Walls[58][29]; //max 59x29
+        f.resize(0);
+        t << s;
+        f.close();
+    }
+
+    // Populate scene
+    for (int i = 0; i < maxBlocksWidth; i++) {
+
+        for (int j = 0; j < maxBlocksHeight; j++) {
+            if (Mat_Walls_Blocks[i][j] != 0)
+            {
+                B_Wall *item = new B_Wall();
+                item->setPos(i,j);
+                mainScene->addItem(item);
+            }
+            if (Mat_Movable_Blocks[i][j] != 0)
+            {
+                B_Movable *item = new B_Movable(i,j);
+                item->addToScene(mainScene);
+            }
+            if (Mat_Items[i][j] != 0)
+            {
+                Object *item = new Object(*neededItem);
+                item->setPos(i, j);
+                mainScene->addItem(item);
+            }
+            if (Mat_Bonus[i][j] != 0)
+            {
+                Object *item = new Object("Oeuf");
+                item->setPos(i, j);
+                mainScene->addItem(item);
+            }
+//            if (Mat_Enemies[i][j] != 0)
+//            {
+//                QGraphicsItem *item = new B_Wall();
+//                item->setPos(QPointF(i*gameSquares, j*gameSquares));
+//                mainScene->addItem(item);
+//            }
+//            if (Mat_Scene_Start[i][j] != 0)
+//            {
+//                QGraphicsItem *item = new B_Wall();
+//                item->setPos(QPointF(i*gameSquares, j*gameSquares));
+//                mainScene->addItem(item);
+//            }
+//            if (Mat_Scene_End[i][j] != 0)
+//            {
+//                QGraphicsItem *item = new B_Wall();
+//                item->setPos(QPointF(i*gameSquares, j*gameSquares));
+//                mainScene->addItem(item);
+//            }
+            if (Mat_Doors[i][j] != 0)
+            {
+                S_ViewTransition *item = new S_ViewTransition();
+                item->setPos(i,j);
+                mainScene->addItem(item);
+            }
+            if (Mat_Water_Blocks[i][j] != 0)
+            {
+                B_Water *item = new B_Water();
+                item->setPos(i,j);
+                mainScene->addItem(item);
+            }
+            if (Mat_Snow_Surface[i][j] != 0)
+            {
+                S_Snow *item = new S_Snow();
+                item->setPos(i,j);
+                mainScene->addItem(item);
+            }
+            if (Mat_Ice_Surface[i][j] != 0)
+            {
+                S_Ice *item = new S_Ice();
+                item->setPos(i,j);
+                mainScene->addItem(item);
+            }
+        }
+    }
+}
+QPoint* Gameboard::getCheckPoint()
+{
+    return this->checkpoint;
+}
+
+void Gameboard::saveCheckpoint()
+{
+    checkpoint->setX(pingouin->x());
+    checkpoint->setY(pingouin->y());
+    qDebug() << "SAVE Checkpoint" << (checkpoint->x()+gameSquares)/gameSquares << " " << (checkpoint->y()+gameSquares)/gameSquares;
+}
+
+void Gameboard::loadCheckpoint()
+{
+    pingouin->setPos((checkpoint->x()+gameSquares)/gameSquares,(checkpoint->y()+gameSquares)/gameSquares);
+    qDebug() << "LOAD CHECKPOINT" << (checkpoint->x()+gameSquares)/gameSquares << " " << (checkpoint->y()+gameSquares)/gameSquares;
+}
+

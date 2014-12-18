@@ -8,6 +8,8 @@
 #include "s_ice.h"
 #include "object.h"
 
+#include <QPropertyAnimation>
+
 #if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
 #else
 #include <typeinfo.h>
@@ -30,6 +32,8 @@ Pingouin::Pingouin(int gameSquare) : Player()
     bottomCollideBox->setPen(Qt::NoPen);
     topCollideBox->setPen(Qt::NoPen);
 
+    lastMove = new QPoint(0,0);
+
 }
 void Pingouin::setPos(int x, int y)
 {
@@ -46,11 +50,30 @@ void Pingouin::setPos(int x, int y)
 
 void Pingouin::moveBy(int x, int y)
 {
+
+
+//    QPropertyAnimation *animation = new QPropertyAnimation(this, "pos");
+//    animation->setDuration(1000);
+//    animation->setStartValue(QPoint(this->pos().x(), this->pos().y()));
+//    animation->setEndValue(QPoint(this->pos().x() + x*gameSquare, this->pos().y() + y*gameSquare));
+
+//    animation->start();
+
     Player::moveBy(x*gameSquare,y*gameSquare);
     leftCollideBox->moveBy(x*gameSquare,y*gameSquare);
     rightCollideBox->moveBy(x*gameSquare,y*gameSquare);
     bottomCollideBox->moveBy(x*gameSquare,y*gameSquare);
     topCollideBox->moveBy(x*gameSquare,y*gameSquare);
+
+    lastMove->setX(x);
+    lastMove->setY(y);
+}
+
+void Pingouin::moveBack()
+{
+    moveBy(-lastMove->x(),-lastMove->y());
+    lastMove->setX(0);
+    lastMove->setY(0);
 }
 
 void Pingouin::addToScene(QGraphicsScene* Scene)
@@ -122,6 +145,18 @@ void Pingouin::addObjectToSacoche(Object *object)
     sacoche.append(object);
 }
 
+void Pingouin::removeObjectToSacoche(QString object)
+{
+    for (int i = 0; i < sacoche.size(); ++i)
+    {
+        if (sacoche.at(i)->getName() == object)
+        {
+            sacoche.removeAt(i);
+            return;
+        }
+    }
+}
+
 void Pingouin::printSacoche()
 {
     qDebug() << "PrintSacoche";
@@ -146,5 +181,3 @@ bool Pingouin::checkObjectSacoche(QString object)
     }
     return false;
 }
-
-

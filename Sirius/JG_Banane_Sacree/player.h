@@ -1,11 +1,13 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include <QRectF>
 #include "qpainter.h"
 #include "qgraphicsitem.h"
 
 class Player : public QGraphicsItem
 {
+
 public:
     Player();
 
@@ -15,6 +17,8 @@ public:
     QBrush *playerSkin;
 
     void setPlayerOrientation(QString orientation);
+    QString getPlayerOrientation();
+    QPoint *getPos();
 
 protected:
     int xPos;
