@@ -83,15 +83,15 @@
  </layer>
  <layer name="Snow_Surface" width="60" height="30">
   <data encoding="base64" compression="zlib">
-   eJztlsEOhCAMRPn/D/a82ZshnbYs00FhX+IFxOnDSmztz50ree3C7r597chr1hftWfUeWnleXdH4L7krfaO60Djj8vJYRHlefnaPRtzUZ4LqXFrVzyP17Oib7cWKnH5cgXUuoTlGzim+T0HVz0/hNN8vOzp5nOQ78v+H+tw7dzN5DdzLZsaV6as4J2ZdM75edmaMicJ35Dlv8u2f62Va2dE6BpXv17uvX6OE4ez1J6tnWFR/vyjDqkOByjdbQzUsX/Q8lIHWVFPxfpsx32eiGhRU9PNIX6h9rVymrzWPclcQfaNv4wNr4CLl
+   eJztlsEOhCAMRPn/D/a82ZshnbYs00FhX+IFxOnDSmztz50ree3C7r597chr1hftWfUeWnleXdH4L7krfaO60Djj8vJYRHlefnaPRtzUZ4LqXFrVzyP17Oib7cWKnH5cgXUuoTlGzim+T0HVz0/hNN8vOzp5nOQ78v+H+tw7dzN5DdzLZsaV6as4J2ZdM75edmaMicJ35Dlv8u2f62Va2dE6BpXv17uvX6OE4ez1J7NvGFR/vyjDqkOByjdbQzUsX/Q8lIHWVFPxfpsx32eiGhRU9PNIX6h9rVymrzWPclcQfaNv4wMHiSPb
   </data>
  </layer>
  <layer name="Ice_Surface" width="60" height="30" visible="0">
   <data encoding="base64" compression="zlib">
-   eJztlsEOwCAIQ3fx/395pyWG2ILOA0WbmCjo4hugPk9uNdCYj7Xssnu8vPV4dzYVsRpG8yO2bLrxxQy2P6r17JqJ2eXV5bXjCHsVXuvv57FzvBrvyI6+k1Wn8qI7lNlH87Jr9S2hyrsqZbaZnGbntaoivMyuptHevXtXiXfmzKqQx3+YFLk9nr7P6lhB0diid5hqfNH+o/9BjdeOG/DZNUqcnzzeSKyVuCO8Xi2r8XrxOpW3Qj7v1AvRgAcs
+   eJztlksKwCAMBd14/yt3VZCQl491kZc6IGi0xWnUOkZtJihWn1WqI+d4ffv5niwsWHsYjY/EqnHzix1kXdvr1cnk7Pry+sp2xL2Lr+xfx1nneDdfLY7eU5W/+qJ/qBXXxlVn9y7B6rsLs1tmTVvnNSsRXyvOhjZ377/L5Js5szqs4y9OjN6ez1q39jELkdyiexhrftH8o9+BzVe2J+iTzzB5vni+kVwzeUd8vb3M5hu9U8q61q5OxrfDej7JA68gByc=
   </data>
  </layer>
- <layer name="Item_Shoes" width="60" height="30" visible="0">
+ <layer name="Item_Shoes" width="60" height="30">
   <data encoding="base64" compression="zlib">
    eJztzjENAAAIA7CZwr81DOwlPK2CJgAAAAAANPMdAIADC4iPADY=
   </data>
