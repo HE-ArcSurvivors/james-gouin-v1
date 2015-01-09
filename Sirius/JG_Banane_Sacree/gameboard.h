@@ -75,6 +75,7 @@ private:
 
     void SinkMovable(B_Movable *b);
     void CheckChangeView(char);
+    void ChangeView(char sens);
     bool CheckGameOver();
     void CheckItem();
 

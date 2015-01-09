@@ -8,7 +8,7 @@
         <file>characters/player_back.png</file>
     </qresource>
     <qresource prefix="/maps">
-        <file>maps/tutorial.png</file>
-        <file>maps/test.png</file>
+        <file>maps/0.png</file>
+        <file>maps/1.png</file>
     </qresource>
 </RCC>

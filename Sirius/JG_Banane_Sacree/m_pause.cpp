@@ -2,7 +2,6 @@
 
 M_Pause::M_Pause(QWidget *parent)
 {
-
     layoutMenuPause = new QFormLayout;
     titleMenuPause = new QLabel(tr("Menu PAUSE"));
     titleMenuPause->setAlignment(Qt::AlignCenter);
@@ -18,5 +17,4 @@ M_Pause::M_Pause(QWidget *parent)
     layoutMenuPause->addRow(btnMenuPauseConfigure);
     layoutMenuPause->addRow(btnMenuPauseQuit);
     this->setLayout(layoutMenuPause);
-
 }

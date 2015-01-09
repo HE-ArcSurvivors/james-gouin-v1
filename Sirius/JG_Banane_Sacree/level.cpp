@@ -16,21 +16,15 @@
 #include <QPoint>
 #include <QDebug>
 
-Level::Level(QString levelName)
+Level::Level(int levelNumber)
 {
-    this->levelName = new QString(levelName);
-    neededItem = new QString("Poisson");
+    this->levelNumber = levelNumber;
 
     maxBlocksHeight = 2*Gameboard::sizeY;
     maxBlocksWidth = 3*Gameboard::sizeX;
 
     startingPoint = new QPoint(0,0);
     viewStart = new QPoint(0,0);
-}
-
-QString* Level::getNeededItem()
-{
-    return this->neededItem;
 }
 
 QPoint* Level::getStartingPoint()
@@ -76,13 +70,13 @@ QGraphicsScene* Level::populateScene()
     }
 
     QString background = ":/maps/maps/";
-    background.append(levelName);
+    background.append(QString("%1").arg(levelNumber));
     background.append(".png");
     QPixmap pixmapBackground(background);
     scene->setBackgroundBrush(pixmapBackground);
 
     QString map = ":/maps/maps/";
-    map.append(levelName);
+    map.append(QString("%1").arg(levelNumber));
     map.append(".txt");
 
     QFile f(map);
@@ -402,10 +396,14 @@ QGraphicsScene* Level::populateScene()
         t << s;
         f.close();
     }
+    else
+    {
+        qDebug() << "Fichier non ouvert";
+    }
 
     // Populate scene
-    for (int i = 0; i < maxBlocksWidth; i++) {
-
+    for (int i = 0; i < maxBlocksWidth; i++)
+    {
         for (int j = 0; j < maxBlocksHeight; j++)
         {
             if (Mat_Walls_Blocks[i][j] != 0)
@@ -443,16 +441,25 @@ QGraphicsScene* Level::populateScene()
 //                item->setPos(QPointF(i*gameSquares, j*gameSquares));
 //                scene->addItem(item);
 //            }
-//            if (Mat_Scene_End[i][j] != 0)
-//            {
-//                QGraphicsItem *item = new B_Wall();
-//                item->setPos(QPointF(i*gameSquares, j*gameSquares));
-//                scene->addItem(item);
-//            }
+            if (Mat_Scene_End[i][j] != 0)
+            {
+                S_ViewTransition *item = new S_ViewTransition();
+                item->setLevelEnd(true);
+                item->setPos(i, j);
+                scene->addItem(item);
+            }
             if (Mat_Doors[i][j] != 0)
             {
                 S_ViewTransition *item = new S_ViewTransition();
                 item->setPos(i,j);
+                item->setLevelEnd(false);
+
+                if(Mat_Doors[i][j] > 20 && Mat_Doors[i][j] < 30)
+                {
+                    item->setNbItem(Mat_Doors[i][j]%20);
+                    item->setNeededItem("Poisson");
+                }
+
                 scene->addItem(item);
             }
             if (Mat_Water_Blocks[i][j] != 0)
@@ -482,7 +489,7 @@ QGraphicsScene* Level::populateScene()
 void Level::getSceneSize()
 {
     QString map = ":/maps/maps/";
-    map.append(levelName);
+    map.append(QString("%1").arg(levelNumber));
     map.append(".txt");
 
     QFile f(map);
@@ -528,4 +535,15 @@ void Level::getSceneSize()
 QPoint Level::getViewStart()
 {
     return *(this->viewStart);
+}
+
+QGraphicsScene* Level::changeLevel(int levelNumber)
+{
+    this->levelNumber = levelNumber;
+    return populateScene();
+}
+
+int Level::getLevelNumber()
+{
+    return this->levelNumber;
 }

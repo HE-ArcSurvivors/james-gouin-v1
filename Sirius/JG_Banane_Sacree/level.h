@@ -9,17 +9,16 @@ class QPoint;
 class Level
 {
 public:
-    Level(QString levelName);
+    Level(int levelNumber);
     QGraphicsScene *populateScene();
-
-    QString *getNeededItem();
     QPoint *getStartingPoint();
     QPoint getViewStart();
+    QGraphicsScene* changeLevel(int levelNumber);
+    int getLevelNumber();
 
 private:
-    QString* levelName;
+    int levelNumber;
     QPixmap* levelBackground;
-    QString* neededItem;
     QPoint* startingPoint;
     QPoint* viewStart;
 
