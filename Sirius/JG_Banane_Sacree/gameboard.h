@@ -6,6 +6,7 @@
 #include "b_movable.h"
 #include "m_pause.h"
 #include <QGraphicsProxyWidget>
+#include "level.h"
 
 class QGraphicsScene;
 class QGraphicsView;
@@ -33,6 +34,8 @@ public:
     ~Gameboard();
 
     static int getGameSquares();
+    static int sizeX;
+    static int sizeY;
     QPoint *getCheckPoint();
 
 private:
@@ -53,12 +56,12 @@ private:
     int viewPositionY;
     static int gameSquares;
     QString windowTitle;
-    QPoint startingPoint;
+
+    Level* currentLevel;
 
     void setViewPosition();
+    bool checkPosition(QGraphicsItem *object);
 
-    int maxBlocksHeight;
-    int maxBlocksWidth;
     int transition;
     QPoint viewRequested;
     QPoint exit;
@@ -78,7 +81,6 @@ private:
 
     B_Movable *moveBloc;
     QList<slideBloc> listSlindingBlocs;
-    QString* neededItem;
 
     void populateScene();
 
@@ -108,10 +110,9 @@ private:
 
 	M_Pause *menuPauseInGame;
 
-    QGraphicsProxyWidget *proxy;protected:
+    QGraphicsProxyWidget *proxy;
 
-    int sizeX;
-    int sizeY;
+protected:
 
 signals:
 

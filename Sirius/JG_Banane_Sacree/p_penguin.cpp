@@ -34,6 +34,8 @@ Pingouin::Pingouin(int gameSquare) : Player()
 
     lastMove = new QPoint(0,0);
 
+    slideAble = true;
+
 }
 void Pingouin::setPos(int x, int y)
 {
@@ -74,6 +76,8 @@ void Pingouin::moveBack()
     moveBy(-lastMove->x(),-lastMove->y());
     lastMove->setX(0);
     lastMove->setY(0);
+
+    qDebug() << "MoveBack" << x() << " " << y();
 }
 
 void Pingouin::addToScene(QGraphicsScene* Scene)
@@ -90,14 +94,22 @@ bool Pingouin::isSlide()
     QList<QGraphicsItem *> CollidingItems = this->CollidesCenter();
     bool slide = false;
 
-    for(int i=0; i<CollidingItems.length(); i++)
+    if(slideAble)
     {
-        if(typeid(*CollidingItems.at(i)).name() == typeid(S_Ice).name())
+        for(int i=0; i<CollidingItems.length(); i++)
         {
-            slide = true;
+            if(typeid(*CollidingItems.at(i)).name() == typeid(S_Ice).name())
+            {
+                slide = true;
+            }
         }
     }
     return slide;
+}
+
+void Pingouin::setSlideAble(bool value)
+{
+    this->slideAble = value;
 }
 
 //Retour des listes des collisions
@@ -136,6 +148,7 @@ QGraphicsRectItem* Pingouin::getTopCB(){
 QGraphicsRectItem* Pingouin::getBottomCB(){
      return bottomCollideBox;
 }
+
 Player* Pingouin::getPlayer(){
      return this;
 }
@@ -180,4 +193,25 @@ bool Pingouin::checkObjectSacoche(QString object)
         }
     }
     return false;
+}
+
+QGraphicsRectItem* Pingouin::getCollideBloc(char sensDepl)
+{
+    if(sensDepl == 'b')
+    {
+        return bottomCollideBox;
+    }
+    else if(sensDepl == 'l')
+    {
+        return leftCollideBox;
+    }
+    else if(sensDepl == 'r')
+    {
+        return rightCollideBox;
+    }
+    else if(sensDepl == 't')
+    {
+        return topCollideBox;
+    }
+    return NULL;
 }

@@ -25,6 +25,8 @@ private:
     QList<Object *> sacoche;
     QPoint* lastMove;
 
+    bool slideAble;
+
 public:
     Pingouin(int gameSquare);
 
@@ -40,6 +42,9 @@ public:
     void printSacoche();
 
     bool isSlide();
+    void setSlideAble(bool value);
+
+    QGraphicsRectItem* getCollideBloc(char sensDepl);
 
     QList<QGraphicsItem *> CollidesRight();
     QList<QGraphicsItem *> CollidesLeft();
