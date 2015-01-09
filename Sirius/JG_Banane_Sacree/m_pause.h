@@ -21,6 +21,8 @@ private:
     QPushButton *btnMenuPauseResume;
     QPushButton *btnMenuPauseConfigure;
     QPushButton *btnMenuPauseQuit;
+    QPushButton *btnMenuPauseRestartLevel;
+    QPushButton *btnMenuPauseRestartGame;
 
 signals:
 

@@ -48,16 +48,17 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     maxBlocksWidth = 3*sizeX;
 
     /* StartPosition */
-    viewRequested = QPoint(1,2);
+    viewRequested = QPoint(2,2);
     setViewPosition();
-    startingPoint = QPoint(15,23);
+    startingPoint = QPoint(37,23);
 
-//exit = QPoint(20,6);
+//  exit = QPoint(20,6);
     QString sceneToLoad = ":/maps/maps/tutorial.png";
     menuPauseSizeX = 400;
     menuPauseSizeY = 400;
     toggleGrabTheWorld = false;
     toggleMenuPause = false;
+    isSliding = false;
 
     moveBloc = NULL;
     neededItem = new QString("Poisson");
@@ -92,7 +93,6 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     populateScene();
 
     menuPauseInGame = new M_Pause(this);
-    menuPauseInGame->setGeometry(viewPositionX+windowSizeX/2-menuPauseSizeX/2,viewPositionY+windowSizeY/2-menuPauseSizeY/2,menuPauseSizeX,menuPauseSizeY);
     proxy = mainScene->addWidget(menuPauseInGame);
     proxy->hide();
    
@@ -278,7 +278,7 @@ void Gameboard::SlidePingouin()
         CheckItem();
         CheckChangeView(cSensPingouinSlide);
         timerPingouinSlide->stop();
-        toggleMenuPause=false;
+        isSliding=false;
     }
 
 }
@@ -469,7 +469,7 @@ void Gameboard::MoveBloc(char sens)
 //http://doc.qt.digia.com/4.6/qt.html#Key-enum
 void Gameboard::keyPressEvent(QKeyEvent *event)
 {
-    if(!toggleMenuPause)
+    if(!toggleMenuPause && !isSliding)
     {
         if(event->key() == Qt::Key_W || event->key() == Qt::Key_Up)
         {
@@ -489,7 +489,7 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
                     }
                     if(pingouin->isSlide())
                     {
-                        toggleMenuPause=true;
+                        isSliding=true;
                         cSensPingouinSlide = 't';
                         timerPingouinSlide->start(SLIDE_SPEED);
                     }
@@ -517,7 +517,7 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
                     }
                     if(pingouin->isSlide())
                     {
-                        toggleMenuPause=true;
+                        isSliding=true;
                         cSensPingouinSlide = 'b';
                         timerPingouinSlide->start(SLIDE_SPEED);
                     }
@@ -542,7 +542,7 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
                     }
                     if(pingouin->isSlide())
                     {
-                        toggleMenuPause=true;
+                        isSliding=true;
                         cSensPingouinSlide = 'l';
                         timerPingouinSlide->start(SLIDE_SPEED);
                     }
@@ -567,7 +567,7 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
                     }
                     if(pingouin->isSlide())
                     {
-                        toggleMenuPause=true;
+                        isSliding=true;
                         cSensPingouinSlide = 'r';
                         timerPingouinSlide->start(SLIDE_SPEED);
                     }
@@ -584,7 +584,6 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
     }
     if(event->key() == Qt::Key_Escape)
     {
-        //qDebug()<<"Escape Menu";
         pauseMenu();
     }
 }
@@ -694,9 +693,15 @@ void Gameboard::pauseMenu()
     grabTheWorld();
     if(toggleMenuPause)
     {
+        timerPingouinSlide->stop();
+        menuPauseInGame->setGeometry(viewPositionX+windowSizeX/2-menuPauseSizeX/2,viewPositionY+windowSizeY/2-menuPauseSizeY/2,menuPauseSizeX,menuPauseSizeY);
+
         proxy->show();
+
     }else{
+
         proxy->hide();
+        timerPingouinSlide->start(SLIDE_SPEED);
     }
 
 }
