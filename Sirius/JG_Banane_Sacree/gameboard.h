@@ -43,6 +43,7 @@ private:
     QTimer *timerPingouinSlide;
     QTimer *timerBlocDeplSlide;
     char cSensPingouinSlide;
+    bool isSliding;
 
     QGraphicsScene *mainScene;
     QGraphicsScene *preloadedScene;

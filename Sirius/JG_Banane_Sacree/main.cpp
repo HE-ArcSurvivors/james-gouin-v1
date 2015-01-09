@@ -1,5 +1,6 @@
 #include "gameboard.h"
 #include <QApplication>
+#include "m_menustart.h"
 
 int main(int argc, char *argv[])
 {
