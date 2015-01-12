@@ -7,7 +7,7 @@
 Surface::Surface(int xpos, int ypos, QGraphicsItem *parent) : QGraphicsRectItem(0, 0, Gameboard::getGameSquares(), Gameboard::getGameSquares(), parent)
 {
     setPen(Qt::NoPen);
-    setOpacity(0.6);
+//    setOpacity(0.6);
 
     setPos(xpos, ypos);
 }

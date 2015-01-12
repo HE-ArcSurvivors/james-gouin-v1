@@ -23,6 +23,7 @@ private:
     int gameSquare;
 
     QList<Object *> sacoche;
+    QList<Object *> tempSacoche;
     QPoint* lastMove;
 
     bool slideAble;
@@ -36,10 +37,12 @@ public:
 
     void addToScene(QGraphicsScene*);
     void addObjectToSacoche(Object *object);
-    void removeObjectToSacoche(QString object);
-    bool checkObjectSacoche(QString object);
-    Object* getObjectSacoche();
+    void removeObjectFromSacoche(QString object);
+    void removeTempFromSacoche();
+    bool checkObjectSacoche(QString object, int quantity = 1);
+    QList<Object*> getSacoche();
     void printSacoche();
+    void emptyTempSacoche();
 
     bool isSlide();
     void setSlideAble(bool value);

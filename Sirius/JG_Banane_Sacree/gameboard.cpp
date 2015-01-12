@@ -29,7 +29,7 @@
 
 #if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
 #else
-#include <typeinfo.h>
+    #include <typeinfo.h>
 #endif
 
 int Gameboard::gameSquares = 32;
@@ -38,9 +38,7 @@ int Gameboard::sizeY = 15;
 
 Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 {
-//    currentLevel = new Level("test");
-    currentLevel = new Level("tutorial");
-
+    currentLevel = new Level(0);
     // Les Variables par default du jeu
     windowTitle = tr("James Gouin et la Banane Sacrée");
     windowSizeX = sizeX*gameSquares;
@@ -79,12 +77,17 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     pingouin = new Pingouin(gameSquares);
     pingouin->addToScene(mainScene);
     pingouin->setPos(currentLevel->getStartingPoint()->x(), currentLevel->getStartingPoint()->y());
-    pingouin->addObjectToSacoche(new Object("Poisson"));
+
     saveCheckpoint();
 
     menuPauseInGame = new M_Pause(this);
     proxy = mainScene->addWidget(menuPauseInGame);
     proxy->hide();
+
+    objectList = new WidgetObject(this);
+    objectListProxy = mainScene->addWidget(objectList);
+    setPositionBottom(objectList);
+    objectListProxy->show();
    
     //initialisation des timer
     timerPingouinSlide = new QTimer();
@@ -352,8 +355,7 @@ bool Gameboard::CheckGameOver()
     {
         if(typeid(*CollidingItems.at(i)).name() == typeid(B_Water).name())
         {
-            pingouin->setPlayerOrientation("down");
-            loadCheckpoint();
+            restartLevel();
             return true;
         }
     }
@@ -377,6 +379,9 @@ void Gameboard::CheckItem()
             {
                 pingouin->setSlideAble(false);
             }
+
+            objectList->reloadObjectList(pingouin->getSacoche());
+            setPositionBottom(objectList);
         }
     }
 }
@@ -388,58 +393,98 @@ void Gameboard::CheckChangeView(char sens)
     {
         if(typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
         {
-            if(pingouin->checkObjectSacoche(*currentLevel->getNeededItem()))
+            S_ViewTransition *bloc = dynamic_cast<S_ViewTransition*>(CollidingItems.at(i));
+            if(bloc->isEndLevel())
             {
-                pingouin->removeObjectToSacoche(*currentLevel->getNeededItem());
-                if(pingouin->checkObjectSacoche(QString("Chaussure")))
-                {
-                    pingouin->removeObjectToSacoche(QString("Chaussure"));
-                    pingouin->setSlideAble(true);
-                }
-                qDebug() << pingouin->x() << " " << pingouin->y();
+                mainScene = currentLevel->changeLevel(currentLevel->getLevelNumber()+1);
+                viewRequested = currentLevel->getViewStart();
+                playerView->setScene(mainScene);
+
+                setViewPosition();
+
+                pingouin->addToScene(mainScene);
+                pingouin->setPos(currentLevel->getStartingPoint()->x(), currentLevel->getStartingPoint()->y());
                 saveCheckpoint();
 
-                qDebug() << "ViewRequested : " << viewRequested.x() << " " << viewRequested.y();
-
-                if(sens == 't')
-                {
-                    qDebug() << "Up";
-                    this-> checkpoint->setY(checkpoint->y()-gameSquares);
-                    viewRequested.setY(viewRequested.y()-1);
-                }
-                if(sens == 'b')
-                {
-                    qDebug() << "Down";
-                    this->checkpoint->setY(checkpoint->y()+gameSquares);
-                    viewRequested.setY(viewRequested.y()+1);
-                }
-                if(sens == 'l')
-                {
-                    qDebug() << "Left";
-                    this->checkpoint->setX(checkpoint->x()-gameSquares);
-                    viewRequested.setX(viewRequested.x()-1);
-                }
-                if(sens == 'r')
-                {
-                    qDebug() << "Right";
-
-                    this->checkpoint->setX(checkpoint->x()+gameSquares);
-                    viewRequested.setX(viewRequested.x()+1);
-                }
-
-                qDebug() << "ViewRequested : " << viewRequested.x() << " " << viewRequested.y();
-                loadCheckpoint();
-                setViewPosition();
                 playerView->setSceneRect(viewPositionX,viewPositionY,windowSizeX,windowSizeY);
-
             }
             else
             {
-                qDebug() << "Pas encore de " << *(currentLevel->getNeededItem()) << " ! ";
-                pingouin->moveBack();
+                if(!bloc->isNeedingItem())
+                {
+                    ChangeView(sens);
+                }
+                else if(bloc->isNeedingItem() && pingouin->checkObjectSacoche(*bloc->getNeededItem(), bloc->getNbItem()))
+                {
+                    if(pingouin->checkObjectSacoche(QString("Chaussure")))
+                    {
+                        pingouin->removeObjectFromSacoche(QString("Chaussure"));
+                        pingouin->setSlideAble(true);
+                    }
+
+                    ChangeView(sens);
+                }
+                else
+                {
+                    qDebug() << "Pas encore de " << *(bloc->getNeededItem()) << " ! ";
+                    pingouin->moveBack();
+                }
             }
         }
     }
+}
+
+void Gameboard::ChangeView(char sens)
+{
+    saveCheckpoint();
+    pingouin->emptyTempSacoche();
+
+    qDebug() << "ViewRequested : " << viewRequested.x() << " " << viewRequested.y();
+
+    if(sens == 't')
+    {
+        qDebug() << "Up";
+        this-> checkpoint->setY(checkpoint->y()-gameSquares);
+        viewRequested.setY(viewRequested.y()-1);
+    }
+    if(sens == 'b')
+    {
+        qDebug() << "Down";
+        this->checkpoint->setY(checkpoint->y()+gameSquares);
+        viewRequested.setY(viewRequested.y()+1);
+    }
+    if(sens == 'l')
+    {
+        qDebug() << "Left";
+        this->checkpoint->setX(checkpoint->x()-gameSquares);
+        viewRequested.setX(viewRequested.x()-1);
+    }
+    if(sens == 'r')
+    {
+        qDebug() << "Right";
+
+        this->checkpoint->setX(checkpoint->x()+gameSquares);
+        viewRequested.setX(viewRequested.x()+1);
+    }
+
+    qDebug() << "ViewRequested : " << viewRequested.x() << " " << viewRequested.y();
+    loadCheckpoint();
+
+    setViewPosition();
+    playerView->setSceneRect(viewPositionX,viewPositionY,windowSizeX,windowSizeY);
+
+    objectList->reloadObjectList(pingouin->getSacoche());
+    setPositionBottom(objectList);
+}
+
+void Gameboard::setPositionBottom(QWidget* widget)
+{
+    int width = widget->width();
+    int height = widget->height();
+
+    qDebug() << width << " " << height;
+
+    widget->setGeometry(viewPositionX+gameSquares*(sizeX)-width,viewPositionY+gameSquares*(sizeY)-height,width,height);
 }
 
 void Gameboard::MoveBloc(char sens)
@@ -778,6 +823,43 @@ void Gameboard::grabTheWorld()
 void Gameboard::resumeGame()
 {
     pauseMenu();
+}
+
+void Gameboard::restartLevel()
+{
+    mainScene = currentLevel->populateScene();
+    playerView->setScene(mainScene);
+
+    pingouin->addToScene(mainScene);
+    pingouin->setPlayerOrientation("down");
+    pingouin->removeTempFromSacoche();
+
+    loadCheckpoint();
+
+    objectList->reloadObjectList(pingouin->getSacoche());
+    setPositionBottom(objectList);
+
+    objectListProxy = NULL;
+    objectListProxy = mainScene->addWidget(objectList);
+
+    //resumeGame();
+}
+
+void Gameboard::restartGame()
+{
+    //resumeGame();
+
+    mainScene = currentLevel->populateScene();
+    viewRequested = currentLevel->getViewStart();
+    playerView->setScene(mainScene);
+
+    setViewPosition();
+
+    pingouin->addToScene(mainScene);
+    pingouin->setPos(currentLevel->getStartingPoint()->x(), currentLevel->getStartingPoint()->y());
+    saveCheckpoint();
+
+    playerView->setSceneRect(viewPositionX,viewPositionY,windowSizeX,windowSizeY);
 }
 
 void Gameboard::exitGame()

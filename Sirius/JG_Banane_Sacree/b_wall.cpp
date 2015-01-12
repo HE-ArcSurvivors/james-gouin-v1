@@ -13,9 +13,9 @@ B_Wall::B_Wall(QGraphicsItem *parent) : Surface(0, 0, parent) //Pas le choix, ob
 }
 void B_Wall::setDesign()
 {
-    QBrush brush;
-    brush.setStyle(Qt::SolidPattern);
-    brush.setColor(Qt::red);
+    //QBrush brush;
+    //brush.setStyle(Qt::SolidPattern);
+    //brush.setColor(Qt::red);
 
-    setBrush(brush);
+//    setBrush(brush);
 }
