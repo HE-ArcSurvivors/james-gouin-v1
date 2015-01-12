@@ -54,6 +54,7 @@ HEADERS  += \
     maingame.h \
     w_object.h \
     e_renard.h \
-    e_loup.hRESOURCES += \
+    e_loup.h
+RESOURCES += \
     images.qrc \
     ItemsPopulation.qrc

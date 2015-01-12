@@ -84,20 +84,20 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     pingouin->addToScene(mainScene);
     pingouin->setPos(currentLevel->getStartingPoint()->x(), currentLevel->getStartingPoint()->y());
 
-    //on ajoute un ennemi
-    QList<QPoint> l;
-    l.append(QPoint(10,23));
-    l.append(QPoint(17,23));
-    l.append(QPoint(17,25));
-    l.append(QPoint(10,25));
-    E_Renard *ennemibasique = new E_Renard(l);
+//    //on ajoute un ennemi
+//    QList<QPoint> l;
+//    l.append(QPoint(10,23));
+//    l.append(QPoint(17,23));
+//    l.append(QPoint(17,25));
+//    l.append(QPoint(10,25));
+//    E_Renard *ennemibasique = new E_Renard(l);
 
-    //on ajoute un ennemi
-    QList<QPoint> l2;
-    //l2.append(QPoint(6,23));
-    l2.append(QPoint(6,25));
-    E_Loup *ennemibasique2 = new E_Loup(l2);
-    ennemibasique2->setOrientation_top();
+//    //on ajoute un ennemi
+//    QList<QPoint> l2;
+//    //l2.append(QPoint(6,23));
+//    l2.append(QPoint(6,25));
+//    E_Loup *ennemibasique2 = new E_Loup(l2);
+//    ennemibasique2->setOrientation_top();
 
 
     //mainScene->addItem(ennemibasique);
@@ -130,8 +130,8 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     QObject::connect(timer, SIGNAL(timeout()), mainScene, SLOT(advance()));
     timer->start(1000 / 33); //30fps
 
-    ennemibasique->addToScene(mainScene);
-    ennemibasique2->addToScene(mainScene);
+//    ennemibasique->addToScene(mainScene);
+//    ennemibasique2->addToScene(mainScene);
 
 }
 void Gameboard::SlideBloc()
@@ -781,10 +781,10 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
             bMove = true;
         }
     }
-    if(bMove && (!checkPosition(pingouin->getCollideBloc(sensDepl))))
+    /*if(bMove && (!checkPosition(pingouin->getCollideBloc(sensDepl))))
     {
         bMove=false;
-    }
+    }*/
     return bMove;
 }
 

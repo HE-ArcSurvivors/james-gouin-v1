@@ -123,8 +123,7 @@ QGraphicsScene* Level::populateScene()
                     QList<QPoint> listeDePoints;
                     for(int i = 0; i < listPoint.size(); i++)
                     {
-                        QStringList point = listPoint.at(1).split("-");
-
+                        QStringList point = listPoint.at(i).split("-");
                         listeDePoints.append(QPoint(point.at(0).toInt(),point.at(1).toInt()));
                     }
                     ennemi.append(listeDePoints);
@@ -464,13 +463,20 @@ QGraphicsScene* Level::populateScene()
             {
                 switch(Mat_Enemies[i][j])
                 {
-                    case 1: E_Renard *item = new E_Renard(ennemi.at(k));
-                            item->addToScene(scene);
-                            break;
-                    case 2 : E_Loup *item = new E_Loup(ennemi.at(k));
-                            item->addToScene(scene);
-                            break;
+
+                case 1: {
+                    qDebug() << "New Renard";
+                    E_Renard *item1 = new E_Renard(ennemi.at(k));
+                            item1->addToScene(scene);
+                            break;}
+                case 2 : {
+                    qDebug() << "New Loup";
+                    E_Loup *item2 = new E_Loup(ennemi.at(k));
+                            item2->addToScene(scene);
+                            break;}
+
                     default:break;
+
                 }
 
                 k++;
@@ -488,11 +494,11 @@ QGraphicsScene* Level::populateScene()
                 item->setPos(i,j);
                 item->setLevelEnd(false);
 
-                if(Mat_Doors[i][j] > 20 && Mat_Doors[i][j] < 30)
+                /*if(Mat_Doors[i][j] > 20 && Mat_Doors[i][j] < 30)
                 {
                     item->setNbItem(Mat_Doors[i][j]%20);
                     item->setNeededItem("Poisson");
-                }
+                }*/
 
                 scene->addItem(item);
             }
