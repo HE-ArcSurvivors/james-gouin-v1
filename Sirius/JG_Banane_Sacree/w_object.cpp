@@ -4,8 +4,8 @@
 #include "gameboard.h"
 #include <QWidget>
 #include <QDebug>
-
-#include <QMap>
+//#include <QList>
+//#include <QMap>
 
 WidgetObject::WidgetObject(QWidget *parent)
 {
@@ -15,29 +15,16 @@ WidgetObject::WidgetObject(QWidget *parent)
 
 void WidgetObject::paintEvent(QPaintEvent *)
 {
+    qDebug() << "PaintEvent";
     QPainter paint(this);
-    paint.setPen(Qt::black);
-    QMap<QString, int> map;
-
-    for (int i = 0; i < sacoche.size(); ++i)
-    {
-        if(map.contains(sacoche.at(i)->getName()))
-        {
-           map[sacoche.at(i)->getName()] = map.value(sacoche.at(i)->getName())+1;
-        }
-        else
-        {
-            map.insert(sacoche.at(i)->getName(),1);
-        }
-    }
 
     int j = 0;
     QMap<QString, int>::const_iterator i = map.constBegin();
-     while (i != map.constEnd()) {
-
+    while (i != map.constEnd())
+    {
          QString img = ":/items/items/";
          img.append(i.key().toLower());
-
+         qDebug() << i.key();
          if(i.value()>1)
          {
             img.append(QString::number(i.value()));
@@ -45,28 +32,18 @@ void WidgetObject::paintEvent(QPaintEvent *)
 
          img.append(".png");
 
-         qDebug() << img;
          paint.drawPixmap(j*Gameboard::getGameSquares(),0,Gameboard::getGameSquares(),
                           Gameboard::getGameSquares(),QPixmap(img));
          ++i;
          j++;
      }
-
-
-//    for (int i = 0; i < sacoche.size(); ++i)
-//    {
-//        paint.drawPixmap(i*Gameboard::getGameSquares(),0,Gameboard::getGameSquares(),
-//                         Gameboard::getGameSquares(),sacoche.at(i)->getTexture());
-//    }
-
-
 }
 
 void WidgetObject::reloadObjectList(QList<Object*> objectList)
 {
     sacoche = objectList;
-
-    QMap<QString, int> map;
+    map.clear();
+    update();
 
     for(int i = 0; i < sacoche.size(); ++i)
     {
@@ -76,10 +53,12 @@ void WidgetObject::reloadObjectList(QList<Object*> objectList)
         }
         else
         {
-            map.insert(sacoche.at(i)->getName(),1);
+           map.insert(sacoche.at(i)->getName(),1);
         }
     }
 
     this->resize(map.size()*Gameboard::getGameSquares(),Gameboard::getGameSquares());
+
+    qDebug() << "Call Update";
     update();
 }

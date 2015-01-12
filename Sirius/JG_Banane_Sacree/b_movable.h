@@ -26,13 +26,14 @@ public:
     bool isSlide();
 
     QList<QGraphicsItem *> CollidesCenter();
-    QGraphicsRectItem* getCollideBloc(char sensDepl);
+    QGraphicsRectItem* getCollideBloc(char sens);
 
-private:
     QGraphicsRectItem *leftCollideBox;
     QGraphicsRectItem *rightCollideBox;
     QGraphicsRectItem *bottomCollideBox;
     QGraphicsRectItem *topCollideBox;
+
+private:
 
     bool IsMovable(QList<QGraphicsItem *>);
 

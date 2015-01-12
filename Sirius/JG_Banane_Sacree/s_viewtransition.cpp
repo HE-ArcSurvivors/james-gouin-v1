@@ -17,10 +17,10 @@ S_ViewTransition::S_ViewTransition(QGraphicsItem *parent) : Surface(0, 0, parent
 
 void S_ViewTransition::setDesign()
 {
-    QBrush brush;
+    /*QBrush brush;
     brush.setStyle(Qt::SolidPattern);
     brush.setColor(Qt::green);
-    setBrush(brush);
+    setBrush(brush);*/
 }
 
 bool S_ViewTransition::isEndLevel()

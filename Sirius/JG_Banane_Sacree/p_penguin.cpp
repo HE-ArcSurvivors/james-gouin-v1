@@ -217,6 +217,11 @@ void Pingouin::emptyTempSacoche()
     tempSacoche.clear();
 }
 
+void Pingouin::emptySacoche()
+{
+    sacoche.clear();
+}
+
 void Pingouin::removeTempFromSacoche()
 {
     for (int i = 0; i < tempSacoche.size(); ++i)
