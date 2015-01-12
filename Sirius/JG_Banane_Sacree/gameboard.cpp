@@ -1128,7 +1128,7 @@ void Gameboard::populateScene()
             }
             if (Mat_Snow_Surface[i][j] != 0)
             {
-                S_Snow *item = new S_Snow();
+                S_Ice *item = new S_Ice();
                 item->setPos(i,j);
                 mainScene->addItem(item);
             }
