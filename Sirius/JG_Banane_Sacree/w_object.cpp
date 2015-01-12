@@ -43,6 +43,7 @@ void WidgetObject::reloadObjectList(QList<Object*> objectList)
 {
     sacoche = objectList;
     map.clear();
+    update();
 
     for(int i = 0; i < sacoche.size(); ++i)
     {

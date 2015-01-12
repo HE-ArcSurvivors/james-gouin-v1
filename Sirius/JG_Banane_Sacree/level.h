@@ -6,6 +6,8 @@ class QGraphicsScene;
 class QPixmap;
 class QPoint;
 
+#include <QList>
+
 class Level
 {
 public:
@@ -25,6 +27,8 @@ private:
     int maxBlocksWidth;
 
     void getSceneSize();
+
+    QList<QList<QPoint> > ennemi;
 };
 
 #endif // LEVEL_H

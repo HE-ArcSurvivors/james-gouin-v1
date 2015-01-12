@@ -13,8 +13,12 @@
 #include "s_viewtransition.h"
 #include "object.h"
 
+#include "e_loup.h"
+#include "e_renard.h"
+
 #include <QPoint>
 #include <QDebug>
+#include <QList>
 
 Level::Level(int levelNumber)
 {
@@ -105,6 +109,26 @@ QGraphicsScene* Level::populateScene()
                 line[line_count] = t.readLine();
                 QStringList valueHeight = line[line_count].split("=");
                 maxBlocksHeight = valueHeight.at(1).toInt();
+            }
+
+            if(line[line_count].contains("[ennemi]"))
+            {
+                line_count++;
+                line[line_count] = t.readLine();
+                QStringList listEnnemi = line[line_count].split("//");
+                QStringList listPoint = listEnnemi.at(1).split(",");
+
+                for(int j = 0; j < listEnnemi.size(); j++)
+                {
+                    QList<QPoint> listeDePoints;
+                    for(int i = 0; i < listPoint.size(); i++)
+                    {
+                        QStringList point = listPoint.at(1).split("-");
+
+                        listeDePoints.append(QPoint(point.at(0).toInt(),point.at(1).toInt()));
+                    }
+                    ennemi.append(listeDePoints);
+                }
             }
 
             if(line[line_count].contains("type=Walls_Blocks"))
@@ -401,6 +425,7 @@ QGraphicsScene* Level::populateScene()
         qDebug() << "Fichier non ouvert";
     }
 
+    int k = 0;
     // Populate scene
     for (int i = 0; i < maxBlocksWidth; i++)
     {
@@ -435,12 +460,21 @@ QGraphicsScene* Level::populateScene()
                 item->setPos(i, j);
                 scene->addItem(item);
             }
-//            if (Mat_Enemies[i][j] != 0)
-//            {
-//                QGraphicsItem *item = new B_Wall();
-//                item->setPos(QPointF(i*gameSquares, j*gameSquares));
-//                scene->addItem(item);
-//            }
+            if (Mat_Enemies[i][j] != 0)
+            {
+                switch(Mat_Enemies[i][j])
+                {
+                    case 1: E_Renard *item = new E_Renard(ennemi.at(k));
+                            item->addToScene(scene);
+                            break;
+                    case 2 : E_Loup *item = new E_Loup(ennemi.at(k));
+                            item->addToScene(scene);
+                            break;
+                    default:break;
+                }
+
+                k++;
+            }
             if (Mat_Scene_End[i][j] != 0)
             {
                 S_ViewTransition *item = new S_ViewTransition();
@@ -454,11 +488,11 @@ QGraphicsScene* Level::populateScene()
                 item->setPos(i,j);
                 item->setLevelEnd(false);
 
-                /*if(Mat_Doors[i][j] > 20 && Mat_Doors[i][j] < 30)
+                if(Mat_Doors[i][j] > 20 && Mat_Doors[i][j] < 30)
                 {
                     item->setNbItem(Mat_Doors[i][j]%20);
                     item->setNeededItem("Poisson");
-                }*/
+                }
 
                 scene->addItem(item);
             }

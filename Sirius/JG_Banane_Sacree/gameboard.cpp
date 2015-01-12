@@ -123,7 +123,6 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     connect(timerPingouinSlide, SIGNAL(timeout()), this, SLOT(SlidePingouin()));
     connect(timerBlocDeplSlide, SIGNAL(timeout()), this, SLOT(SlideBloc()));
 
-
     //pour annimer !
     QTimer *timer = new QTimer();
     QObject::connect(timer, SIGNAL(timeout()), mainScene, SLOT(advance()));
