@@ -18,7 +18,6 @@ public:
 
 private:
     int levelNumber;
-    QPixmap* levelBackground;
     QPoint* startingPoint;
     QPoint* viewStart;
 

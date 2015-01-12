@@ -27,8 +27,11 @@ SOURCES += \
     m_menustart.cpp \
     object.cpp \
     m_pause.cpp \
+    ennemi.cpp \
+    e_basique.cpp
     s_ice.cpp \
     level.cpp \
+    maingame.cpp \
     w_object.cpp
 HEADERS  += \
     player.h \
@@ -44,8 +47,11 @@ HEADERS  += \
     m_menustart.h \
     object.h \
     m_pause.h \
+    ennemi.h \
+    e_basique.h
     s_ice.h \
     level.h \
+    maingame.h \
     w_object.h
 RESOURCES += \
     images.qrc \

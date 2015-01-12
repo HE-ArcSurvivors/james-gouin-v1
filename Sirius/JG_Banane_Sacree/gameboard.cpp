@@ -10,6 +10,10 @@
 #include "s_ice.h"
 #include "level.h"
 
+#include "ennemi.h"
+
+#include <QtWidgets>
+
 #include <QList>
 #include <QDebug>
 #include <QGraphicsItemGroup>
@@ -78,6 +82,30 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     pingouin->addToScene(mainScene);
     pingouin->setPos(currentLevel->getStartingPoint()->x(), currentLevel->getStartingPoint()->y());
 
+    //on ajoute un ennemi
+    QList<QPoint> l;
+    l.append(QPoint(10,23));
+    l.append(QPoint(17,23));
+    l.append(QPoint(17,25));
+    l.append(QPoint(10,25));
+    Ennemi *ennemibasique = new Ennemi(l);
+
+    //on ajoute un ennemi
+    QList<QPoint> l2;
+    //l2.append(QPoint(6,23));
+    l2.append(QPoint(6,25));
+    Ennemi *ennemibasique2 = new Ennemi(l2);
+    ennemibasique2->setOrientation_top();
+
+
+    //mainScene->addItem(ennemibasique);
+
+
+    B_Movable *b = new B_Movable(12,22);
+    b->addToScene(mainScene);
+    B_Movable *b2 = new B_Movable(13,22);
+    b2->addToScene(mainScene);
+
     saveCheckpoint();
 
     menuPauseInGame = new M_Pause(this);
@@ -94,6 +122,16 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     timerBlocDeplSlide = new QTimer();
     connect(timerPingouinSlide, SIGNAL(timeout()), this, SLOT(SlidePingouin()));
     connect(timerBlocDeplSlide, SIGNAL(timeout()), this, SLOT(SlideBloc()));
+
+
+    //pour annimer !
+    QTimer *timer = new QTimer();
+    QObject::connect(timer, SIGNAL(timeout()), mainScene, SLOT(advance()));
+    timer->start(1000 / 33); //30fps
+
+    ennemibasique->addToScene(mainScene);
+    ennemibasique2->addToScene(mainScene);
+
 }
 void Gameboard::SlideBloc()
 {
@@ -832,6 +870,8 @@ void Gameboard::resumeGame()
 
 void Gameboard::restartLevel()
 {
+    mainScene->removeItem(proxy);
+    mainScene->removeItem(objectListProxy);
     mainScene = currentLevel->populateScene();
     playerView->setScene(mainScene);
 
@@ -844,15 +884,19 @@ void Gameboard::restartLevel()
     objectList->reloadObjectList(pingouin->getSacoche());
     setPositionBottom(objectList);
 
-    objectListProxy = NULL;
+    menuPauseInGame = new M_Pause(this);
+    proxy = mainScene->addWidget(menuPauseInGame);
+
+    objectList = new WidgetObject(this);
     objectListProxy = mainScene->addWidget(objectList);
 
-    //resumeGame();
+    resumeGame();
 }
 
 void Gameboard::restartGame()
 {
-    //resumeGame();
+    mainScene->removeItem(proxy);
+    mainScene->removeItem(objectListProxy);
 
     mainScene = currentLevel->populateScene();
     viewRequested = currentLevel->getViewStart();
@@ -866,6 +910,14 @@ void Gameboard::restartGame()
     pingouin->emptySacoche();
 
     playerView->setSceneRect(viewPositionX,viewPositionY,windowSizeX,windowSizeY);
+
+    menuPauseInGame = new M_Pause(this);
+    proxy = mainScene->addWidget(menuPauseInGame);
+
+    objectList = new WidgetObject(this);
+    objectListProxy = mainScene->addWidget(objectList);
+
+    resumeGame();
 }
 
 void Gameboard::exitGame()
