@@ -33,56 +33,21 @@ Ennemi::Ennemi(QList<QPoint> path)
 
     //vitesse entre 1 et 100
     // 1 étant très rapide, 100 étant très lent
-    speed = 30;
+    speed = 100; //vitesse par défaut
     time = rand() % speed;
 
     iDestPoint = 0;
     this->path = path;
 
-    ViewBloc vb;
-    vb.bloc = new QGraphicsRectItem(0,0, Gameboard::getGameSquares()-2, Gameboard::getGameSquares()-2);
-    vb.colonne=1;
-    vb.ligne=0;
-
-    ViewBloc vb2;
-    vb2.bloc = new QGraphicsRectItem(0,0, Gameboard::getGameSquares()-2, Gameboard::getGameSquares()-2);
-    vb2.colonne=2;
-    vb2.ligne=0;
-
-    ViewBloc vb3;
-    vb3.bloc = new QGraphicsRectItem(0,0, Gameboard::getGameSquares()-2, Gameboard::getGameSquares()-2);
-    vb3.colonne=1;
-    vb3.ligne=1;
-
-    ViewBloc vb4;
-    vb4.bloc = new QGraphicsRectItem(0,0, Gameboard::getGameSquares()-2, Gameboard::getGameSquares()-2);
-    vb4.colonne=1;
-    vb4.ligne=-1;
-
-    ViewBloc vb5;
-    vb5.bloc = new QGraphicsRectItem(0,0, Gameboard::getGameSquares()-2, Gameboard::getGameSquares()-2);
-    vb5.colonne=2;
-    vb5.ligne=-1;
-
-    ViewBloc vb6;
-    vb6.bloc = new QGraphicsRectItem(0,0, Gameboard::getGameSquares()-2, Gameboard::getGameSquares()-2);
-    vb6.colonne=2;
-    vb6.actif =true;
-    vb6.ligne=1;
-
-    champVue.append(vb);
-    champVue.append(vb2);
-    champVue.append(vb3);
-    champVue.append(vb4);
-    champVue.append(vb5);
-    champVue.append(vb6);
-
-
     setPos(path.at(0).x(), path.at(0).y());
 
     //par défaut on lui donne une orientation
-    setOrientation_left();
+    setOrientation_top();
+}
 
+void Ennemi::setPath(QList<QPoint> path)
+{
+    this->path = path;
 }
 
 void Ennemi::viewBlocActif()
@@ -188,6 +153,8 @@ void Ennemi::pinguinDetection()
                     pen.setStyle(Qt::SolidLine);
                     pen.setColor(Qt::yellow);
                     vb.bloc->setPen(pen);
+
+                    //Gameboard::restartLevel();
                 }
             }
         }
@@ -262,12 +229,12 @@ int Ennemi::nextPoint()
 //Cerveau de l'ennemi
 void Ennemi::advance(int step)
 {
+    viewBlocActif();
     pinguinDetection();
     if(step == 1 && time % speed==0 && !detectPinguin)
     {
         time = 0;
         QPoint posEnnemi = convertPosPoint(this->pos());
-
 
         //1 on trouve son orientation
         char direction = orientation;
