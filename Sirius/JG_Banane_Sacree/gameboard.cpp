@@ -54,7 +54,7 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     checkpoint = new QPoint();
 
     this->setWindowTitle(windowTitle);
-    this->setFixedSize(windowSizeX,windowSizeY);
+//    this->setFixedSize(windowSizeX,windowSizeY);
     this->resize(windowSizeX,windowSizeY);
 
     mainScene = new QGraphicsScene(this);

@@ -23,6 +23,7 @@ public:
     bool getProfil();
 
 signals:
+    void startGame(int,int,int);
 
 public slots:
     void loadGame(QString value);
@@ -31,6 +32,8 @@ public slots:
 
 private :
     QSignalMapper* signalMapper;
+    int totalForms;
+    int maxTotalForms;
 
 };
 
