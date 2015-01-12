@@ -1,10 +1,16 @@
-#ifndef M_BASIQUE_H
-#define M_BASIQUE_H
+//#ifndef M_BASIQUE_H
+//#define M_BASIQUE_H
 
-class M_basique
-{
-public:
-    M_basique();
-};
+//#include "ennemi.h"
 
-#endif // M_BASIQUE_H
+//class E_basique : public Ennemi
+//{
+//public:
+//    E_basique(QList<QPoint> path);
+
+//private:
+//    void setDesign();
+
+//};
+
+//#endif // M_BASIQUE_H

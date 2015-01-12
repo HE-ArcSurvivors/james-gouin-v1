@@ -9,6 +9,10 @@
 #include "s_snow.h"
 #include "s_ice.h"
 
+#include "ennemi.h"
+
+#include <QtWidgets>
+
 #include <QList>
 #include <QDebug>
 #include <QGraphicsItemGroup>
@@ -74,19 +78,44 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     //On crée la scene
     QPixmap loadScene(sceneToLoad);
     mainScene->setBackgroundBrush(loadScene);
+    playerView->setScene(mainScene);
 
     playerView->setHorizontalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
     playerView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     playerView->setSceneRect(viewStartPostionX,viewStartPostionY,viewPositionX,viewPositionY);
 
     //On position la vue
-    playerView->setScene(mainScene);
+
     grabKeyboard();
 
     //On ajoute le joueur
     pingouin = new Pingouin(gameSquares);
     pingouin->addToScene(mainScene);
     pingouin->setPos(startingPoint.x(), startingPoint.y());
+
+    //on ajoute un ennemi
+    QList<QPoint> l;
+    l.append(QPoint(10,23));
+    l.append(QPoint(17,23));
+    l.append(QPoint(17,25));
+    l.append(QPoint(10,25));
+    Ennemi *ennemibasique = new Ennemi(l);
+
+    //on ajoute un ennemi
+    QList<QPoint> l2;
+    //l2.append(QPoint(6,23));
+    l2.append(QPoint(6,25));
+    Ennemi *ennemibasique2 = new Ennemi(l2);
+    ennemibasique2->setOrientation_top();
+
+
+    //mainScene->addItem(ennemibasique);
+
+
+    B_Movable *b = new B_Movable(12,22);
+    b->addToScene(mainScene);
+    B_Movable *b2 = new B_Movable(13,22);
+    b2->addToScene(mainScene);
 
     saveCheckpoint();
     populateScene();
@@ -101,6 +130,16 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     timerBlocDeplSlide = new QTimer();
     connect(timerPingouinSlide, SIGNAL(timeout()), this, SLOT(SlidePingouin()));
     connect(timerBlocDeplSlide, SIGNAL(timeout()), this, SLOT(SlideBloc()));
+
+
+    //pour annimer !
+    QTimer *timer = new QTimer();
+    QObject::connect(timer, SIGNAL(timeout()), mainScene, SLOT(advance()));
+    timer->start(1000 / 33); //30fps
+
+    ennemibasique->addToScene(mainScene);
+    ennemibasique2->addToScene(mainScene);
+
 }
 void Gameboard::SlideBloc()
 {
@@ -1128,7 +1167,7 @@ void Gameboard::populateScene()
             }
             if (Mat_Snow_Surface[i][j] != 0)
             {
-                S_Ice *item = new S_Ice();
+                S_Snow *item = new S_Snow();
                 item->setPos(i,j);
                 mainScene->addItem(item);
             }

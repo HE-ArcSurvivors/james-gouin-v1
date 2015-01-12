@@ -27,7 +27,9 @@ SOURCES += \
     m_menustart.cpp \
     object.cpp \
     m_pause.cpp \
-    s_ice.cpp
+    s_ice.cpp \
+    ennemi.cpp \
+    e_basique.cpp
 HEADERS  += \
     player.h \
     surface.h \
@@ -42,7 +44,9 @@ HEADERS  += \
     m_menustart.h \
     object.h \
     m_pause.h \
-    s_ice.h
+    s_ice.h \
+    ennemi.h \
+    e_basique.h
 RESOURCES += \
     images.qrc \
     ItemsPopulation.qrc
