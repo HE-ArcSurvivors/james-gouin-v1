@@ -11,6 +11,8 @@
 #include "level.h"
 
 #include "ennemi.h"
+#include "e_renard.h"
+#include "e_loup.h"
 
 #include <QtWidgets>
 
@@ -88,13 +90,13 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     l.append(QPoint(17,23));
     l.append(QPoint(17,25));
     l.append(QPoint(10,25));
-    Ennemi *ennemibasique = new Ennemi(l);
+    E_Renard *ennemibasique = new E_Renard(l);
 
     //on ajoute un ennemi
     QList<QPoint> l2;
     //l2.append(QPoint(6,23));
     l2.append(QPoint(6,25));
-    Ennemi *ennemibasique2 = new Ennemi(l2);
+    E_Loup *ennemibasique2 = new E_Loup(l2);
     ennemibasique2->setOrientation_top();
 
 

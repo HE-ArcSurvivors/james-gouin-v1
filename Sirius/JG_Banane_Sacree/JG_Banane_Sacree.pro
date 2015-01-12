@@ -28,11 +28,12 @@ SOURCES += \
     object.cpp \
     m_pause.cpp \
     ennemi.cpp \
-    e_basique.cpp
     s_ice.cpp \
     level.cpp \
     maingame.cpp \
-    w_object.cpp
+    w_object.cpp \
+    e_renard.cpp \
+    e_loup.cpp
 HEADERS  += \
     player.h \
     surface.h \
@@ -48,11 +49,12 @@ HEADERS  += \
     object.h \
     m_pause.h \
     ennemi.h \
-    e_basique.h
     s_ice.h \
     level.h \
     maingame.h \
-    w_object.h
+    w_object.h \
+    e_renard.h \
+    e_loup.h
 RESOURCES += \
     images.qrc \
     ItemsPopulation.qrc
