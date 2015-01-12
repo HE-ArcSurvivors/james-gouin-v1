@@ -26,6 +26,7 @@ public:
     bool isSlide();
 
     QList<QGraphicsItem *> CollidesCenter();
+    QGraphicsRectItem* getCollideBloc(char sensDepl);
 
 private:
     QGraphicsRectItem *leftCollideBox;

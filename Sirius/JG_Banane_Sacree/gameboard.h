@@ -6,6 +6,8 @@
 #include "b_movable.h"
 #include "m_pause.h"
 #include <QGraphicsProxyWidget>
+#include "level.h"
+#include "w_object.h"
 
 class QGraphicsScene;
 class QGraphicsView;
@@ -33,6 +35,8 @@ public:
     ~Gameboard();
 
     static int getGameSquares();
+    static int sizeX;
+    static int sizeY;
     QPoint *getCheckPoint();
 
 private:
@@ -40,28 +44,28 @@ private:
     QTimer *timerPingouinSlide;
     QTimer *timerBlocDeplSlide;
     char cSensPingouinSlide;
+    bool isSliding;
 
     QGraphicsScene *mainScene;
     QGraphicsScene *preloadedScene;
     QGraphicsView *playerView;
     Pingouin *pingouin;
     void keyPressEvent(QKeyEvent *event);
-    int viewPositionX;
-    int viewPositionY;
     int windowSizeY;
     int windowSizeX;
-    int viewStartPostionX;
-    int viewStartPostionY;
+    int viewPositionX;
+    int viewPositionY;
     static int gameSquares;
     QString windowTitle;
-    QPoint startingPoint;
 
-    int maxBlocksHeight;
-    int maxBlocksWidth;
+    Level* currentLevel;
+
+    void setViewPosition();
+    bool checkPosition(QGraphicsItem *object);
+
     int transition;
     QPoint viewRequested;
     QPoint exit;
-    void setView(QPoint);
 
     bool MovePingouinToLeft();
     bool MovePingouinToRight();
@@ -73,12 +77,12 @@ private:
 
     void SinkMovable(B_Movable *b);
     void CheckChangeView(char);
+    void ChangeView(char sens);
     bool CheckGameOver();
     void CheckItem();
 
     B_Movable *moveBloc;
     QList<slideBloc> listSlindingBlocs;
-    QString* neededItem;
 
     void populateScene();
 
@@ -107,9 +111,14 @@ private:
     void loadCheckpoint();
 
 	M_Pause *menuPauseInGame;
+    WidgetObject *objectList;
 
-    QGraphicsProxyWidget *proxy;protected:
+    QGraphicsProxyWidget *proxy;
+    QGraphicsProxyWidget *objectListProxy;
 
+    void setPositionBottom(QWidget* widget);
+
+protected:
 
 signals:
 
@@ -119,6 +128,8 @@ public slots:
     void SlideBloc();
 
     void exitGame();
+    void restartLevel();
+    void restartGame();
 };
 
 #endif // GAMEBOARD_H

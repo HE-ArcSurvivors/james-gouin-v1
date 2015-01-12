@@ -16,19 +16,10 @@ Object::Object(QString new_nom, QGraphicsItem *parent) : Surface(0, 0, parent)
 void Object::setDesign()
 {
     objectSkin = new QBrush();
-
-    if(*this->nom == "Poisson")
-    {
-       objectSkin->setTexture(QPixmap(":/characters/characters/baleine.png"));
-    }
-    else if(*this->nom == "Oeuf")
-    {
-        objectSkin->setTexture(QPixmap(":/characters/characters/oeuf.png"));
-    }
-    else
-    {
-        objectSkin->setTexture(QPixmap(""));
-    }
+    QString img = ":/items/items/";
+    img.append(this->nom->toLower());
+    img.append(".png");
+    objectSkin->setTexture(QPixmap(img));
 
     setBrush(*objectSkin);
 }
@@ -41,4 +32,9 @@ QString Object::getName()
 void Object::action()
 {
 
+}
+
+QPixmap Object::getTexture()
+{
+    return objectSkin->texture();
 }

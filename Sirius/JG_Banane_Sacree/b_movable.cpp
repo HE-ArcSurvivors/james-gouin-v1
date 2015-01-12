@@ -143,3 +143,24 @@ bool B_Movable::IsMovableToTop(){
 QList<QGraphicsItem *> B_Movable::CollidesCenter(){
      return collidingItems();
 }
+
+QGraphicsRectItem* B_Movable::getCollideBloc(char sensDepl)
+{
+    if(sensDepl == 'b')
+    {
+        return bottomCollideBox;
+    }
+    else if(sensDepl == 'l')
+    {
+        return leftCollideBox;
+    }
+    else if(sensDepl == 'r')
+    {
+        return rightCollideBox;
+    }
+    else if(sensDepl == 't')
+    {
+        return topCollideBox;
+    }
+    return NULL;
+}

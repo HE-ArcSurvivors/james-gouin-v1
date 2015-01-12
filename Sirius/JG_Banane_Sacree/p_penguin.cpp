@@ -34,6 +34,8 @@ Pingouin::Pingouin(int gameSquare) : Player()
 
     lastMove = new QPoint(0,0);
 
+    slideAble = true;
+
 }
 void Pingouin::setPos(int x, int y)
 {
@@ -74,6 +76,8 @@ void Pingouin::moveBack()
     moveBy(-lastMove->x(),-lastMove->y());
     lastMove->setX(0);
     lastMove->setY(0);
+
+    qDebug() << "MoveBack" << x() << " " << y();
 }
 
 void Pingouin::addToScene(QGraphicsScene* Scene)
@@ -90,14 +94,22 @@ bool Pingouin::isSlide()
     QList<QGraphicsItem *> CollidingItems = this->CollidesCenter();
     bool slide = false;
 
-    for(int i=0; i<CollidingItems.length(); i++)
+    if(slideAble)
     {
-        if(typeid(*CollidingItems.at(i)).name() == typeid(S_Ice).name())
+        for(int i=0; i<CollidingItems.length(); i++)
         {
-            slide = true;
+            if(typeid(*CollidingItems.at(i)).name() == typeid(S_Ice).name())
+            {
+                slide = true;
+            }
         }
     }
     return slide;
+}
+
+void Pingouin::setSlideAble(bool value)
+{
+    this->slideAble = value;
 }
 
 //Retour des listes des collisions
@@ -136,16 +148,18 @@ QGraphicsRectItem* Pingouin::getTopCB(){
 QGraphicsRectItem* Pingouin::getBottomCB(){
      return bottomCollideBox;
 }
+
 Player* Pingouin::getPlayer(){
      return this;
 }
 
 void Pingouin::addObjectToSacoche(Object *object)
 {
+    tempSacoche.append(object);
     sacoche.append(object);
 }
 
-void Pingouin::removeObjectToSacoche(QString object)
+void Pingouin::removeObjectFromSacoche(QString object)
 {
     for (int i = 0; i < sacoche.size(); ++i)
     {
@@ -159,25 +173,78 @@ void Pingouin::removeObjectToSacoche(QString object)
 
 void Pingouin::printSacoche()
 {
-    qDebug() << "PrintSacoche";
+    qDebug() << "[PrintSacoche]";
     for (int i = 0; i < sacoche.size(); ++i) {
         qDebug() << sacoche.at(i)->getName();
     }
+    qDebug() << " ";
+
+    qDebug() << "[PrintSacocheTemp]";
+    for (int i = 0; i < tempSacoche.size(); ++i) {
+        qDebug() << tempSacoche.at(i)->getName();
+    }
+    qDebug() << " ";
 }
 
-Object* Pingouin::getObjectSacoche()
+QList<Object*> Pingouin::getSacoche()
 {
-    return sacoche.at(0);
+    return sacoche;
 }
 
-bool Pingouin::checkObjectSacoche(QString object)
+bool Pingouin::checkObjectSacoche(QString object, int quantity)
 {
+    int total = 0;
     for (int i = 0; i < sacoche.size(); ++i)
     {
         if (sacoche.at(i)->getName() == object)
         {
-            return true;
+            total++;
         }
     }
-    return false;
+
+    if(total >= quantity)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void Pingouin::emptyTempSacoche()
+{
+    tempSacoche.clear();
+}
+
+void Pingouin::removeTempFromSacoche()
+{
+    for (int i = 0; i < tempSacoche.size(); ++i)
+    {
+        qDebug() << "Remove : " << tempSacoche.at(i)->getName();
+        QString nom = tempSacoche.at(i)->getName();
+        removeObjectFromSacoche(nom);
+    }
+    emptyTempSacoche();
+}
+
+QGraphicsRectItem* Pingouin::getCollideBloc(char sensDepl)
+{
+    if(sensDepl == 'b')
+    {
+        return bottomCollideBox;
+    }
+    else if(sensDepl == 'l')
+    {
+        return leftCollideBox;
+    }
+    else if(sensDepl == 'r')
+    {
+        return rightCollideBox;
+    }
+    else if(sensDepl == 't')
+    {
+        return topCollideBox;
+    }
+    return NULL;
 }

@@ -13,9 +13,9 @@ B_Water::B_Water(QGraphicsItem *parent) : Surface(0, 0, parent) //Pas le choix, 
 }
 void B_Water::setDesign()
 {
-    QBrush brush;
-    brush.setStyle(Qt::SolidPattern);
-    brush.setColor(Qt::blue);
+//    QBrush brush;
+//    brush.setStyle(Qt::SolidPattern);
+//    brush.setColor(Qt::blue);
 
-    setBrush(brush);
+//    setBrush(brush);
 }

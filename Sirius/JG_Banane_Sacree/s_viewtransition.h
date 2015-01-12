@@ -10,8 +10,23 @@ public:
     S_ViewTransition(int xpos, int ypos, QGraphicsItem *parent = 0);
     S_ViewTransition(QGraphicsItem *parent = 0);
 
+    bool isEndLevel();
+    void setLevelEnd(bool value);
+    void setNeededItem(QString value);
+
+    QString *getNeededItem();
+    bool isNeedingItem();
+
+    void setNbItem(int nb);
+    int getNbItem();
+
 private:
     void setDesign();
+    bool levelEnd;
+
+    bool needItem;
+    int nbItem;
+    QString* neededItem;
 };
 
 #endif // S_VIEWTRANSITION_H
