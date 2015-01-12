@@ -28,6 +28,8 @@ public:
     void setOrientation_left();
     void setOrientation_right();
 
+    void setPath(QList<QPoint>);
+
 protected:
     void advance(int);
     int speed;

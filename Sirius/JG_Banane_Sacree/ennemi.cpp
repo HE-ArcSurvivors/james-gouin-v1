@@ -41,6 +41,11 @@ Ennemi::Ennemi(QList<QPoint> path)
     setOrientation_top();
 }
 
+void Ennemi::setPath(QList<QPoint> path)
+{
+    this->path = path;
+}
+
 void Ennemi::viewBlocActif()
 {
 
@@ -144,6 +149,8 @@ void Ennemi::pinguinDetection()
                     pen.setStyle(Qt::SolidLine);
                     pen.setColor(Qt::yellow);
                     vb.bloc->setPen(pen);
+
+                    //Gameboard::restartLevel();
                 }
             }
         }
