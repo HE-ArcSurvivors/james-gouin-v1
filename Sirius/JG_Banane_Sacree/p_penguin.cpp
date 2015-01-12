@@ -186,9 +186,9 @@ void Pingouin::printSacoche()
     qDebug() << " ";
 }
 
-Object* Pingouin::getObjectSacoche()
+QList<Object*> Pingouin::getSacoche()
 {
-    return sacoche.at(0);
+    return sacoche;
 }
 
 bool Pingouin::checkObjectSacoche(QString object, int quantity)

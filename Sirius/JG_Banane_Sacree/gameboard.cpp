@@ -83,6 +83,11 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     menuPauseInGame = new M_Pause(this);
     proxy = mainScene->addWidget(menuPauseInGame);
     proxy->hide();
+
+    objectList = new WidgetObject(this);
+    objectListProxy = mainScene->addWidget(objectList);
+    setPositionBottom(objectList);
+    objectListProxy->show();
    
     //initialisation des timer
     timerPingouinSlide = new QTimer();
@@ -350,14 +355,7 @@ bool Gameboard::CheckGameOver()
     {
         if(typeid(*CollidingItems.at(i)).name() == typeid(B_Water).name())
         {
-            mainScene = currentLevel->populateScene();
-            playerView->setScene(mainScene);
-
-            pingouin->addToScene(mainScene);
-            pingouin->setPlayerOrientation("down");
-            pingouin->removeTempFromSacoche();
-
-            loadCheckpoint();
+            restartLevel();
             return true;
         }
     }
@@ -381,6 +379,9 @@ void Gameboard::CheckItem()
             {
                 pingouin->setSlideAble(false);
             }
+
+            objectList->reloadObjectList(pingouin->getSacoche());
+            setPositionBottom(objectList);
         }
     }
 }
@@ -395,13 +396,10 @@ void Gameboard::CheckChangeView(char sens)
             S_ViewTransition *bloc = dynamic_cast<S_ViewTransition*>(CollidingItems.at(i));
             if(bloc->isEndLevel())
             {
-                qDebug() << "Changement de niveau";
-
                 mainScene = currentLevel->changeLevel(currentLevel->getLevelNumber()+1);
                 viewRequested = currentLevel->getViewStart();
                 playerView->setScene(mainScene);
 
-                qDebug() << "Position souhaitée : " << viewRequested.x() << " " << viewRequested.y();
                 setViewPosition();
 
                 pingouin->addToScene(mainScene);
@@ -471,8 +469,22 @@ void Gameboard::ChangeView(char sens)
 
     qDebug() << "ViewRequested : " << viewRequested.x() << " " << viewRequested.y();
     loadCheckpoint();
+
     setViewPosition();
     playerView->setSceneRect(viewPositionX,viewPositionY,windowSizeX,windowSizeY);
+
+    objectList->reloadObjectList(pingouin->getSacoche());
+    setPositionBottom(objectList);
+}
+
+void Gameboard::setPositionBottom(QWidget* widget)
+{
+    int width = widget->width();
+    int height = widget->height();
+
+    qDebug() << width << " " << height;
+
+    widget->setGeometry(viewPositionX+gameSquares*(sizeX)-width,viewPositionY+gameSquares*(sizeY)-height,width,height);
 }
 
 void Gameboard::MoveBloc(char sens)
@@ -811,6 +823,43 @@ void Gameboard::grabTheWorld()
 void Gameboard::resumeGame()
 {
     pauseMenu();
+}
+
+void Gameboard::restartLevel()
+{
+    mainScene = currentLevel->populateScene();
+    playerView->setScene(mainScene);
+
+    pingouin->addToScene(mainScene);
+    pingouin->setPlayerOrientation("down");
+    pingouin->removeTempFromSacoche();
+
+    loadCheckpoint();
+
+    objectList->reloadObjectList(pingouin->getSacoche());
+    setPositionBottom(objectList);
+
+    objectListProxy = NULL;
+    objectListProxy = mainScene->addWidget(objectList);
+
+    //resumeGame();
+}
+
+void Gameboard::restartGame()
+{
+    //resumeGame();
+
+    mainScene = currentLevel->populateScene();
+    viewRequested = currentLevel->getViewStart();
+    playerView->setScene(mainScene);
+
+    setViewPosition();
+
+    pingouin->addToScene(mainScene);
+    pingouin->setPos(currentLevel->getStartingPoint()->x(), currentLevel->getStartingPoint()->y());
+    saveCheckpoint();
+
+    playerView->setSceneRect(viewPositionX,viewPositionY,windowSizeX,windowSizeY);
 }
 
 void Gameboard::exitGame()

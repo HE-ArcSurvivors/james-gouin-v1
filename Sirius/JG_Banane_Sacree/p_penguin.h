@@ -40,7 +40,7 @@ public:
     void removeObjectFromSacoche(QString object);
     void removeTempFromSacoche();
     bool checkObjectSacoche(QString object, int quantity = 1);
-    Object* getObjectSacoche();
+    QList<Object*> getSacoche();
     void printSacoche();
     void emptyTempSacoche();
 

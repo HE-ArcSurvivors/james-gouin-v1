@@ -7,6 +7,7 @@
 #include "m_pause.h"
 #include <QGraphicsProxyWidget>
 #include "level.h"
+#include "w_object.h"
 
 class QGraphicsScene;
 class QGraphicsView;
@@ -110,8 +111,12 @@ private:
     void loadCheckpoint();
 
 	M_Pause *menuPauseInGame;
+    WidgetObject *objectList;
 
     QGraphicsProxyWidget *proxy;
+    QGraphicsProxyWidget *objectListProxy;
+
+    void setPositionBottom(QWidget* widget);
 
 protected:
 
@@ -123,6 +128,8 @@ public slots:
     void SlideBloc();
 
     void exitGame();
+    void restartLevel();
+    void restartGame();
 };
 
 #endif // GAMEBOARD_H

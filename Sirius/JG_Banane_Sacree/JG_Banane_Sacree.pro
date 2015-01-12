@@ -28,7 +28,8 @@ SOURCES += \
     object.cpp \
     m_pause.cpp \
     s_ice.cpp \
-    level.cpp
+    level.cpp \
+    w_object.cpp
 HEADERS  += \
     player.h \
     surface.h \
@@ -44,7 +45,8 @@ HEADERS  += \
     object.h \
     m_pause.h \
     s_ice.h \
-    level.h
+    level.h \
+    w_object.h
 RESOURCES += \
     images.qrc \
     ItemsPopulation.qrc
