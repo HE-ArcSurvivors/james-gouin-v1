@@ -116,10 +116,10 @@ QGraphicsScene* Level::populateScene()
                 line_count++;
                 line[line_count] = t.readLine();
                 QStringList listEnnemi = line[line_count].split("//");
-                QStringList listPoint = listEnnemi.at(1).split(",");
 
                 for(int j = 0; j < listEnnemi.size(); j++)
                 {
+                    QStringList listPoint = listEnnemi.at(j).split(",");
                     QList<QPoint> listeDePoints;
                     for(int i = 0; i < listPoint.size(); i++)
                     {
@@ -461,23 +461,24 @@ QGraphicsScene* Level::populateScene()
             }
             if (Mat_Enemies[i][j] != 0)
             {
-                switch(Mat_Enemies[i][j])
-                {
+//                switch(Mat_Enemies[i][j])
+//                {
+//                case 1: {
+//                    qDebug() << "New Renard";
+//                    E_Renard *item = new E_Renard(ennemi.at(k));
+//                    item->addToScene(scene);
+//                    break;
+//                }
 
-                case 1: {
-                    qDebug() << "New Renard";
-                    E_Renard *item1 = new E_Renard(ennemi.at(k));
-                            item1->addToScene(scene);
-                            break;}
-                case 2 : {
-                    qDebug() << "New Loup";
-                    E_Loup *item2 = new E_Loup(ennemi.at(k));
-                            item2->addToScene(scene);
-                            break;}
+//                case 2 : {
+//                    qDebug() << "New Loup";
+//                    E_Loup *item2 = new E_Loup(ennemi.at(k));
+//                    item2->addToScene(scene);
+//                    break;
+//                    }
 
-                    default:break;
-
-                }
+//                default:break;
+//                }
 
                 k++;
             }

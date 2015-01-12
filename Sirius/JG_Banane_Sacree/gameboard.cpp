@@ -84,29 +84,32 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     pingouin->addToScene(mainScene);
     pingouin->setPos(currentLevel->getStartingPoint()->x(), currentLevel->getStartingPoint()->y());
 
-//    //on ajoute un ennemi
-//    QList<QPoint> l;
-//    l.append(QPoint(10,23));
-//    l.append(QPoint(17,23));
-//    l.append(QPoint(17,25));
-//    l.append(QPoint(10,25));
-//    E_Renard *ennemibasique = new E_Renard(l);
+    //on ajoute un ennemi
+    QList<QPoint> l;
+    l.append(QPoint(8,9));
+    l.append(QPoint(5,9));
+    l.append(QPoint(5,12));
+    l.append(QPoint(8,12));
+    l.append(QPoint(8,9));
+    l.append(QPoint(11,9));
+    l.append(QPoint(11,12));
+    l.append(QPoint(8,12));
+    E_Renard *ennemibasique = new E_Renard(l);
 
-//    //on ajoute un ennemi
-//    QList<QPoint> l2;
-//    //l2.append(QPoint(6,23));
-//    l2.append(QPoint(6,25));
-//    E_Loup *ennemibasique2 = new E_Loup(l2);
-//    ennemibasique2->setOrientation_top();
+    //on ajoute un ennemi
+    QList<QPoint> l2;
+    l2.append(QPoint(15,6));
+    E_Loup *ennemibasique2 = new E_Loup(l2);
+    ennemibasique2->setOrientation_top();
 
+    QList<QPoint> l3;
+    l3.append(QPoint(8,1));
+    l3.append(QPoint(8,7));
+    E_Loup *ennemibasique3 = new E_Loup(l3);
 
-    //mainScene->addItem(ennemibasique);
-
-
-    B_Movable *b = new B_Movable(12,22);
-    b->addToScene(mainScene);
-    B_Movable *b2 = new B_Movable(13,22);
-    b2->addToScene(mainScene);
+    ennemibasique->addToScene(mainScene);
+    ennemibasique2->addToScene(mainScene);
+    ennemibasique3->addToScene(mainScene);
 
     saveCheckpoint();
 
@@ -129,10 +132,6 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     QTimer *timer = new QTimer();
     QObject::connect(timer, SIGNAL(timeout()), mainScene, SLOT(advance()));
     timer->start(1000 / 33); //30fps
-
-//    ennemibasique->addToScene(mainScene);
-//    ennemibasique2->addToScene(mainScene);
-
 }
 void Gameboard::SlideBloc()
 {
