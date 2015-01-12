@@ -16,12 +16,15 @@
 #include <QHBoxLayout>
 #include <QDir>
 #include "m_pause.h"
+#include "gameboard.h"
 
 MenuStart::MenuStart(QWidget *parent) :
     QWidget(parent)
 {
+    maxTotalForms = 5;
     listButtonProfil = new QList<QPushButton*>();
-    buttonNew = new QPushButton("Nouvelle partie");
+
+    buttonNew = new QPushButton("Nouvelle partie", this);
 
     layoutMenu = new QVBoxLayout;
 
@@ -48,9 +51,7 @@ bool MenuStart::getProfil()
 {
     QFile loadFile("save.json");
 
-    if (!loadFile.open(QIODevice::ReadOnly)) {
-        qWarning("Couldn't open save file.");
-    }
+    loadFile.open(QIODevice::ReadOnly);
 
     QByteArray saveData = loadFile.readAll();
     //qDebug() << saveData;
@@ -71,9 +72,7 @@ void MenuStart::loadGame(QString value)
 
     QFile loadFile("save.json");
 
-    if (!loadFile.open(QIODevice::ReadOnly)) {
-        qWarning("Couldn't open save file.");
-    }
+    loadFile.open(QIODevice::ReadOnly);
 
     QByteArray saveData = loadFile.readAll();
     QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
@@ -83,49 +82,59 @@ void MenuStart::loadGame(QString value)
     user.read(object[value].toObject());
     user.print();
 
+    emit startGame(0,1,2);
+
 }
 
 void MenuStart::newGameForm()
 {
-    username = new QLineEdit();
-    QLabel* text = new QLabel("Surnom : ");
+    if (totalForms <= maxTotalForms)
+    {
+        totalForms++;
+        username = new QLineEdit(this);
+        username->grabKeyboard();
+        QLabel* text = new QLabel("Surnom : ");
 
-    QHBoxLayout* layoutNewGame = new QHBoxLayout;
-    layoutNewGame->addWidget(text);
-    layoutNewGame->addWidget(username);
-    layoutNewGame->addWidget(validate);
-    layoutMenu->addLayout(layoutNewGame);
+        QHBoxLayout* layoutNewGame = new QHBoxLayout;
+        layoutNewGame->addWidget(text);
+        layoutNewGame->addWidget(username);
+        layoutNewGame->addWidget(validate);
+        layoutMenu->addLayout(layoutNewGame);
+    }else{
+        buttonNew->hide();
+    }
 }
 
 void MenuStart::newGame()
 {
     qDebug() << "NEW";
-    Profil newProfil;
-    newProfil.setUsername(username->text());
+    if (username->text() != "")
+    {
+        Profil newProfil;
+        newProfil.setUsername(username->text());
 
-    // LIS LE FICHIER POUR GARDER LES DONNEES
-    QFile loadFile("save.json");
-    if (!loadFile.open(QIODevice::ReadOnly)) {
-        qWarning("Couldn't open save file.");
+        // LIS LE FICHIER POUR GARDER LES DONNEES
+        QFile loadFile("save.json");
+        loadFile.open(QIODevice::ReadOnly);
+
+        QByteArray loadData = loadFile.readAll();
+        QJsonDocument loadDoc(QJsonDocument::fromJson(loadData));
+        QJsonObject object = loadDoc.object();
+
+        // LIS LE FICHIER POUR ENREGISTRER
+        QFile saveFile(QStringLiteral("save.json"));
+        saveFile.open(QIODevice::WriteOnly);
+
+        QJsonObject gameObject;
+        QJsonObject playerObject;
+        newProfil.write(playerObject);
+        newProfil.print();
+
+        gameObject = object;
+        gameObject[newProfil.getUsername()] = playerObject;
+
+        QJsonDocument saveDoc(gameObject);
+        saveFile.write(saveDoc.toJson());
     }
-
-    QByteArray loadData = loadFile.readAll();
-    QJsonDocument loadDoc(QJsonDocument::fromJson(loadData));
-    QJsonObject object = loadDoc.object();
-
-    // LIS LE FICHIER POUR ENREGISTRER
-    QFile saveFile(QStringLiteral("save.json"));
-    saveFile.open(QIODevice::WriteOnly);
-
-    QJsonObject gameObject;
-    QJsonObject playerObject;
-    newProfil.write(playerObject);
-    newProfil.print();
-
-    gameObject = object;
-    gameObject[newProfil.getUsername()] = playerObject;
-
-    QJsonDocument saveDoc(gameObject);
-    saveFile.write(saveDoc.toJson());
-
 }
+
