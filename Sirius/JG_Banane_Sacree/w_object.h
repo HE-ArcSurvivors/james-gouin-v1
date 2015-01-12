@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "object.h"
 #include <QList>
+#include <QMap>
 
 class WidgetObject : public QWidget
 {
@@ -19,6 +20,7 @@ public slots:
 
 private:
     QList<Object* > sacoche;
+    QMap<QString, int> map;
 
 };
 

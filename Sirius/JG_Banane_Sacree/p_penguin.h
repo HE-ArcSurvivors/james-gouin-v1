@@ -43,6 +43,7 @@ public:
     QList<Object*> getSacoche();
     void printSacoche();
     void emptyTempSacoche();
+    void emptySacoche();
 
     bool isSlide();
     void setSlideAble(bool value);

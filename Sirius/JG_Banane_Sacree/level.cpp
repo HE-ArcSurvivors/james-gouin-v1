@@ -454,11 +454,11 @@ QGraphicsScene* Level::populateScene()
                 item->setPos(i,j);
                 item->setLevelEnd(false);
 
-                if(Mat_Doors[i][j] > 20 && Mat_Doors[i][j] < 30)
+                /*if(Mat_Doors[i][j] > 20 && Mat_Doors[i][j] < 30)
                 {
                     item->setNbItem(Mat_Doors[i][j]%20);
                     item->setNeededItem("Poisson");
-                }
+                }*/
 
                 scene->addItem(item);
             }
