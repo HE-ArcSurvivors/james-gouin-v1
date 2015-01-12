@@ -380,6 +380,7 @@ void Gameboard::CheckItem()
                 pingouin->setSlideAble(false);
             }
 
+            qDebug() << "Call Reload";
             objectList->reloadObjectList(pingouin->getSacoche());
             setPositionBottom(objectList);
         }
@@ -412,6 +413,12 @@ void Gameboard::CheckChangeView(char sens)
             {
                 if(!bloc->isNeedingItem())
                 {
+                    if(pingouin->checkObjectSacoche(QString("Chaussure")))
+                    {
+                        pingouin->removeObjectFromSacoche(QString("Chaussure"));
+                        pingouin->setSlideAble(true);
+                    }
+
                     ChangeView(sens);
                 }
                 else if(bloc->isNeedingItem() && pingouin->checkObjectSacoche(*bloc->getNeededItem(), bloc->getNbItem()))
@@ -482,8 +489,6 @@ void Gameboard::setPositionBottom(QWidget* widget)
     int width = widget->width();
     int height = widget->height();
 
-    qDebug() << width << " " << height;
-
     widget->setGeometry(viewPositionX+gameSquares*(sizeX)-width,viewPositionY+gameSquares*(sizeY)-height,width,height);
 }
 
@@ -525,25 +530,25 @@ void Gameboard::MoveBloc(char sens)
 
 bool Gameboard::checkPosition(QGraphicsItem *object)
 {
-    if(object->y() < (viewRequested.y()-1)*15*gameSquares)
+    if(object->y() < (viewRequested.y()-1)*15*gameSquares+1)
     {
         qDebug() << "Déplacement Impossible : " << object->y() << " < " << (viewRequested.y()-1)*15*gameSquares;
         return false;
     }
 
-    if(object->y() > viewRequested.y()*15*gameSquares-gameSquares)
+    if(object->y() > viewRequested.y()*15*gameSquares-gameSquares+1)
     {
         qDebug() << "Déplacement Impossible : " << object->y() << " > " << viewRequested.y()*15*gameSquares-gameSquares;
         return false;
     }
 
-    if(object->x() < (viewRequested.x()-1)*20*gameSquares)
+    if(object->x() < (viewRequested.x()-1)*20*gameSquares+1)
     {
         qDebug() << "Déplacement Impossible : " << object->x() << " < " << (viewRequested.x()-1)*20*gameSquares;
         return false;
     }
 
-    if(object->x() > viewRequested.x()*20*gameSquares-gameSquares)
+    if(object->x() > viewRequested.x()*20*gameSquares-gameSquares+1)
     {
         qDebug() << "Déplacement Impossible : " << object->x() << " > " << viewRequested.x()*20*gameSquares-gameSquares;
         return false;
@@ -592,7 +597,7 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
             {
                 pingouin->moveBy(0, 1);
 
-                if(!CheckGameOver())
+                if(!CheckGameOver() && checkPosition(pingouin))
                 {
                     CheckItem();
                     CheckChangeView('b');
@@ -711,20 +716,20 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
             B_Movable *b;
             b = dynamic_cast<B_Movable*>(CollidingItems.at(i));
 
-            if(sensDepl == 'l' && b->IsMovableToLeft() && checkPosition(b))
+            if(sensDepl == 'l' && b->IsMovableToLeft()) //&& checkPosition(b->getCollideBloc('l'))
             {
                 moveBloc = b;
                 bMove = true;
             }
-            else if(sensDepl == 'r' && b->IsMovableToRight() && checkPosition(b)){
+            else if(sensDepl == 'r' && b->IsMovableToRight()){ //&& checkPosition(b->getCollideBloc('r'))
                 moveBloc = b;
                 bMove = true;
             }
-            else if(sensDepl == 't' && b->IsMovableToTop() && checkPosition(b)){
+            else if(sensDepl == 't' && b->IsMovableToTop()){ //&& checkPosition(b->getCollideBloc('l'))
                 moveBloc = b;
                 bMove = true;
             }
-            else if(sensDepl == 'b' && b->IsMovableToBottom() && checkPosition(b)){
+            else if(sensDepl == 'b' && b->IsMovableToBottom()){ //&& checkPosition(b->getCollideBloc('b'))
                 moveBloc = b;
                 bMove = true;
             }
@@ -737,7 +742,7 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
             bMove = true;
         }
     }
-    if(bMove && (!checkPosition(pingouin)))
+    if(bMove && (!checkPosition(pingouin->getCollideBloc(sensDepl))))
     {
         bMove=false;
     }
@@ -858,6 +863,7 @@ void Gameboard::restartGame()
     pingouin->addToScene(mainScene);
     pingouin->setPos(currentLevel->getStartingPoint()->x(), currentLevel->getStartingPoint()->y());
     saveCheckpoint();
+    pingouin->emptySacoche();
 
     playerView->setSceneRect(viewPositionX,viewPositionY,windowSizeX,windowSizeY);
 }

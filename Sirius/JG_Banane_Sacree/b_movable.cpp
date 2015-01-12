@@ -144,22 +144,28 @@ QList<QGraphicsItem *> B_Movable::CollidesCenter(){
      return collidingItems();
 }
 
-QGraphicsRectItem* B_Movable::getCollideBloc(char sensDepl)
+QGraphicsRectItem* B_Movable::getCollideBloc(char sens)
 {
-    if(sensDepl == 'b')
+    qDebug() << "Bloc : " << this->x() << " " << this->y();
+    if(sens == 'b')
     {
-        return bottomCollideBox;
+        qDebug() << "BottomCollideBox :" << this->bottomCollideBox->x() << " " << this->bottomCollideBox->y();
+        return this->bottomCollideBox;
     }
-    else if(sensDepl == 'l')
+    else if(sens == 'l')
     {
-        return leftCollideBox;
+        qDebug() << "LeftCollideBox :" << this->leftCollideBox->x() << " " << this->leftCollideBox->y();
+        return this->leftCollideBox;
     }
-    else if(sensDepl == 'r')
+    else if(sens == 'r')
     {
-        return rightCollideBox;
+        qDebug() << "RightCollideBox :" << this->rightCollideBox->x() << " " << this->rightCollideBox->y();
+        return this->rightCollideBox;
     }
-    else if(sensDepl == 't')
+    else if(sens == 't')
     {
-        return topCollideBox;
+        qDebug() << "TopCollideBox :" << this->topCollideBox->x() << " " << this->topCollideBox->y();
+        return this->topCollideBox;
     }
+    return NULL;
 }
