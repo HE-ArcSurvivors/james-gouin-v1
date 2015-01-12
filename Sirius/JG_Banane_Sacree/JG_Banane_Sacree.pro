@@ -29,8 +29,7 @@ SOURCES += \
     m_pause.cpp \
     s_ice.cpp \
     level.cpp \
-    maingame.cpp
-    level.cpp \
+    maingame.cpp \
     w_object.cpp
 HEADERS  += \
     player.h \
@@ -48,8 +47,7 @@ HEADERS  += \
     m_pause.h \
     s_ice.h \
     level.h \
-    maingame.h
-    level.h \
+    maingame.h \
     w_object.h
 RESOURCES += \
     images.qrc \

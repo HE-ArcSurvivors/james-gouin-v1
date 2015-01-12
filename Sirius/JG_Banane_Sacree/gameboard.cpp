@@ -827,6 +827,8 @@ void Gameboard::resumeGame()
 
 void Gameboard::restartLevel()
 {
+    mainScene->removeItem(proxy);
+    mainScene->removeItem(objectListProxy);
     mainScene = currentLevel->populateScene();
     playerView->setScene(mainScene);
 
@@ -839,15 +841,19 @@ void Gameboard::restartLevel()
     objectList->reloadObjectList(pingouin->getSacoche());
     setPositionBottom(objectList);
 
-    objectListProxy = NULL;
+    menuPauseInGame = new M_Pause(this);
+    proxy = mainScene->addWidget(menuPauseInGame);
+
+    objectList = new WidgetObject(this);
     objectListProxy = mainScene->addWidget(objectList);
 
-    //resumeGame();
+    resumeGame();
 }
 
 void Gameboard::restartGame()
 {
-    //resumeGame();
+    mainScene->removeItem(proxy);
+    mainScene->removeItem(objectListProxy);
 
     mainScene = currentLevel->populateScene();
     viewRequested = currentLevel->getViewStart();
@@ -860,6 +866,14 @@ void Gameboard::restartGame()
     saveCheckpoint();
 
     playerView->setSceneRect(viewPositionX,viewPositionY,windowSizeX,windowSizeY);
+
+    menuPauseInGame = new M_Pause(this);
+    proxy = mainScene->addWidget(menuPauseInGame);
+
+    objectList = new WidgetObject(this);
+    objectListProxy = mainScene->addWidget(objectList);
+
+    resumeGame();
 }
 
 void Gameboard::exitGame()

@@ -162,4 +162,5 @@ QGraphicsRectItem* B_Movable::getCollideBloc(char sensDepl)
     {
         return topCollideBox;
     }
+    return NULL;
 }
