@@ -23,12 +23,12 @@
  </layer>
  <layer name="Solid_Blocks" width="60" height="30">
   <data encoding="base64" compression="zlib">
-   eJztWdGuwiAM5RvUR6+P4mfzqY5cSU6a01LmxprFkyxjrFJOobSdKcVFMd7lWZOYiPK5X5brulw3eHdmvs/0z+8F72bxrba+daXOg/tyPSbqy0lfyyxkspBnfdoYGmbzPRrVl6of9Wzbw4jciK8yf/vG16Ofi2z/WXPu2fNsfKPCGxeavyE8fHH8CDEI103mHz0+Hr5oJ2azGSjQRr61/QfPjY+0A8vLIqNAG22u8ZX98jk6itLP8suKNXyfnzuLq0zHniiD8tIOml1+2BZ4PrYzxDpHvPFDG+PoeIv6m0+NnCPMRpZvjuagWwNz7eZTza88tYz8Dfa9iLzUOxujeree597r3atDMV9j81gzNy2eRADmDuw7DZurxUfjdhTnvXVm0c6kfyZ6+jG2WLJszT16Z0NykHvSk/dZ32StfZ7S/vva8icGD18mI/dxBDDfkuvgzevZ2Wbpi1C3M6yt23r/OxxVtyPYmqytY371Tx9vmeIpag==
+   eJztmMFOBCEMhvsM6lE9DvvA6tH0qPuUQjINTVNKIcAQ9Uua3ZmFoT9tgVmAfcFob9HeB9nHUu/bwWifhd9C5/N2BiHr/T6NWKX3IdpTR79eSvHtATv6PEd7HehDjQDlWAbRJoj28hqNZ5RYrXck2NHniHaD+tzWaGnXUqtavVnx9Yy/ktb61fKvls+Wpt+mdzdIr3dfoHrjePTy56/egzikl8ct+fMI2adaznn08nnS5mwFCFnvV7T7+T1pf4Gsn/TIeZDXOM/VISDo9Zu0p7PWXdyX8yCvcbiHY0FoW6969B7np7avJluZ1wg5ll7jPh7nNf0m8+GfMfD1k9YQvo5Y7UvItai1/0z4+FRTvK5qaHMka1OOd6VmftammqI6K53DObIPv3dT2stxV9M67mg/Z8fbeg9Nxs9rmh89vpX2kx3g5zW5x5V8tfSUtF2lefaYQXwPyv2V1Mbne4vVVou5Z9zVSA0yJ629hdD2W8//VwDz89qqJw2PXq2NzOMd0GpLxsGjl++32rO1e1e+t1t49GpYOZ646r2do8VEi52H3n5/iR/C7k8b
   </data>
  </layer>
  <layer name="Movable_Blocks" width="60" height="30" visible="0">
   <data encoding="base64" compression="zlib">
-   eJzt2NEOgCAIBVDn/3907w0yxwUB79laD84EKdcYo68ZPC8aKs4q+aJ85Wt5Z6S5EXu7WsMrBinnDPmi19Jqi1xDur/HpTFvO+udjNMKVWPU2TKVC8X6rGr11Xh/26dkOkOIiIiIVjL9n/yNpXuvSVI59h2n+isRPHtDxH3oIlMdu/YsJLfkmdUDR8gAcw==
+   eJzt2NEOgCAIBVDnt/fhvTPQRBCwe7bWgzNAVmu0BlSPTkDpUe6rUq+2PmpUr/YsurD3xNnOYnjlwNWcoV7rWFJvLWNwd7rOrXlbiReZ5y6rHlt9W7pwWdl9VrX+Srzf7SiZviEAAAAAM5n+T77msjM3qKpy7iui5isneM6GAOdwi0x9vHVmwflLnVm9kR4Bdw==
   </data>
  </layer>
  <layer name="Items" width="60" height="30" visible="0">
@@ -41,11 +41,6 @@
    eJzt1UENAAAIxDCc4d8VJkggl1bBfquCP/o6AAAC+SsAWzwFAAAyDMxHAL4=
   </data>
  </layer>
- <layer name="Enemies" width="60" height="30" visible="0">
-  <data encoding="base64" compression="zlib">
-   eJzt1TEKACEMAEH/fFqqXzdg7VWCIjOwXYpUSUprX5Sj8jPzkhq1qJ9eBNjKLQNOc4cA4A5+MgAATAM+0AtZ
-  </data>
- </layer>
  <layer name="Enemies_Motion" width="60" height="30" visible="0">
   <data encoding="base64" compression="zlib">
    eJzt0rEKACAIQEE/3I9vbYqmQr0DwdEHRrDL3wc8prc3vb3ppbo8TEd5sXcysXfSPwMAAAC1LUe+DRU=
@@ -54,16 +49,6 @@
  <layer name="Solutions" width="60" height="30" visible="0">
   <data encoding="base64" compression="zlib">
    eJztlgEOwiAMRTnKP9jufw5jlASbln5KYWJ8SePo+L+tjsVSzuJ6hweaTzTr05DzonzOAydG62ixE21eDZlHZ69VJ3Ivm9l5q9b7vTLn1fa3tb1akXlrjqnB9nCVsefGOhe9s+NFRfYg+5Lf78w5ZfuSM454V2B4tPm6ljnLPxvreWa1zJmDuAcltwvrOWK1Ui99n0DRarloHzNE5p09v9JzJ+w7c0QLZS1z0uME/vO+gLKWOelxAtZ7Bspa5lqP04GylrnKL86btfdbQeH/YzB7MuuthKnP7MmstxKmPrMnox6UyIbx1PrY0YtVw+rH2q9pR4loPB2M6xmPNhh9z9eLy8j3PBl/r6+Ra5aIxtKhcLOw/lYN7T4GItpPb72K2TpRPYr/Ha9g1j+q8/SzvqtAkocW3wjubmAzuLuBJB5o5UMR
-  </data>
- </layer>
- <layer name="Scene_Start" width="60" height="30" visible="0">
-  <data encoding="base64" compression="zlib">
-   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAvBhwgAAE=
-  </data>
- </layer>
- <layer name="Scene_End" width="60" height="30" visible="0">
-  <data encoding="base64" compression="zlib">
-   eJztzqENADAIAEEmLOw/DRVYXJOau+T9RwAAAAAAAACbc8upPr+80BV7AT0=
   </data>
  </layer>
  <layer name="Doors" width="60" height="30" visible="0">
@@ -83,17 +68,32 @@
  </layer>
  <layer name="Snow_Surface" width="60" height="30">
   <data encoding="base64" compression="zlib">
-   eJztlsEOhCAMRPn/D/a82ZshnbYs00FhX+IFxOnDSmztz50ree3C7r597chr1hftWfUeWnleXdH4L7krfaO60Djj8vJYRHlefnaPRtzUZ4LqXFrVzyP17Oib7cWKnH5cgXUuoTlGzim+T0HVz0/hNN8vOzp5nOQ78v+H+tw7dzN5DdzLZsaV6as4J2ZdM75edmaMicJ35Dlv8u2f62Va2dE6BpXv17uvX6OE4ez1J7NvGFR/vyjDqkOByjdbQzUsX/Q8lIHWVFPxfpsx32eiGhRU9PNIX6h9rVymrzWPclcQfaNv4wMHiSPb
+   eJztlsEOhCAMRPn/D/a82ZtpOqUs00FhX+IFlOnDSmztz50ree3C7r62duQ164v2rHoPvbyort74L7krfXt1oXHGhdZlkslD2dk9yrp59VSjOpdW9fNIPTv6ZnuxIseOK/DOJTTHyDnF9ymo+vkpnOb7ZUeniJN8s/9+UZ9H524mr4F72cy4Mn0V58Ssa8Y3ys6MMVH4jqzzJl+7bpTpZfeeY1D5fqP77DNKGM5RfzL7hkH194syvDoUqHyzNVTD8kXroQz0TDUV77c58zYT1aCgop9H+kLt6+Uyfb15lLuC3jf6Nj70pCTR
   </data>
  </layer>
  <layer name="Ice_Surface" width="60" height="30" visible="0">
   <data encoding="base64" compression="zlib">
-   eJztlksKwCAMBd14/yt3VZCQl491kZc6IGi0xWnUOkZtJihWn1WqI+d4ffv5niwsWHsYjY/EqnHzix1kXdvr1cnk7Pry+sp2xL2Lr+xfx1nneDdfLY7eU5W/+qJ/qBXXxlVn9y7B6rsLs1tmTVvnNSsRXyvOhjZ377/L5Js5szqs4y9OjN6ez1q39jELkdyiexhrftH8o9+BzVe2J+iTzzB5vni+kVwzeUd8vb3M5hu9U8q61q5OxrfDej7JA68gByc=
+   eJztl0sOgCAMRN1w/yu7MiHNMB2RRQd5CQlFSXxQPl7XoRoNlFE7Ky60UP+D74riBMvp0fssrsyZX+yB1nmWBxVR5+34+vr2ddV9F1/0LBuDHX1HfVBcGXausHYWV2bmfHX2nWF3v4izr5K7aD92vk/2KL6s3Q307ezcdfNV92dl33bgi5Ojd+bT19k6dkGZW+QY+7rA9h91HNx8Yzz6T4h9nDwfMl9lrp28Fd9sLbv5qnfKWEdxdd747pDPK7kBmIsGRg==
   </data>
  </layer>
- <layer name="Item_Shoes" width="60" height="30">
+ <layer name="Item_Shoes" width="60" height="30" visible="0">
   <data encoding="base64" compression="zlib">
    eJztzjENAAAIA7CZwr81DOwlPK2CJgAAAAAANPMdAIADC4iPADY=
+  </data>
+ </layer>
+ <layer name="Scene_End" width="60" height="30" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztzqENADAIAEEmLOw/DRVYXJOau+T9RwAAAAAAAACbc8upPr+80BV7AT0=
+  </data>
+ </layer>
+ <layer name="Scene_Start" width="60" height="30" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztzgEJAAAMA6A1e/9WjzEGmsAEAAAAAPZcOwAAMOoBZPYAQA==
+  </data>
+ </layer>
+ <layer name="Enemies" width="60" height="30" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJzt1TEKACEMAEH/fFqqXzdg7VWCIjOwXYpUSUprX5Sj8jPzkhq1qJ9eBNjKLQNOc4cA4A5+MgAATAM+0AtZ
   </data>
  </layer>
 </map>
