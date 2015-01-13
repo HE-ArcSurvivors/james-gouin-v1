@@ -60,7 +60,7 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     checkpoint = new QPoint();
 
     this->setWindowTitle(windowTitle);
-    this->setFixedSize(windowSizeX,windowSizeY);
+//    this->setFixedSize(windowSizeX,windowSizeY);
     this->resize(windowSizeX,windowSizeY);
 
     mainScene = new QGraphicsScene(this);
@@ -93,30 +93,23 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     l.append(QPoint(8,9));
     l.append(QPoint(11,9));
     l.append(QPoint(11,12));
-
+    l.append(QPoint(8,12));
     E_Renard *ennemibasique = new E_Renard(l);
 
     //on ajoute un ennemi
     QList<QPoint> l2;
-    l2.append(QPoint(8,1));
-    l2.append(QPoint(8,7));
+    l2.append(QPoint(15,6));
     E_Loup *ennemibasique2 = new E_Loup(l2);
     ennemibasique2->setOrientation_top();
 
-    //on ajoute un ennemi
     QList<QPoint> l3;
-    l3.append(QPoint(15,5));
+    l3.append(QPoint(8,1));
+    l3.append(QPoint(8,7));
     E_Loup *ennemibasique3 = new E_Loup(l3);
-    ennemibasique3->setOrientation_top();
 
-
-    //mainScene->addItem(ennemibasique);
-
-
-    B_Movable *b = new B_Movable(12,22);
-    b->addToScene(mainScene);
-    B_Movable *b2 = new B_Movable(13,22);
-    b2->addToScene(mainScene);
+    ennemibasique->addToScene(mainScene);
+    ennemibasique2->addToScene(mainScene);
+    ennemibasique3->addToScene(mainScene);
 
     saveCheckpoint();
 
@@ -135,16 +128,10 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     connect(timerPingouinSlide, SIGNAL(timeout()), this, SLOT(SlidePingouin()));
     connect(timerBlocDeplSlide, SIGNAL(timeout()), this, SLOT(SlideBloc()));
 
-
     //pour annimer !
     QTimer *timer = new QTimer();
     QObject::connect(timer, SIGNAL(timeout()), mainScene, SLOT(advance()));
     timer->start(1000 / 33); //30fps
-
-    ennemibasique->addToScene(mainScene);
-    ennemibasique2->addToScene(mainScene);
-    ennemibasique3->addToScene(mainScene);
-
 }
 void Gameboard::SlideBloc()
 {
@@ -793,10 +780,10 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
             bMove = true;
         }
     }
-    if(bMove && (!checkPosition(pingouin->getCollideBloc(sensDepl))))
+    /*if(bMove && (!checkPosition(pingouin->getCollideBloc(sensDepl))))
     {
         bMove=false;
-    }
+    }*/
     return bMove;
 }
 

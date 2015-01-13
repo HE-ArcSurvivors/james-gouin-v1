@@ -13,7 +13,7 @@ TEMPLATE = app
 
 
 SOURCES += \
-    player.cpp \
+player.cpp \
     surface.cpp \
     gameboard.cpp \
     main.cpp \

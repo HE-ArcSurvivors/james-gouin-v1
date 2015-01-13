@@ -14,9 +14,9 @@ S_Snow::S_Snow(QGraphicsItem *parent) : Surface(0, 0, parent)
 
 void S_Snow::setDesign()
 {
-//    QBrush brush;
-//    brush.setStyle(Qt::SolidPattern);
-//    brush.setColor(Qt::white);
+    QBrush brush;
+    brush.setStyle(Qt::SolidPattern);
+    brush.setColor(Qt::white);
 
-//    setBrush(brush);
+    setBrush(brush);
 }

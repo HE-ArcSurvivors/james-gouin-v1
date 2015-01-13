@@ -26,7 +26,7 @@
    eJztmMFOBCEMhvsM6lE9DvvA6tH0qPuUQjINTVNKIcAQ9Uua3ZmFoT9tgVmAfcFob9HeB9nHUu/bwWifhd9C5/N2BiHr/T6NWKX3IdpTR79eSvHtATv6PEd7HehDjQDlWAbRJoj28hqNZ5RYrXck2NHniHaD+tzWaGnXUqtavVnx9Yy/ktb61fKvls+Wpt+mdzdIr3dfoHrjePTy56/egzikl8ct+fMI2adaznn08nnS5mwFCFnvV7T7+T1pf4Gsn/TIeZDXOM/VISDo9Zu0p7PWXdyX8yCvcbiHY0FoW6969B7np7avJluZ1wg5ll7jPh7nNf0m8+GfMfD1k9YQvo5Y7UvItai1/0z4+FRTvK5qaHMka1OOd6VmftammqI6K53DObIPv3dT2stxV9M67mg/Z8fbeg9Nxs9rmh89vpX2kx3g5zW5x5V8tfSUtF2lefaYQXwPyv2V1Mbne4vVVou5Z9zVSA0yJ629hdD2W8//VwDz89qqJw2PXq2NzOMd0GpLxsGjl++32rO1e1e+t1t49GpYOZ646r2do8VEi52H3n5/iR/C7k8b
   </data>
  </layer>
- <layer name="Movable_Blocks" width="60" height="30" visible="0">
+ <layer name="Movable_Blocks" width="60" height="30">
   <data encoding="base64" compression="zlib">
    eJzt2NEOgCAIBVDnt/fhvTPQRBCwe7bWgzNAVmu0BlSPTkDpUe6rUq+2PmpUr/YsurD3xNnOYnjlwNWcoV7rWFJvLWNwd7rOrXlbiReZ5y6rHlt9W7pwWdl9VrX+Srzf7SiZviEAAAAAM5n+T77msjM3qKpy7iui5isneM6GAOdwi0x9vHVmwflLnVm9kR4Bdw==
   </data>
@@ -93,7 +93,7 @@
  </layer>
  <layer name="Enemies" width="60" height="30" visible="0">
   <data encoding="base64" compression="zlib">
-   eJzt1TEKACEMAEH/fFqqXzdg7VWCIjOwXYpUSUprX5Sj8jPzkhq1qJ9eBNjKLQNOc4cA4A5+MgAATAM+0AtZ
+   eJzt1LEJAAAIA0H3n9jS1gFEEe4m+CIkgi6vAwAG+DK+sVkAAAAA2FPc3gLp
   </data>
  </layer>
 </map>

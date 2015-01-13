@@ -22,6 +22,10 @@
 #include "player.h"
 #include "p_penguin.h"
 
+#if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
+#else
+    #include <typeinfo.h>
+#endif
 
 Ennemi::Ennemi(QList<QPoint> path)
 {
