@@ -100,12 +100,11 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     QList<QPoint> l2;
     l2.append(QPoint(15,6));
     E_Loup *ennemibasique2 = new E_Loup(l2);
-    ennemibasique2->setOrientation_top();
 
     QList<QPoint> l3;
     l3.append(QPoint(8,1));
     l3.append(QPoint(8,7));
-    E_Loup *ennemibasique3 = new E_Loup(l3);
+    E_Renard *ennemibasique3 = new E_Renard(l3);
 
     ennemibasique->addToScene(mainScene);
     ennemibasique2->addToScene(mainScene);

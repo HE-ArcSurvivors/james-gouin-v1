@@ -39,9 +39,6 @@ Ennemi::Ennemi(QList<QPoint> path)
     time = rand() % speed;
 
     setPath(path);
-
-    //par défaut on lui donne une orientation
-    setOrientation_top();
 }
 
 void Ennemi::setPath(QList<QPoint> path)
@@ -409,12 +406,11 @@ void Ennemi::advance(int step)
 void Ennemi::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     //Draw the ennemi
-
-     painter->setPen(Qt::transparent);
+    painter->setPen(Qt::transparent);
 
     ennemiSkin = new QBrush();
 
-    //Set playerSkin texture depending on ennemi's orientation
+    //Set ennemiSkin texture depending on ennemi's orientation
     switch (orientation) {
     case 'l':
         ennemiSkin->setTexture(QPixmap(leftSkin));
@@ -433,8 +429,6 @@ void Ennemi::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget 
     }
 
     QRectF ennemiBox = boundingRect();  //Setting ennemi's box
-
-
 
     painter->fillRect(ennemiBox,*ennemiSkin);   //charger la couleur
     painter->drawRect(ennemiBox);
