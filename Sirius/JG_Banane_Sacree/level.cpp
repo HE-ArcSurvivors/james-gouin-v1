@@ -11,6 +11,7 @@
 #include "s_snow.h"
 #include "s_ice.h"
 #include "s_viewtransition.h"
+#include "s_dialog.h"
 #include "object.h"
 
 #include "e_loup.h"
@@ -29,6 +30,8 @@ Level::Level(int levelNumber)
 
     startingPoint = new QPoint(0,0);
     viewStart = new QPoint(0,0);
+
+    dialogValue = 0;
 }
 
 QPoint* Level::getStartingPoint()
@@ -53,6 +56,7 @@ QGraphicsScene* Level::populateScene()
     int Mat_Snow_Surface[maxBlocksWidth][maxBlocksHeight];
     int Mat_Ice_Surface[maxBlocksWidth][maxBlocksHeight];
     int Mat_Item_Shoes[maxBlocksWidth][maxBlocksHeight];
+    int Mat_Dialog[maxBlocksWidth][maxBlocksHeight];
 
     for (int matY = 0; matY < maxBlocksHeight; matY++)
     {
@@ -69,6 +73,7 @@ QGraphicsScene* Level::populateScene()
             Mat_Item_Shoes[matX][matY] = 0;
             Mat_Enemies[matX][matY] = 0;
             Mat_Scene_End[matX][matY] = 0;
+            Mat_Dialog[matX][matY] = 0;
 
         }
     }
@@ -98,6 +103,7 @@ QGraphicsScene* Level::populateScene()
         {
             line_count++;
             line[line_count]=t.readLine();
+
             if(line[line_count].contains("[header]"))
             {
                 line_count++;
@@ -128,6 +134,13 @@ QGraphicsScene* Level::populateScene()
                     }
                     ennemi.append(listeDePoints);
                 }
+            }
+
+            if(line[line_count].contains("[dialog]"))
+            {
+                line_count++;
+                line[line_count] = t.readLine();
+                dialogList = line[line_count].split("//");
             }
 
             if(line[line_count].contains("type=Walls_Blocks"))
@@ -414,6 +427,25 @@ QGraphicsScene* Level::populateScene()
                     line[line_count]=t.readLine();
                 }
             }
+            if(line[line_count].contains("type=Dialogs"))
+            {
+                line_count ++;
+                line[line_count]=t.readLine();
+                line_count ++;
+                line[line_count]=t.readLine();
+
+                for (matY = 0; matY < maxBlocksHeight; matY++)
+                {
+                    QStringList values = line[line_count].split(",");
+
+                    for (matX = 0; matX < maxBlocksWidth; matX++)
+                    {
+                        Mat_Dialog[matX][matY] = values.at(matX).toInt();
+                    }
+                    line_count++;
+                    line[line_count]=t.readLine();
+                }
+            }
         }
         f.resize(0);
         t << s;
@@ -461,18 +493,14 @@ QGraphicsScene* Level::populateScene()
             }
             if (Mat_Enemies[i][j] != 0)
             {
-                qDebug() << Mat_Enemies[i][j];
-                qDebug() << ennemi.at(k);
                 switch(Mat_Enemies[i][j])
                 {
                 case 1: {
-                    qDebug() << "New Renard";
                     E_Renard *item2 = new E_Renard(ennemi.at(k));
                     item2->addToScene(scene);
                     break;
                 }
                 case 2: {
-                    qDebug() << "New Loup";
                     E_Loup *item2 = new E_Loup(ennemi.at(k));
                     item2->addToScene(scene);
                     break;
@@ -518,6 +546,12 @@ QGraphicsScene* Level::populateScene()
             if (Mat_Ice_Surface[i][j] != 0)
             {
                 S_Ice *item = new S_Ice();
+                item->setPos(i,j);
+                scene->addItem(item);
+            }
+            if (Mat_Dialog[i][j] != 0)
+            {
+                S_Dialog *item = new S_Dialog();
                 item->setPos(i,j);
                 scene->addItem(item);
             }
@@ -587,4 +621,19 @@ QGraphicsScene* Level::changeLevel(int levelNumber)
 int Level::getLevelNumber()
 {
     return this->levelNumber;
+}
+
+QString Level::getDialogText()
+{
+    qDebug() << "dialogValue<dialogList.size()" << dialogValue << "<" << dialogList.size();
+    if(dialogValue<dialogList.size())
+    {
+        dialogValue += 1;
+        return dialogList.at(dialogValue-1);
+    }
+    else
+    {
+        qDebug() << "ERREUR - PAS DE TEXTE POUR CE DIALOG" << dialogValue;
+        return "";
+    }
 }

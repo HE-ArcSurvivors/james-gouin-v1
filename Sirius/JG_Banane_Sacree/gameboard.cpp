@@ -8,6 +8,7 @@
 #include "s_viewtransition.h"
 #include "s_snow.h"
 #include "s_ice.h"
+#include "s_dialog.h"
 #include "level.h"
 
 #include "ennemi.h"
@@ -60,7 +61,7 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     checkpoint = new QPoint();
 
     this->setWindowTitle(windowTitle);
-//    this->setFixedSize(windowSizeX,windowSizeY);
+    this->setFixedSize(windowSizeX,windowSizeY);
     this->resize(windowSizeX,windowSizeY);
 
     mainScene = new QGraphicsScene(this);
@@ -84,17 +85,6 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     pingouin->addToScene(mainScene);
     pingouin->setPos(currentLevel->getStartingPoint()->x(), currentLevel->getStartingPoint()->y());
 
-//    ennemibasique2->setOrientation_top();
-
-//    QList<QPoint> l3;
-//    l3.append(QPoint(8,1));
-//    l3.append(QPoint(8,7));
-//    E_Loup *ennemibasique3 = new E_Loup(l3);
-
-//    ennemibasique->addToScene(mainScene);
-//    ennemibasique2->addToScene(mainScene);
-//    ennemibasique3->addToScene(mainScene);
-
     saveCheckpoint();
 
     menuPauseInGame = new M_Pause(this);
@@ -105,6 +95,12 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     objectListProxy = mainScene->addWidget(objectList);
     setPositionBottom(objectList);
     objectListProxy->show();
+
+    dialog = new WidgetDialog(this);
+    dialog->setText("");
+    dialogProxy = mainScene->addWidget(dialog);
+    dialogProxy->hide();
+    dialogProxy->setZValue(100);
    
     //initialisation des timer
     timerPingouinSlide = new QTimer();
@@ -406,6 +402,13 @@ void Gameboard::CheckItem()
             objectList->reloadObjectList(pingouin->getSacoche());
             setPositionBottom(objectList);
         }
+        if(typeid(*CollidingItems.at(i)).name() == typeid(S_Dialog).name())
+        {
+            qDebug() << "DIALOG";
+            setPositionCenter(dialog);
+            dialogProxy->show();
+            dialog->setText(currentLevel->getDialogText());
+        }
     }
 }
 
@@ -512,6 +515,14 @@ void Gameboard::setPositionBottom(QWidget* widget)
     int height = widget->height();
 
     widget->setGeometry(viewPositionX+gameSquares*(sizeX)-width,viewPositionY+gameSquares*(sizeY)-height,width,height);
+}
+
+void Gameboard::setPositionCenter(QWidget* widget)
+{
+    int width = widget->width();
+    int height = widget->height();
+
+    widget->setGeometry(viewPositionX+(gameSquares*(sizeX)-width)/2,viewPositionY+(gameSquares*(sizeY)-height)/2,width,height);
 }
 
 void Gameboard::MoveBloc(char sens)
@@ -692,6 +703,10 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
             mainScene->addWidget(menuStart);*/
 
             pingouin->printSacoche();
+        }
+        if(event->key() == Qt::Key_Space)
+        {
+            dialogProxy->hide();
         }
     }
     if(event->key() == Qt::Key_Escape)

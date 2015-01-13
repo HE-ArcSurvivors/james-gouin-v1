@@ -8,6 +8,7 @@
 #include <QGraphicsProxyWidget>
 #include "level.h"
 #include "w_object.h"
+#include "w_dialog.h"
 
 class QGraphicsScene;
 class QGraphicsView;
@@ -116,7 +117,11 @@ private:
     QGraphicsProxyWidget *proxy;
     QGraphicsProxyWidget *objectListProxy;
 
+    WidgetDialog *dialog;
+    QGraphicsProxyWidget* dialogProxy;
+
     void setPositionBottom(QWidget* widget);
+    void setPositionCenter(QWidget* widget);
 
 protected:
 
