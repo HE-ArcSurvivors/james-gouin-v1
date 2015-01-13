@@ -12,6 +12,8 @@ E_Loup::E_Loup(QList<QPoint> path) : Ennemi(path)
     upSkin = ":/characters/characters/loup_back.png";
     downSkin = ":/characters/characters/loup_front.png";
 
+        setZValue(2);
+
     //Création du champs de vue
     int gs = Gameboard::getGameSquares();
     for(int i=1; i<=5; i++)
