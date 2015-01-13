@@ -25,6 +25,7 @@ E_Loup::E_Loup(QList<QPoint> path) : Ennemi(path)
         champVue.append(vb);
     }
 
-        setOrientation_top();
+    //il lui faut une orientation de base
+    setOrientation_top();
 
 }

@@ -28,4 +28,6 @@ E_Renard::E_Renard(QList<QPoint> path) : Ennemi(path)
         }
     }
 
+    //il lui faut une orientation de base
+    setOrientation_top();
 }
