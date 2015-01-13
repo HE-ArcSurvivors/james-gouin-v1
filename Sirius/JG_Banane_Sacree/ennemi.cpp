@@ -42,12 +42,13 @@ Ennemi::Ennemi(QList<QPoint> path)
     setPos(path.at(0).x(), path.at(0).y());
 
     //par défaut on lui donne une orientation
-    setOrientation_top();
+    setZValue(2);
 }
 
 void Ennemi::setPath(QList<QPoint> path)
 {
     this->path = path;
+
 }
 
 void Ennemi::viewBlocActif()
