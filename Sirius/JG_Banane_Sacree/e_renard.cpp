@@ -12,6 +12,8 @@ E_Renard::E_Renard(QList<QPoint> path) : Ennemi(path)
     upSkin = ":/characters/characters/renard_back.png";
     downSkin = ":/characters/characters/renard_front.png";
 
+        setZValue(2);
+
     //Création du champs de vue
     int gs = Gameboard::getGameSquares();
     for(int i=1; i<=2; i++)
