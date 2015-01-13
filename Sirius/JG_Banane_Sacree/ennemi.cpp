@@ -5,6 +5,7 @@
 #include <QList>
 
 #include <QBrush>
+#include <QPen>
 #include <QGraphicsRectItem>
 
 #include <QWidget>
@@ -28,6 +29,7 @@
 
 Ennemi::Ennemi(QList<QPoint> path)
 {
+
     sens = true;
     detectPinguin = false;
 
@@ -36,10 +38,7 @@ Ennemi::Ennemi(QList<QPoint> path)
     speed = 100; //vitesse par défaut
     time = rand() % speed;
 
-    iDestPoint = 0;
-    this->path = path;
-
-    setPos(path.at(0).x(), path.at(0).y());
+    setPath(path);
 
     //par défaut on lui donne une orientation
     setZValue(2);
@@ -47,9 +46,9 @@ Ennemi::Ennemi(QList<QPoint> path)
 
 void Ennemi::setPath(QList<QPoint> path)
 {
+    iDestPoint = 0;
     this->path = path;
-
-}
+	setPos(path.at(0).x(), path.at(0).y());}
 
 void Ennemi::viewBlocActif()
 {
@@ -409,8 +408,35 @@ void Ennemi::advance(int step)
 void Ennemi::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     //Draw the ennemi
-    painter->setBrush(Qt::red);
-    painter->drawRect(0,0,Gameboard::getGameSquares()-2,Gameboard::getGameSquares()-2);
+
+     painter->setPen(Qt::transparent);
+
+    ennemiSkin = new QBrush();
+
+    //Set playerSkin texture depending on ennemi's orientation
+    switch (orientation) {
+    case 'l':
+        ennemiSkin->setTexture(QPixmap(leftSkin));
+        break;
+    case 'r':
+        ennemiSkin->setTexture(QPixmap(rightSkin));
+        break;
+    case 't':
+        ennemiSkin->setTexture(QPixmap(upSkin));
+        break;
+    case 'b':
+        ennemiSkin->setTexture(QPixmap(downSkin));
+        break;
+    default:
+        break;
+    }
+
+    QRectF ennemiBox = boundingRect();  //Setting ennemi's box
+
+
+
+    painter->fillRect(ennemiBox,*ennemiSkin);   //charger la couleur
+    painter->drawRect(ennemiBox);
 }
 QRectF Ennemi::boundingRect() const
 {
@@ -424,6 +450,7 @@ void Ennemi::setOrientation_top()
     {
         setPosViewBloc(vb.bloc, QPoint(vb.ligne, -vb.colonne));
     }
+    update();
 }
 void Ennemi::setOrientation_bottom()
 {
@@ -432,6 +459,7 @@ void Ennemi::setOrientation_bottom()
     {
         setPosViewBloc(vb.bloc, QPoint(-vb.ligne, vb.colonne));
     }
+    update();
 }
 void Ennemi::setOrientation_left()
 {
@@ -440,6 +468,7 @@ void Ennemi::setOrientation_left()
     {
         setPosViewBloc(vb.bloc, QPoint(-vb.colonne, -vb.ligne));
     }
+    update();
 }
 void Ennemi::setOrientation_right()
 {
@@ -448,6 +477,7 @@ void Ennemi::setOrientation_right()
     {
         setPosViewBloc(vb.bloc, QPoint(vb.colonne, vb.ligne));
     }
+    update();
 }
 
 //Défini la position d'un bloc "viewBloc" en fonction de sa ligne et sa colonne

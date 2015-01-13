@@ -7,6 +7,11 @@ E_Loup::E_Loup(QList<QPoint> path) : Ennemi(path)
     // 1 étant très rapide, 100 étant très lent
     speed = 20; //vitesse par défaut
 
+    leftSkin = ":/characters/characters/loup_left.png";
+    rightSkin = ":/characters/characters/loup_right.png";
+    upSkin = ":/characters/characters/loup_back.png";
+    downSkin = ":/characters/characters/loup_front.png";
+
     //Création du champs de vue
     int gs = Gameboard::getGameSquares();
     for(int i=1; i<=5; i++)
