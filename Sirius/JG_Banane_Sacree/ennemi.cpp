@@ -39,14 +39,16 @@ Ennemi::Ennemi(QList<QPoint> path)
     time = rand() % speed;
 
     setPath(path);
+
+    //par défaut on lui donne une orientation
+    setZValue(2);
 }
 
 void Ennemi::setPath(QList<QPoint> path)
 {
     iDestPoint = 0;
     this->path = path;
-    setPos(path.at(0).x(), path.at(0).y());
-}
+	setPos(path.at(0).x(), path.at(0).y());}
 
 void Ennemi::viewBlocActif()
 {

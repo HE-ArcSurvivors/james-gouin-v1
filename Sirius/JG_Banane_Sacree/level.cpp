@@ -461,24 +461,24 @@ QGraphicsScene* Level::populateScene()
             }
             if (Mat_Enemies[i][j] != 0)
             {
-//                switch(Mat_Enemies[i][j])
-//                {
-//                case 1: {
-//                    qDebug() << "New Renard";
-//                    E_Renard *item = new E_Renard(ennemi.at(k));
-//                    item->addToScene(scene);
-//                    break;
-//                }
-
-//                case 2 : {
-//                    qDebug() << "New Loup";
-//                    E_Loup *item2 = new E_Loup(ennemi.at(k));
-//                    item2->addToScene(scene);
-//                    break;
-//                    }
-
-//                default:break;
-//                }
+                qDebug() << Mat_Enemies[i][j];
+                qDebug() << ennemi.at(k);
+                switch(Mat_Enemies[i][j])
+                {
+                case 1: {
+                    qDebug() << "New Renard";
+                    E_Renard *item2 = new E_Renard(ennemi.at(k));
+                    item2->addToScene(scene);
+                    break;
+                }
+                case 2: {
+                    qDebug() << "New Loup";
+                    E_Loup *item2 = new E_Loup(ennemi.at(k));
+                    item2->addToScene(scene);
+                    break;
+                    }
+                default:break;
+                }
 
                 k++;
             }

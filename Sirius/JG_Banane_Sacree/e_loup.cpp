@@ -18,12 +18,13 @@ E_Loup::E_Loup(QList<QPoint> path) : Ennemi(path)
     {
         ViewBloc vb;
         vb.bloc = new QGraphicsRectItem(0,0, gs-2, gs-2);
+        vb.bloc->setZValue(2);
         vb.colonne=i;
         vb.ligne=0;
 
         champVue.append(vb);
     }
 
-    setOrientation_top();
+        setOrientation_top();
 
 }
