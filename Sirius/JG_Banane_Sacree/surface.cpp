@@ -27,3 +27,13 @@ QPoint Surface::getPos()
 {
     return QPoint(this->pos().x()/Gameboard::getGameSquares(), this->pos().y()/Gameboard::getGameSquares());
 }
+
+void Surface::setTexture(QString nom)
+{
+    QBrush* surfaceSkin = new QBrush();
+    QString img = ":/maps/maps/";
+    img.append(nom);
+    img.append(".png");
+    surfaceSkin->setTexture(QPixmap(img));
+    setBrush(*surfaceSkin);
+}

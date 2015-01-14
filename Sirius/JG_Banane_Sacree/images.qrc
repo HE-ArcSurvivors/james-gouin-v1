@@ -4,6 +4,14 @@
         <file>characters/player_left.png</file>
         <file>characters/player_right.png</file>
         <file>characters/player_back.png</file>
+        <file>characters/renard_back.png</file>
+        <file>characters/renard_right.png</file>
+        <file>characters/renard_front.png</file>
+        <file>characters/renard_left.png</file>
+        <file>characters/loup_left.png</file>
+        <file>characters/loup_front.png</file>
+        <file>characters/loup_back.png</file>
+        <file>characters/loup_right.png</file>
     </qresource>
     <qresource prefix="/items">
         <file>items/poisson.png</file>

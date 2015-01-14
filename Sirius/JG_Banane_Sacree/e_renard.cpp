@@ -7,6 +7,13 @@ E_Renard::E_Renard(QList<QPoint> path) : Ennemi(path)
     // 1 étant très rapide, 100 étant très lent
     speed = 30; //vitesse par défaut
 
+    leftSkin = ":/characters/characters/renard_left.png";
+    rightSkin = ":/characters/characters/renard_right.png";
+    upSkin = ":/characters/characters/renard_back.png";
+    downSkin = ":/characters/characters/renard_front.png";
+
+        setZValue(2);
+
     //Création du champs de vue
     int gs = Gameboard::getGameSquares();
     for(int i=1; i<=2; i++)
@@ -15,6 +22,7 @@ E_Renard::E_Renard(QList<QPoint> path) : Ennemi(path)
         {
             ViewBloc vb;
             vb.bloc = new QGraphicsRectItem(0,0, gs-2, gs-2);
+            vb.bloc->setZValue(2);
             vb.colonne=i;
             vb.ligne=j;
 
@@ -22,4 +30,6 @@ E_Renard::E_Renard(QList<QPoint> path) : Ennemi(path)
         }
     }
 
+    //il lui faut une orientation de base
+    setOrientation_top();
 }

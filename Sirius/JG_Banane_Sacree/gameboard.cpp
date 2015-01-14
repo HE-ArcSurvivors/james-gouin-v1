@@ -8,6 +8,7 @@
 #include "s_viewtransition.h"
 #include "s_snow.h"
 #include "s_ice.h"
+#include "s_dialog.h"
 #include "level.h"
 
 #include "ennemi.h"
@@ -60,7 +61,7 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     checkpoint = new QPoint();
 
     this->setWindowTitle(windowTitle);
-//    this->setFixedSize(windowSizeX,windowSizeY);
+    this->setFixedSize(windowSizeX,windowSizeY);
     this->resize(windowSizeX,windowSizeY);
 
     mainScene = new QGraphicsScene(this);
@@ -84,30 +85,6 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     pingouin->addToScene(mainScene);
     pingouin->setPos(currentLevel->getStartingPoint()->x(), currentLevel->getStartingPoint()->y());
 
-    //on ajoute un ennemi
-    QList<QPoint> l;
-    l.append(QPoint(10,23));
-    l.append(QPoint(17,23));
-    l.append(QPoint(17,25));
-    l.append(QPoint(10,25));
-    E_Renard *ennemibasique = new E_Renard(l);
-
-    //on ajoute un ennemi
-    QList<QPoint> l2;
-    //l2.append(QPoint(6,23));
-    l2.append(QPoint(6,25));
-    E_Loup *ennemibasique2 = new E_Loup(l2);
-    ennemibasique2->setOrientation_top();
-
-
-    //mainScene->addItem(ennemibasique);
-
-
-    B_Movable *b = new B_Movable(12,22);
-    b->addToScene(mainScene);
-    B_Movable *b2 = new B_Movable(13,22);
-    b2->addToScene(mainScene);
-
     saveCheckpoint();
 
     menuPauseInGame = new M_Pause(this);
@@ -118,6 +95,12 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     objectListProxy = mainScene->addWidget(objectList);
     setPositionBottom(objectList);
     objectListProxy->show();
+
+    dialog = new WidgetDialog(this);
+    dialog->setText("");
+    dialogProxy = mainScene->addWidget(dialog);
+    dialogProxy->hide();
+    dialogProxy->setZValue(100);
    
     //initialisation des timer
     timerPingouinSlide = new QTimer();
@@ -129,10 +112,6 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     QTimer *timer = new QTimer();
     QObject::connect(timer, SIGNAL(timeout()), mainScene, SLOT(advance()));
     timer->start(1000 / 33); //30fps
-
-    ennemibasique->addToScene(mainScene);
-    ennemibasique2->addToScene(mainScene);
-
 }
 void Gameboard::SlideBloc()
 {
@@ -423,6 +402,13 @@ void Gameboard::CheckItem()
             objectList->reloadObjectList(pingouin->getSacoche());
             setPositionBottom(objectList);
         }
+        if(typeid(*CollidingItems.at(i)).name() == typeid(S_Dialog).name())
+        {
+            qDebug() << "DIALOG";
+            setPositionCenter(dialog);
+            dialogProxy->show();
+            dialog->setText(currentLevel->getDialogText());
+        }
     }
 }
 
@@ -529,6 +515,14 @@ void Gameboard::setPositionBottom(QWidget* widget)
     int height = widget->height();
 
     widget->setGeometry(viewPositionX+gameSquares*(sizeX)-width,viewPositionY+gameSquares*(sizeY)-height,width,height);
+}
+
+void Gameboard::setPositionCenter(QWidget* widget)
+{
+    int width = widget->width();
+    int height = widget->height();
+
+    widget->setGeometry(viewPositionX+(gameSquares*(sizeX)-width)/2,viewPositionY+(gameSquares*(sizeY)-height)/2,width,height);
 }
 
 void Gameboard::MoveBloc(char sens)
@@ -710,6 +704,10 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
 
             pingouin->printSacoche();
         }
+        if(event->key() == Qt::Key_Space)
+        {
+            dialogProxy->hide();
+        }
     }
     if(event->key() == Qt::Key_Escape)
     {
@@ -781,10 +779,10 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
             bMove = true;
         }
     }
-    if(bMove && (!checkPosition(pingouin->getCollideBloc(sensDepl))))
+    /*if(bMove && (!checkPosition(pingouin->getCollideBloc(sensDepl))))
     {
         bMove=false;
-    }
+    }*/
     return bMove;
 }
 

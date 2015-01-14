@@ -7,6 +7,8 @@ class QPixmap;
 class QPoint;
 
 #include <QList>
+#include <QStringList>
+#include "w_dialog.h"
 
 class Level
 {
@@ -17,6 +19,7 @@ public:
     QPoint getViewStart();
     QGraphicsScene* changeLevel(int levelNumber);
     int getLevelNumber();
+    QString getDialogText();
 
 private:
     int levelNumber;
@@ -29,6 +32,8 @@ private:
     void getSceneSize();
 
     QList<QList<QPoint> > ennemi;
+    QStringList dialogList;
+    int dialogValue;
 };
 
 #endif // LEVEL_H

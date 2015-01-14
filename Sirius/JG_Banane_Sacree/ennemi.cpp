@@ -5,6 +5,7 @@
 #include <QList>
 
 #include <QBrush>
+#include <QPen>
 #include <QGraphicsRectItem>
 
 #include <QWidget>
@@ -36,47 +37,52 @@ Ennemi::Ennemi(QList<QPoint> path)
     speed = 100; //vitesse par défaut
     time = rand() % speed;
 
-    iDestPoint = 0;
-    this->path = path;
-
-    setPos(path.at(0).x(), path.at(0).y());
-
-    //par défaut on lui donne une orientation
-    setOrientation_top();
+    setPath(path);
+    setZValue(2);
 }
 
 void Ennemi::setPath(QList<QPoint> path)
 {
+    iDestPoint = 0;
     this->path = path;
+    setPos(path.at(0).x(), path.at(0).y());
 }
 
 void Ennemi::viewBlocActif()
 {
+    QBrush brush;
+    QPen pen;
+
+    QList<QPoint> toDesactivate;
+    bool allunactived = false;
 
     for(int i=0; i<champVue.size(); i++)
     {
+        //On les actives tous !
         ViewBloc nBloc;
         nBloc = champVue.at(i);
         nBloc.actif=true;
         champVue.replace(i,nBloc);
-    }
 
-    foreach (ViewBloc vb, champVue)
-    {
-        QList<QGraphicsItem *> CollidingItems = vb.bloc->collidingItems();
+        //Design Activated
+        brush.setStyle(Qt::DiagCrossPattern);
+        brush.setColor(Qt::red);
+        champVue.at(i).bloc->setBrush(brush);
+
+        pen.setStyle(Qt::SolidLine);
+        pen.setColor(Qt::red);
+        champVue.at(i).bloc->setPen(pen);
+
+
+        //les quels on va désactiver ?
+        QList<QGraphicsItem *> CollidingItems = champVue.at(i).bloc->collidingItems();
         bool bUnactivate = false;
 
         for(int i=0; i<CollidingItems.length(); i++)
         {
-            if(typeid(*CollidingItems.at(i)).name() == typeid(B_Movable).name())
-            {
-                bUnactivate = true;
-            }
-            else if(typeid(*CollidingItems.at(i)).name() == typeid(B_Wall).name())
-            {
-                bUnactivate = true;
-            }
-            else if(typeid(*CollidingItems.at(i)).name() == typeid(Ennemi).name())
+            if(typeid(*CollidingItems.at(i)).name() == typeid(B_Movable).name()
+            || typeid(*CollidingItems.at(i)).name() == typeid(B_Wall).name()
+            || typeid(*CollidingItems.at(i)).name() == typeid(Ennemi).name())
             {
                 bUnactivate = true;
             }
@@ -84,50 +90,38 @@ void Ennemi::viewBlocActif()
 
         if(bUnactivate)
         {
-            bool allunactived = false;
-            if(vb.ligne==0 && vb.colonne ==1) //si c'est le bloc 1
+            if(champVue.at(i).ligne==0 && champVue.at(i).colonne ==1) //si c'est le bloc 1
             {
                 allunactived = true;
             }
-            for(int i=0; i<champVue.size(); i++)
+            toDesactivate.append(QPoint(champVue.at(i).ligne, champVue.at(i).colonne));
+        }
+    }
+
+    //on déactive ce qu'il faut
+    foreach (QPoint toDes, toDesactivate)
+    {
+        for(int i=0; i<champVue.size(); i++)
+        {
+            //on désactive la ligne
+            if((champVue.at(i).colonne >= toDes.y() && champVue.at(i).ligne == toDes.x()) || allunactived)
             {
-                if((champVue.at(i).colonne >= vb.colonne && champVue.at(i).ligne == vb.ligne) || allunactived)
-                {
-                    ViewBloc nBloc;
-                    nBloc = champVue.at(i);
-                    nBloc.actif=false;
-                    champVue.replace(i,nBloc);
-                }
+                ViewBloc nBloc;
+                nBloc = champVue.at(i);
+                nBloc.actif=false;
+                champVue.replace(i,nBloc);
+
+                //Design Unactivated
+                brush.setStyle(Qt::Dense6Pattern);
+                brush.setColor(Qt::green);
+                champVue.at(i).bloc->setBrush(brush);
+
+                pen.setStyle(Qt::NoPen);
+                champVue.at(i).bloc->setPen(pen);
             }
         }
     }
 
-    //couleur
-    foreach (ViewBloc vb, champVue)
-    {
-        if(vb.actif)
-        {
-            QBrush brush;
-            brush.setStyle(Qt::DiagCrossPattern);
-            brush.setColor(Qt::red);
-            QPen pen;
-            pen.setStyle(Qt::SolidLine);
-            pen.setColor(Qt::red);
-            vb.bloc->setPen(pen);
-
-            vb.bloc->setBrush(brush);
-        }
-        else
-        {
-            QBrush brush;
-            brush.setStyle(Qt::Dense6Pattern);
-            brush.setColor(Qt::green);
-            vb.bloc->setBrush(brush);
-            QPen pen;
-            pen.setStyle(Qt::NoPen);
-            vb.bloc->setPen(pen);
-        }
-    }
 }
 
 void Ennemi::pinguinDetection()
@@ -408,8 +402,32 @@ void Ennemi::advance(int step)
 void Ennemi::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     //Draw the ennemi
-    painter->setBrush(Qt::red);
-    painter->drawRect(0,0,Gameboard::getGameSquares()-2,Gameboard::getGameSquares()-2);
+    painter->setPen(Qt::transparent);
+
+    ennemiSkin = new QBrush();
+
+    //Set ennemiSkin texture depending on ennemi's orientation
+    switch (orientation) {
+    case 'l':
+        ennemiSkin->setTexture(QPixmap(leftSkin));
+        break;
+    case 'r':
+        ennemiSkin->setTexture(QPixmap(rightSkin));
+        break;
+    case 't':
+        ennemiSkin->setTexture(QPixmap(upSkin));
+        break;
+    case 'b':
+        ennemiSkin->setTexture(QPixmap(downSkin));
+        break;
+    default:
+        break;
+    }
+
+    QRectF ennemiBox = boundingRect();  //Setting ennemi's box
+
+    painter->fillRect(ennemiBox,*ennemiSkin);   //charger la couleur
+    painter->drawRect(ennemiBox);
 }
 QRectF Ennemi::boundingRect() const
 {
@@ -423,6 +441,7 @@ void Ennemi::setOrientation_top()
     {
         setPosViewBloc(vb.bloc, QPoint(vb.ligne, -vb.colonne));
     }
+    update();
 }
 void Ennemi::setOrientation_bottom()
 {
@@ -431,6 +450,7 @@ void Ennemi::setOrientation_bottom()
     {
         setPosViewBloc(vb.bloc, QPoint(-vb.ligne, vb.colonne));
     }
+    update();
 }
 void Ennemi::setOrientation_left()
 {
@@ -439,6 +459,7 @@ void Ennemi::setOrientation_left()
     {
         setPosViewBloc(vb.bloc, QPoint(-vb.colonne, -vb.ligne));
     }
+    update();
 }
 void Ennemi::setOrientation_right()
 {
@@ -447,6 +468,7 @@ void Ennemi::setOrientation_right()
     {
         setPosViewBloc(vb.bloc, QPoint(vb.colonne, vb.ligne));
     }
+    update();
 }
 
 //Défini la position d'un bloc "viewBloc" en fonction de sa ligne et sa colonne

@@ -39,6 +39,14 @@ protected:
 
     void setPosViewBloc(QGraphicsRectItem*, QPoint);
 
+    //Les skins sont les images attribué au méchant
+    QString leftSkin;
+    QString rightSkin;
+    QString upSkin;
+    QString downSkin;
+
+    QBrush *ennemiSkin;
+
 private:
     int iDestPoint;
     bool sens;
