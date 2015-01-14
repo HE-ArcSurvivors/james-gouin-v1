@@ -6,7 +6,6 @@
 
 MainGame::MainGame(QWidget *parent) : QWidget(parent)
 {
-    theGame = new Gameboard;
 
     currentLevel = new Level(-1);
     // Les Variables par default du jeu
@@ -16,6 +15,9 @@ MainGame::MainGame(QWidget *parent) : QWidget(parent)
 
     menuSizeX = 400;
     menuSizeY = 280;
+
+    quitBtnSizeX = menuSizeX-20;
+    quitBtnSizeY = 50;
 
     titleSizeX = 479;
     titleSizeY = 30;
@@ -45,11 +47,12 @@ MainGame::MainGame(QWidget *parent) : QWidget(parent)
     gameTitle->setStyleSheet("color: blue; font: bold 30px;");
     gameTitle->setGeometry(windowSizeX/2-titleSizeX/2,windowSizeY/7-titleSizeY/2,titleSizeX,titleSizeY);
 
-    menuStart = new MenuStart(this);
-    connect(menuStart,SIGNAL(startGame(int,int,int)),this, SLOT(startGame(int,int,int)));
-    menuStart->setGeometry(windowSizeX/2-menuSizeX/2,windowSizeY/2-menuSizeY/2,menuSizeX,menuSizeY);
+    refreshGameMenu();
 
-//    menuStartProxy->show();
+    quitGame = new QPushButton(tr("Quitter le jeu"), this);
+    QObject::connect(quitGame,SIGNAL(clicked()),this,SLOT(close()));
+    quitGame->setGeometry(windowSizeX/2-quitBtnSizeX/2,9*windowSizeY/10-quitBtnSizeY/2,quitBtnSizeX,quitBtnSizeY);
+
 }
 
 MainGame::~MainGame()
@@ -80,8 +83,17 @@ void MainGame::setViewPosition()
 
 void MainGame::startGame(int a, int b, int c)
 {
-    qDebug() << a << b << c;
+    theGame = new Gameboard;
     theGame->setParent(this);
     theGame->show();
 }
 
+void MainGame::refreshGameMenu()
+{
+    delete this->menuStart;
+    menuStart = new MenuStart(this);
+    menuStart->show();
+    connect(menuStart,SIGNAL(startGame(int,int,int)),this, SLOT(startGame(int,int,int)));
+    connect(menuStart,SIGNAL(refreshGameMenu()),this, SLOT(refreshGameMenu()));
+    menuStart->setGeometry(windowSizeX/2-menuSizeX/2,windowSizeY/2-menuSizeY/2,menuSizeX,menuSizeY);
+}

@@ -7,6 +7,7 @@ class QPushButton;
 class QVBoxLayout;
 class QSignalMapper;
 class QLineEdit;
+class QLabel;
 
 class MenuStart : public QWidget
 {
@@ -19,11 +20,14 @@ public:
     QVBoxLayout* layoutMenu;
     QLineEdit* username;
     QPushButton* validate;
+    QLabel *textPseudo;
+
 
     bool getProfil();
 
 signals:
     void startGame(int,int,int);
+    void refreshGameMenu();
 
 public slots:
     void loadGame(QString value);

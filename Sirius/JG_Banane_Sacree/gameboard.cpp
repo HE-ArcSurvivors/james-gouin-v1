@@ -45,6 +45,10 @@ int Gameboard::sizeY = 15;
 
 Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 {
+
+    setFocus();
+    grabKeyboard();
+
     currentLevel = new Level(0);
     // Les Variables par default du jeu
     windowTitle = tr("James Gouin et la Banane Sacrée");
@@ -78,7 +82,7 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 
     //On position la vue
     playerView->setScene(mainScene);
-    grabKeyboard();
+
 
     //On ajoute le joueur
     pingouin = new Pingouin(gameSquares);
