@@ -11,7 +11,7 @@ orientation=orthogonal
 8-1,8-7//8-9,5-9,5-12,8-12,8-9,11-9,11-12,8-12//15-6
 
 [dialog]
-Bienvenue sur l'Iceberg!//Déplace des blocs pour accéder à ton premier poisson!
+Bienvenue sur l'Iceberg!//Déplace des blocs pour accéder à ton premier poisson!//Ouah! De la glace! Afin de t'aider, tu as des bottes magiques qui t'empêchent de glisser. Mais attention, les blocs glissent jusqu'à rencontrer un mur ! //Tu n'as désormais plus de bottes. Attention, tu dois donc gérer tes glissades !//Plouf dans l'eau? James Gouin a peur de mouiller son noeud papillon et ne peut pas tomber dans l'eau. Essaye de te faire un chemin grâce aux blocs !//Récupère le dernier poisson en évitant de te faire repérer par les ennemis.//Bravo! Retourne voir la loutre pour lui donner tes poissons!
 
 [tilesets]
 tileset=../../Images/Tiles/Pokemon_Ice_tiles.png,32,32,0,0
@@ -652,7 +652,7 @@ data=
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,63,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,63,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,63,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

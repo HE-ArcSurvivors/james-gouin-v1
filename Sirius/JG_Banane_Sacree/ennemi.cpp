@@ -78,11 +78,11 @@ void Ennemi::viewBlocActif()
         QList<QGraphicsItem *> CollidingItems = champVue.at(i).bloc->collidingItems();
         bool bUnactivate = false;
 
-        for(int i=0; i<CollidingItems.length(); i++)
+        for(int j=0; j<CollidingItems.length(); j++)
         {
-            if(typeid(*CollidingItems.at(i)).name() == typeid(B_Movable).name()
-            || typeid(*CollidingItems.at(i)).name() == typeid(B_Wall).name()
-            || typeid(*CollidingItems.at(i)).name() == typeid(Ennemi).name())
+            if(typeid(*CollidingItems.at(j)).name() == typeid(B_Movable).name()
+            || typeid(*CollidingItems.at(j)).name() == typeid(B_Wall).name()
+            || typeid(*CollidingItems.at(j)).name() == typeid(Ennemi).name())
             {
                 bUnactivate = true;
             }

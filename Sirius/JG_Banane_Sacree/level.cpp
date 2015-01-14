@@ -93,6 +93,7 @@ QGraphicsScene* Level::populateScene()
     if(f.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QTextStream t(&f);
+        t.setCodec("UTF-8");
         QString line[1000];
         QString s;
         int line_count=0;
@@ -523,11 +524,11 @@ QGraphicsScene* Level::populateScene()
                 item->setPos(i,j);
                 item->setLevelEnd(false);
 
-                /*if(Mat_Doors[i][j] > 20 && Mat_Doors[i][j] < 30)
+                if(Mat_Doors[i][j] > 20 && Mat_Doors[i][j] < 30)
                 {
                     item->setNbItem(Mat_Doors[i][j]%20);
                     item->setNeededItem("Poisson");
-                }*/
+                }
 
                 scene->addItem(item);
             }

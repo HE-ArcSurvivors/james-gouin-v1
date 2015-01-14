@@ -15,10 +15,8 @@
 #include <typeinfo.h>
 #endif
 
-Pingouin::Pingouin(int gameSquare) : Player()
+Pingouin::Pingouin() : Player()
 {
-    this->gameSquare = gameSquare;
-
     int BlocsSizeX = Gameboard::getGameSquares()-2;
     int BlocsSizeY = Gameboard::getGameSquares()-2;
 
@@ -39,8 +37,8 @@ Pingouin::Pingouin(int gameSquare) : Player()
 }
 void Pingouin::setPos(int x, int y)
 {
-    int xPos = x*gameSquare-gameSquare;
-    int yPos = y*gameSquare-gameSquare;
+    int xPos = x*Gameboard::getGameSquares()-Gameboard::getGameSquares();
+    int yPos = y*Gameboard::getGameSquares()-Gameboard::getGameSquares();
 
     Player::setPos(xPos, yPos);
 
@@ -61,11 +59,11 @@ void Pingouin::moveBy(int x, int y)
 
 //    animation->start();
 
-    Player::moveBy(x*gameSquare,y*gameSquare);
-    leftCollideBox->moveBy(x*gameSquare,y*gameSquare);
-    rightCollideBox->moveBy(x*gameSquare,y*gameSquare);
-    bottomCollideBox->moveBy(x*gameSquare,y*gameSquare);
-    topCollideBox->moveBy(x*gameSquare,y*gameSquare);
+    Player::moveBy(x*Gameboard::getGameSquares(),y*Gameboard::getGameSquares());
+    leftCollideBox->moveBy(x*Gameboard::getGameSquares(),y*Gameboard::getGameSquares());
+    rightCollideBox->moveBy(x*Gameboard::getGameSquares(),y*Gameboard::getGameSquares());
+    bottomCollideBox->moveBy(x*Gameboard::getGameSquares(),y*Gameboard::getGameSquares());
+    topCollideBox->moveBy(x*Gameboard::getGameSquares(),y*Gameboard::getGameSquares());
 
     lastMove->setX(x);
     lastMove->setY(y);
@@ -155,8 +153,16 @@ Player* Pingouin::getPlayer(){
 
 void Pingouin::addObjectToSacoche(Object *object)
 {
-    tempSacoche.append(object);
-    sacoche.append(object);
+    if(object->getName()=="Oeuf")
+    {
+        nbLives++;
+    }
+    else
+    {
+        tempSacoche.append(object);
+        sacoche.append(object);
+    }
+
 }
 
 void Pingouin::removeObjectFromSacoche(QString object)
