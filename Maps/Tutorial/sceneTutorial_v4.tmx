@@ -68,12 +68,12 @@
  </layer>
  <layer name="Snow_Surface" width="60" height="30">
   <data encoding="base64" compression="zlib">
-   eJztlsEOhCAMRPn/D/a82ZtpOqUs00FhX+IFlOnDSmztz50ree3C7r62duQ164v2rHoPvbyort74L7krfXt1oXHGhdZlkslD2dk9yrp59VSjOpdW9fNIPTv6ZnuxIseOK/DOJTTHyDnF9ymo+vkpnOb7ZUeniJN8s/9+UZ9H524mr4F72cy4Mn0V58Ssa8Y3ys6MMVH4jqzzJl+7bpTpZfeeY1D5fqP77DNKGM5RfzL7hkH194syvDoUqHyzNVTD8kXroQz0TDUV77c58zYT1aCgop9H+kLt6+Uyfb15lLuC3jf6Nj70pCTR
+   eJztlEEShCAMBPn/g/fs1UplwiCTILhd5QWESWOktT93fuRzCqf72tqR16wvOrPsM/Tyorp6409yV/r26kLjigftq4TJQ9nsGbFuXj3ZVN1Lq/p5pJ4TfdlezMix4xV49xKaU+R8xfctVPXzWzjFd6TOXZwivubLwvRzr8+je5fJa+BdNTOuSt+Ke2LWlfGNspkxJRW+I/vs5Gv3jTK97N46BZnfN3rPrqlE4Rz1p7JvFGT/vyjDq6OCKl+2hmxUvmg/lIHWZJPxfZszbzNRDRVk9PNIX1T7erlKX28e5a6g94/uxgUR1ya9
   </data>
  </layer>
  <layer name="Ice_Surface" width="60" height="30" visible="0">
   <data encoding="base64" compression="zlib">
-   eJztl0sOgCAMRN1w/yu7MiHNMB2RRQd5CQlFSXxQPl7XoRoNlFE7Ky60UP+D74riBMvp0fssrsyZX+yB1nmWBxVR5+34+vr2ddV9F1/0LBuDHX1HfVBcGXausHYWV2bmfHX2nWF3v4izr5K7aD92vk/2KL6s3Q307ezcdfNV92dl33bgi5Ojd+bT19k6dkGZW+QY+7rA9h91HNx8Yzz6T4h9nDwfMl9lrp28Fd9sLbv5qnfKWEdxdd747pDPK7kBmIsGRg==
+   eJztl0sOgCAMRN1w/yu7JU2ZGZVFB/sSEoqS+Cg/r6upxkjKqh0VF0ao/8F3R3ECzenV+yiuTOc398jWOZsHFVHz1r6+vnNddT/FN3vGxuBE31WfLK4MOldQO4ors+N8dfJtOM75ZHN3tR873ydnFF/U7kb27ejcdfNV9+c3+3ZFvjg5ejOfuY7WsQtKbjPH2NcFtP+o4+DmG2P238OeV4b5Krl28lZ82Vp281XvlLGexdV54nvCfN7JDQZLBjw=
   </data>
  </layer>
  <layer name="Item_Shoes" width="60" height="30" visible="0">
@@ -86,7 +86,7 @@
    eJztzqENADAIAEEmLOw/DRVYXJOau+T9RwAAAAAAAACbc8upPr+80BV7AT0=
   </data>
  </layer>
- <layer name="Scene_Start" width="60" height="30" visible="0">
+ <layer name="Scene_Start" width="60" height="30">
   <data encoding="base64" compression="zlib">
    eJztzgEJAAAMA6A1e/9WjzEGmsAEAAAAAPZcOwAAMOoBZPYAQA==
   </data>
@@ -94,6 +94,11 @@
  <layer name="Enemies" width="60" height="30" visible="0">
   <data encoding="base64" compression="zlib">
    eJzt1LEJAAAIA0H3n9jS1gFEEe4m+CIkgi6vAwAG+DK+sVkAAAAA2FPc3gLp
+  </data>
+ </layer>
+ <layer name="Dialogs" width="60" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt1VEJADAMQ8E6m/Y5m4lCu3CnIB8PUgW57vQAVuruQmcA8B//DZDhTA9gre42tAZAmgf1QgPC
   </data>
  </layer>
 </map>
