@@ -119,6 +119,7 @@ private:
 
     WidgetDialog *dialog;
     QGraphicsProxyWidget* dialogProxy;
+    bool dialogToogle;
 
     void setPositionBottom(QWidget* widget);
     void setPositionCenter(QWidget* widget);

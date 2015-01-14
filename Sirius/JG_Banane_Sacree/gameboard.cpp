@@ -85,7 +85,7 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 
 
     //On ajoute le joueur
-    pingouin = new Pingouin(gameSquares);
+    pingouin = new Pingouin();
     pingouin->addToScene(mainScene);
     pingouin->setPos(currentLevel->getStartingPoint()->x(), currentLevel->getStartingPoint()->y());
 
@@ -98,13 +98,17 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     objectList = new WidgetObject(this);
     objectListProxy = mainScene->addWidget(objectList);
     setPositionBottom(objectList);
-    objectListProxy->show();
+    objectListProxy->hide();
 
     dialog = new WidgetDialog(this);
     dialog->setText("");
     dialogProxy = mainScene->addWidget(dialog);
-    dialogProxy->hide();
     dialogProxy->setZValue(100);
+
+    setPositionCenter(dialog);
+    dialogProxy->show();
+    dialog->setText(currentLevel->getDialogText());
+    dialogToogle = true;
    
     //initialisation des timer
     timerPingouinSlide = new QTimer();
@@ -356,6 +360,13 @@ void Gameboard::SinkMovable(B_Movable *b)
         }
         if(typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
         {
+            QString text = "Tu as bloqué ta sortie!";
+            setPositionCenter(dialog);
+            dialogProxy->show();
+            dialog->setText(text);
+
+            dialogToogle = true;
+
             b->removeFromScene(mainScene);
             mainScene->removeItem(CollidingItems.at(i));
 
@@ -365,6 +376,13 @@ void Gameboard::SinkMovable(B_Movable *b)
         if(typeid(*CollidingItems.at(i)).name() == typeid(Object).name())
         {
             mainScene->removeItem(CollidingItems.at(i));
+
+            QString text = "OUCH! Ce bloc vient d'écraser un objet !";
+            setPositionCenter(dialog);
+            dialogProxy->show();
+            dialog->setText(text);
+
+            dialogToogle = true;
         }
     }
 }
@@ -408,10 +426,13 @@ void Gameboard::CheckItem()
         }
         if(typeid(*CollidingItems.at(i)).name() == typeid(S_Dialog).name())
         {
-            qDebug() << "DIALOG";
+            mainScene->removeItem(CollidingItems.at(i));
+
             setPositionCenter(dialog);
             dialogProxy->show();
             dialog->setText(currentLevel->getDialogText());
+
+            dialogToogle = true;
         }
     }
 }
@@ -462,7 +483,18 @@ void Gameboard::CheckChangeView(char sens)
                 }
                 else
                 {
-                    qDebug() << "Pas encore de " << *(bloc->getNeededItem()) << " ! ";
+                    QString text = "Il te faut ";
+                    text.append(QString::number(bloc->getNbItem()));
+                    text.append("x l'objet \"");
+                    text.append(*(bloc->getNeededItem()));
+                    text.append("\" pour aller plus loin ;) ");
+
+                    setPositionCenter(dialog);
+                    dialogProxy->show();
+                    dialog->setText(text);
+
+                    dialogToogle = true;
+
                     pingouin->moveBack();
                 }
             }
@@ -599,118 +631,125 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
 {
     if(!toggleMenuPause && !isSliding)
     {
-        if(event->key() == Qt::Key_W || event->key() == Qt::Key_Up)
+        if(!dialogToogle)
         {
-            pingouin->setPlayerOrientation("up"); //definir l'orientation du joueur
-
-            if(MovePingouinToTop())
+            if(event->key() == Qt::Key_W || event->key() == Qt::Key_Up)
             {
-                pingouin->moveBy(0, -1);
+                pingouin->setPlayerOrientation("up"); //definir l'orientation du joueur
 
-                if(!CheckGameOver())
+                if(MovePingouinToTop())
                 {
-                    CheckItem();
-                    CheckChangeView('t');
+                    pingouin->moveBy(0, -1);
 
-                    if(moveBloc != NULL)
+                    if(!CheckGameOver())
                     {
-                        MoveBloc('t');
+                        CheckItem();
+                        CheckChangeView('t');
+
+                        if(moveBloc != NULL)
+                        {
+                            MoveBloc('t');
+                        }
+                        if(pingouin->isSlide())
+                        {
+                            isSliding=true;
+                            cSensPingouinSlide = 't';
+                            timerPingouinSlide->start(SLIDE_SPEED);
+                        }
                     }
-                    if(pingouin->isSlide())
+                }
+
+            }
+            if(event->key() == Qt::Key_S || event->key() == Qt::Key_Down)
+            {
+                pingouin->setPlayerOrientation("down");
+
+                if(MovePingouinToBottom())
+                {
+                    pingouin->moveBy(0, 1);
+
+                    if(!CheckGameOver() && checkPosition(pingouin))
                     {
-                        isSliding=true;
-                        cSensPingouinSlide = 't';
-                        timerPingouinSlide->start(SLIDE_SPEED);
+                        CheckItem();
+                        CheckChangeView('b');
+                        if(moveBloc != NULL)
+                        {
+                            MoveBloc('b');
+                        }
+                        if(pingouin->isSlide())
+                        {
+                            isSliding=true;
+                            cSensPingouinSlide = 'b';
+                            timerPingouinSlide->start(SLIDE_SPEED);
+                        }
                     }
                 }
             }
-
-        }
-        if(event->key() == Qt::Key_S || event->key() == Qt::Key_Down)
-        {
-            pingouin->setPlayerOrientation("down");
-
-            if(MovePingouinToBottom())
+            if(event->key() == Qt::Key_A || event->key() == Qt::Key_Left)
             {
-                pingouin->moveBy(0, 1);
+                pingouin->setPlayerOrientation("left");
 
-                if(!CheckGameOver() && checkPosition(pingouin))
+                if(MovePingouinToLeft())
                 {
-                    CheckItem();
-                    CheckChangeView('b');
-                    if(moveBloc != NULL)
+                    pingouin->moveBy(-1, 0);
+
+                    if(!CheckGameOver())
                     {
-                        MoveBloc('b');
-                    }
-                    if(pingouin->isSlide())
-                    {
-                        isSliding=true;
-                        cSensPingouinSlide = 'b';
-                        timerPingouinSlide->start(SLIDE_SPEED);
+                        CheckItem();
+                        CheckChangeView('l');
+                        if(moveBloc != NULL)
+                        {
+                            MoveBloc('l');
+                        }
+                        if(pingouin->isSlide())
+                        {
+                            isSliding=true;
+                            cSensPingouinSlide = 'l';
+                            timerPingouinSlide->start(SLIDE_SPEED);
+                        }
                     }
                 }
             }
-        }
-        if(event->key() == Qt::Key_A || event->key() == Qt::Key_Left)
-        {
-            pingouin->setPlayerOrientation("left");
-
-            if(MovePingouinToLeft())
+            if(event->key() == Qt::Key_D || event->key() == Qt::Key_Right)
             {
-                pingouin->moveBy(-1, 0);
+                pingouin->setPlayerOrientation("right");
 
-                if(!CheckGameOver())
+                if(MovePingouinToRight())
                 {
-                    CheckItem();
-                    CheckChangeView('l');
-                    if(moveBloc != NULL)
+                    pingouin->moveBy(1, 0);
+
+                    if(!CheckGameOver())
                     {
-                        MoveBloc('l');
-                    }
-                    if(pingouin->isSlide())
-                    {
-                        isSliding=true;
-                        cSensPingouinSlide = 'l';
-                        timerPingouinSlide->start(SLIDE_SPEED);
+                        CheckItem();
+                        CheckChangeView('r');
+                        if(moveBloc != NULL)
+                        {
+                            MoveBloc('r');
+                        }
+                        if(pingouin->isSlide())
+                        {
+                            isSliding=true;
+                            cSensPingouinSlide = 'r';
+                            timerPingouinSlide->start(SLIDE_SPEED);
+                        }
                     }
                 }
             }
-        }
-        if(event->key() == Qt::Key_D || event->key() == Qt::Key_Right)
-        {
-            pingouin->setPlayerOrientation("right");
-
-            if(MovePingouinToRight())
+            if(event->key() == Qt::Key_0)
             {
-                pingouin->moveBy(1, 0);
+                /*MenuStart* menuStart = new MenuStart();
+                mainScene->addWidget(menuStart);*/
 
-                if(!CheckGameOver())
-                {
-                    CheckItem();
-                    CheckChangeView('r');
-                    if(moveBloc != NULL)
-                    {
-                        MoveBloc('r');
-                    }
-                    if(pingouin->isSlide())
-                    {
-                        isSliding=true;
-                        cSensPingouinSlide = 'r';
-                        timerPingouinSlide->start(SLIDE_SPEED);
-                    }
-                }
+                pingouin->printSacoche();
             }
         }
-        if(event->key() == Qt::Key_0)
+        else
         {
-            /*MenuStart* menuStart = new MenuStart();
-            mainScene->addWidget(menuStart);*/
-
-            pingouin->printSacoche();
-        }
-        if(event->key() == Qt::Key_Space)
-        {
-            dialogProxy->hide();
+            if(event->key() == Qt::Key_Space)
+            {
+                dialogProxy->hide();
+                dialogToogle = false;
+            }
         }
     }
     if(event->key() == Qt::Key_Escape)
