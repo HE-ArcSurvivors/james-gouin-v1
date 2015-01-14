@@ -8,12 +8,12 @@
  </tileset>
  <layer name="Base" width="60" height="30">
   <data encoding="base64" compression="zlib">
-   eJztlzEOwCAMA/MPntdnZ+7cL3RloFIQAZtiJE9IJheDRIqZFWLdyULzRHgZvXr1ADJhz1e8nLxXUIj+zeQZZd4l38z6xCte8fLxusX+Gn/hRdR4Km+9vNpryRf3KXs++novK85BKTsLxrs8qz7xile84t2Bl1075Cs/+clPfif79cwS6NlmVC+mdKXD
+   eJztlzEOwCAMA/MPntdnZ+7cL3RlaKsgQpxQI3lCMrkYJNJEpCXW6Sw0j4U3o9eoLkAm2fMlb07ewyhE/1byzDJXydezPvKSl7z5eFVsf41deBE17swrH1790m7vSRrcJ+/56O29RJyDkncW6LscWR95yUte8lbgza4K+dKPfvSj35/9RmYJ9GwzqxsO3aWo
   </data>
  </layer>
  <layer name="Ground" width="60" height="30">
   <data encoding="base64" compression="zlib">
-   eJzlmEtSwzAMQHWCXIBLAEvKErgB0LABUjZAmgtzj6yrDPaMMJJ/kVsbPPNmEjej+EVyYrcDgE5gaVukD/BkrpXirOEcuVDiMnCvpQ3ILsBbQd8rZKPEteAIkO+b4s3Vzhn8rBtt3y2J3Rk/n+9sWOvrxrUxBqdP23cgsdf4hua4Sw2+YFx84+J8NeB8d4qu1ndE9sgEfJ25zITeOaf9IaQ5UTq/oXnF5UHjvXuqenbHEapXn69tLfnm5pe2Fn1pnunxMX2nin1T69kXg57XWs85OY6hZt8SlPYdjddeYDqy7w1ym8GG6buD3603vqnrQ7sGj9k/psS7Rx4yeGH6HhnftWtCbj7MzjFFWsPZeM9m7Bq8VupL47Xsy621fc+hdd9YWvN188Tllf7Wum9M/ri1m/tsavcN1WcOWq4lfGPeV758c/8B1JzfWF9pPrfqK31b/0N+fd9YLt+t+8bwl32lOj+Vr21f8L3/c8cm7RPtXnEMXJPCEu8d+VDiEzkAqHc8QA==
+   eJzlmFFOwzAMQH2CXoBLAJ+wT+AGwMrPoOMH6Hph7tFvXJFIxthJmrpbApGe1GaVm1c7bbIGABqFqW2RNsKTu1aLs4Rz5MKIy8i9ptYh+wivK/peIddGbBRHgHzfOd5S7ZzBz7qx9t2S2I3zC/mOjqW+PK6P0bE+a9+OxF7iG5vjnBJ8wbmExiX5WiD57g1dvW+PHJAB5DrjjISWndP+GNqcWDu/sXkl5cHivXuqeubjiNVryNe3mnxz80tbjb40z/T4mL5Dwb5z6zkUg56XWs85OU6hZN81yPWFRN/eeR0UhiP73iC3GYDQdwe/W+t8564P/Ro8Zf84J9498pDBs9D3KPguXRNK82FkxxRtDefj7dzYLXgp1JfGq9lXWmuHnkPtvqnU5svzJOWV/la7b0r+pLUbfzal+8bqMwcr1zV8U95XoXxL/wGUnN9UX20+1+qrfVv/Q35D31gp37X7pvCXfbU6P5Wvb5/wvf/jY9P2iX6v2EeumcMU7w15N+ID+QLqTjvK
   </data>
  </layer>
  <layer name="Walls_Blocks" width="60" height="30">
@@ -26,7 +26,7 @@
    eJztmMFOBCEMhvsM6lE9DvvA6tH0qPuUQjINTVNKIcAQ9Uua3ZmFoT9tgVmAfcFob9HeB9nHUu/bwWifhd9C5/N2BiHr/T6NWKX3IdpTR79eSvHtATv6PEd7HehDjQDlWAbRJoj28hqNZ5RYrXck2NHniHaD+tzWaGnXUqtavVnx9Yy/ktb61fKvls+Wpt+mdzdIr3dfoHrjePTy56/egzikl8ct+fMI2adaznn08nnS5mwFCFnvV7T7+T1pf4Gsn/TIeZDXOM/VISDo9Zu0p7PWXdyX8yCvcbiHY0FoW6969B7np7avJluZ1wg5ll7jPh7nNf0m8+GfMfD1k9YQvo5Y7UvItai1/0z4+FRTvK5qaHMka1OOd6VmftammqI6K53DObIPv3dT2stxV9M67mg/Z8fbeg9Nxs9rmh89vpX2kx3g5zW5x5V8tfSUtF2lefaYQXwPyv2V1Mbne4vVVou5Z9zVSA0yJ629hdD2W8//VwDz89qqJw2PXq2NzOMd0GpLxsGjl++32rO1e1e+t1t49GpYOZ646r2do8VEi52H3n5/iR/C7k8b
   </data>
  </layer>
- <layer name="Movable_Blocks" width="60" height="30">
+ <layer name="Movable_Blocks" width="60" height="30" visible="0">
   <data encoding="base64" compression="zlib">
    eJzt2NEOgCAIBVDnt/fhvTPQRBCwe7bWgzNAVmu0BlSPTkDpUe6rUq+2PmpUr/YsurD3xNnOYnjlwNWcoV7rWFJvLWNwd7rOrXlbiReZ5y6rHlt9W7pwWdl9VrX+Srzf7SiZviEAAAAAM5n+T77msjM3qKpy7iui5isneM6GAOdwi0x9vHVmwflLnVm9kR4Bdw==
   </data>
@@ -39,16 +39,6 @@
  <layer name="Bonus" width="60" height="30" visible="0">
   <data encoding="base64" compression="zlib">
    eJzt1UENAAAIxDCc4d8VJkggl1bBfquCP/o6AAAC+SsAWzwFAAAyDMxHAL4=
-  </data>
- </layer>
- <layer name="Enemies_Motion" width="60" height="30" visible="0">
-  <data encoding="base64" compression="zlib">
-   eJzt0rEKACAIQEE/3I9vbYqmQr0DwdEHRrDL3wc8prc3vb3ppbo8TEd5sXcysXfSPwMAAAC1LUe+DRU=
-  </data>
- </layer>
- <layer name="Solutions" width="60" height="30" visible="0">
-  <data encoding="base64" compression="zlib">
-   eJztlgEOwiAMRTnKP9jufw5jlASbln5KYWJ8SePo+L+tjsVSzuJ6hweaTzTr05DzonzOAydG62ixE21eDZlHZ69VJ3Ivm9l5q9b7vTLn1fa3tb1akXlrjqnB9nCVsefGOhe9s+NFRfYg+5Lf78w5ZfuSM454V2B4tPm6ljnLPxvreWa1zJmDuAcltwvrOWK1Ui99n0DRarloHzNE5p09v9JzJ+w7c0QLZS1z0uME/vO+gLKWOelxAtZ7Bspa5lqP04GylrnKL86btfdbQeH/YzB7MuuthKnP7MmstxKmPrMnox6UyIbx1PrY0YtVw+rH2q9pR4loPB2M6xmPNhh9z9eLy8j3PBl/r6+Ra5aIxtKhcLOw/lYN7T4GItpPb72K2TpRPYr/Ha9g1j+q8/SzvqtAkocW3wjubmAzuLuBJB5o5UMR
   </data>
  </layer>
  <layer name="Doors" width="60" height="30" visible="0">
@@ -86,7 +76,7 @@
    eJztzqENADAIAEEmLOw/DRVYXJOau+T9RwAAAAAAAACbc8upPr+80BV7AT0=
   </data>
  </layer>
- <layer name="Scene_Start" width="60" height="30">
+ <layer name="Scene_Start" width="60" height="30" visible="0">
   <data encoding="base64" compression="zlib">
    eJztzgEJAAAMA6A1e/9WjzEGmsAEAAAAAPZcOwAAMOoBZPYAQA==
   </data>
@@ -96,9 +86,9 @@
    eJzt1LEJAAAIA0H3n9jS1gFEEe4m+CIkgi6vAwAG+DK+sVkAAAAA2FPc3gLp
   </data>
  </layer>
- <layer name="Dialogs" width="60" height="30">
+ <layer name="Dialogs" width="60" height="30" visible="0">
   <data encoding="base64" compression="zlib">
-   eJzt1VEJADAMQ8E6m/Y5m4lCu3CnIB8PUgW57vQAVuruQmcA8B//DZDhTA9gre42tAZAmgf1QgPC
+   eJzt17ENADAMAjCu6v+n9YQskRql9gUMDJDAXud1AMbq7oauAQCT2SoA/MTnB4DaBRb7AUU=
   </data>
  </layer>
 </map>
