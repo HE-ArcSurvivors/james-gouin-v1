@@ -101,13 +101,6 @@ private:
     int menuPauseSizeX;
     int menuPauseSizeY;
 
-    bool toggleGrabTheWorld;
-    bool toggleMenuPause;
-
-    void grabTheWorld();
-
-    QGraphicsProxyWidget *menuPauseOnTop;
-
     QFormLayout *layoutMenuPause;
     QGroupBox *groupBoxMenuPause;
     QLabel *titleMenuPause;
@@ -120,12 +113,16 @@ private:
     void saveCheckpoint();
     void loadCheckpoint();
 
-	M_Pause *menuPauseInGame;
-    WidgetObject *objectList;
-
+    // MENU PAUSE
+    M_Pause *menuPauseInGame;
     QGraphicsProxyWidget *proxy;
+    bool toggleMenuPause;
+
+    // LIST DES OBJETS
+    WidgetObject *objectList;
     QGraphicsProxyWidget *objectListProxy;
 
+    // DIALOG
     WidgetDialog *dialog;
     QGraphicsProxyWidget* dialogProxy;
     bool dialogToogle;

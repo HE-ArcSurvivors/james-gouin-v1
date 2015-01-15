@@ -4,23 +4,28 @@
 
 WidgetDialog::WidgetDialog(QWidget *parent)
 {
-    resize(300,100);
+    resize(300,200);
 
 }
 
-void WidgetDialog::setText(QString text)
+void WidgetDialog::setText(QString text, int type)
 {
     this->text = text;
+    this->type = type;
     update();
 }
 
 void WidgetDialog::paintEvent(QPaintEvent *)
 {
-     qDebug() << "Write:" << text;
      QPainter paint(this);
      paint.setPen(Qt::black);
-     paint.drawText(10,10,280,80,Qt::TextWordWrap,this->text);
 
-     paint.drawText(10,this->height()-20,280,20,Qt::TextWordWrap,"Presse sur la touche espace pour continuer");
+     if(type == 1)
+     {
+         paint.drawText(10,10,280,20,Qt::TextWordWrap,"Ordre de mission de James Gouin :");
+     }
+     paint.drawText(10,30,280,80,Qt::TextWordWrap,this->text);
+
+     paint.drawText(10,this->height()-20,280,20,Qt::AlignRight,"Espace pour continuer");
 }
 
