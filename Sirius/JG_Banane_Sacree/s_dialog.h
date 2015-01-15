@@ -11,8 +11,14 @@ public:
     S_Dialog(int xpos, int ypos, QGraphicsItem *parent = 0);
     S_Dialog(QGraphicsItem *parent = 0);
 
+    void setDialogNumber(int value);
+    int getDialogNumber();
+
 private:
     void setDesign();
+
+    int dialogNumber;
+
 };
 
 #endif // S_DIALOG_H

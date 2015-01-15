@@ -19,3 +19,13 @@ void S_Dialog::setDesign()
 
     setBrush(brush);
 }
+
+void S_Dialog::setDialogNumber(int value)
+{
+    this->dialogNumber = value;
+}
+
+int S_Dialog::getDialogNumber()
+{
+    return this->dialogNumber;
+}

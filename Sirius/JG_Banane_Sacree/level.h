@@ -19,7 +19,7 @@ public:
     QPoint getViewStart();
     QGraphicsScene* changeLevel(int levelNumber);
     int getLevelNumber();
-    QString getDialogText();
+    QString getDialogText(int value);
 
 private:
     int levelNumber;
@@ -30,6 +30,7 @@ private:
     int maxBlocksWidth;
 
     void getSceneSize();
+    void getSceneDialog();
 
     QList<QList<QPoint> > ennemi;
     QStringList dialogList;

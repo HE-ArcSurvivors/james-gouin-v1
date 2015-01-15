@@ -44,6 +44,7 @@ QGraphicsScene* Level::populateScene()
     QGraphicsScene* scene = new QGraphicsScene();
 
     getSceneSize();
+    getSceneDialog();
 
     int Mat_Walls_Blocks[maxBlocksWidth][maxBlocksHeight];
     int Mat_Movable_Blocks[maxBlocksWidth][maxBlocksHeight];
@@ -135,13 +136,6 @@ QGraphicsScene* Level::populateScene()
                     }
                     ennemi.append(listeDePoints);
                 }
-            }
-
-            if(line[line_count].contains("[dialog]"))
-            {
-                line_count++;
-                line[line_count] = t.readLine();
-                dialogList = line[line_count].split("//");
             }
 
             if(line[line_count].contains("type=Walls_Blocks"))
@@ -554,6 +548,7 @@ QGraphicsScene* Level::populateScene()
             {
                 S_Dialog *item = new S_Dialog();
                 item->setPos(i,j);
+                item->setDialogNumber(Mat_Dialog[i][j]);
                 scene->addItem(item);
             }
         }
@@ -566,7 +561,7 @@ void Level::getSceneSize()
 {
     QString map = ":/maps/maps/";
     map.append(QString("%1").arg(levelNumber));
-    map.append(".txt");
+    map.append("header.txt");
 
     QFile f(map);
 
@@ -574,7 +569,6 @@ void Level::getSceneSize()
     {
         QTextStream t(&f);
         QString line[1000];
-        QString s;
         int line_count=0;
 
         while(!t.atEnd())
@@ -608,6 +602,30 @@ void Level::getSceneSize()
     f.close();
  }
 
+void Level::getSceneDialog()
+{
+    QString map = ":/maps/maps/";
+    map.append(QString("%1").arg(levelNumber));
+    map.append("texte.txt");
+
+    QFile f(map);
+
+    if(f.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QTextStream t(&f);
+        QString line[1000];
+        int line_count=0;
+
+        while(!t.atEnd())
+        {
+            line_count++;
+            line[line_count]=t.readLine();
+            dialogList.append(line[line_count]);
+        }
+    }
+    f.close();
+ }
+
 QPoint Level::getViewStart()
 {
     return *(this->viewStart);
@@ -624,17 +642,15 @@ int Level::getLevelNumber()
     return this->levelNumber;
 }
 
-QString Level::getDialogText()
+QString Level::getDialogText(int value)
 {
-    qDebug() << "dialogValue<dialogList.size()" << dialogValue << "<" << dialogList.size();
-    if(dialogValue<dialogList.size())
+    if(value<dialogList.size())
     {
-        dialogValue += 1;
-        return dialogList.at(dialogValue-1);
+        return dialogList.at(value-1);
     }
     else
     {
-        qDebug() << "ERREUR - PAS DE TEXTE POUR CE DIALOG" << dialogValue;
+        qDebug() << "ERREUR - PAS DE TEXTE POUR CE DIALOG : " << dialogValue;
         return "";
     }
 }
