@@ -87,9 +87,10 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 
     saveCheckpoint();
 
-    menuPauseInGame = new M_Pause(this);
+     menuPauseInGame= new M_Pause(this);
     proxy = mainScene->addWidget(menuPauseInGame);
     proxy->hide();
+
 
     objectList = new WidgetObject(this);
     objectListProxy = mainScene->addWidget(objectList);
