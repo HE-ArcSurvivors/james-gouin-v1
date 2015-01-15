@@ -6,6 +6,8 @@
 
 MainGame::MainGame(QWidget *parent) : QWidget(parent)
 {
+    toggleGameCreated = false;
+    toggleFirstStart = true;
 
     currentLevel = new Level(-1);
     // Les Variables par default du jeu
@@ -28,8 +30,8 @@ MainGame::MainGame(QWidget *parent) : QWidget(parent)
     gameScene = new QGraphicsScene(this);
     gameScene = currentLevel->populateScene();
 
-    viewRequested = currentLevel->getViewStart();
-    setViewPosition();
+    viewPositionX=0;
+    viewPositionY=0;
 
     gameView = new QGraphicsView(this);
 
@@ -40,18 +42,19 @@ MainGame::MainGame(QWidget *parent) : QWidget(parent)
     //On position la vue
     gameView->setScene(gameScene);
 
-//    grabKeyboard();
-
     gameTitle = new QLabel(this);
     gameTitle->setText(tr("James Gouin et la Banane Sacrée"));
     gameTitle->setStyleSheet("color: blue; font: bold 30px;");
-    gameTitle->setGeometry(windowSizeX/2-titleSizeX/2,windowSizeY/7-titleSizeY/2,titleSizeX,titleSizeY);
+    gameTitle->setGeometry(windowSizeX/2-titleSizeX/2,windowSizeY/2-menuSizeY/2-50,titleSizeX,titleSizeY);
+
 
     refreshGameMenu();
 
     quitGame = new QPushButton(tr("Quitter le jeu"), this);
     QObject::connect(quitGame,SIGNAL(clicked()),this,SLOT(close()));
-    quitGame->setGeometry(windowSizeX/2-quitBtnSizeX/2,9*windowSizeY/10-quitBtnSizeY/2,quitBtnSizeX,quitBtnSizeY);
+    quitGame->setGeometry(windowSizeX/2-quitBtnSizeX/2,windowSizeY/2+menuSizeY/2+35,quitBtnSizeX,quitBtnSizeY);
+
+
 
 }
 
@@ -60,45 +63,45 @@ MainGame::~MainGame()
 
 }
 
-void MainGame::setViewPosition()
-{
-    int x = viewRequested.x();
-    int y = viewRequested.y();
-
-    if(x==1) { viewPositionX = 1; }
-    else
-    {
-        viewPositionX = (x-1)*20*Gameboard::getGameSquares();
-    }
-
-    if(y==1)
-    {
-        viewPositionY = 1;
-    }
-    else
-    {
-        viewPositionY = (y-1)*15*Gameboard::getGameSquares();
-    }
-}
-
 void MainGame::startGame(int a, int b, int c)
 {
-    refreshGameMenu();
     theGame = new Gameboard;
+    refreshGameMenu();
     theGame->setParent(this);
     theGame->show();
-
+    theGame->setGeometry(this->size().width()/2-windowSizeX/2,this->size().height()/2-windowSizeY/2,windowSizeX,windowSizeY);
+    toggleGameCreated = true;
 }
 
 void MainGame::refreshGameMenu()
 {
-//    deleteLater()
-    delete menuStart;
-    menuStart = NULL;
+    if (!toggleFirstStart)
+    {
+        delete menuStart;
+        menuStart = NULL;
+    }
+    toggleFirstStart = false;
     menuStart = new MenuStart(this);
     connect(menuStart,SIGNAL(startGame(int,int,int)),this, SLOT(startGame(int,int,int)));
     connect(menuStart,SIGNAL(refreshGameMenu()),this, SLOT(refreshGameMenu()));
-    menuStart->setGeometry(windowSizeX/2-menuSizeX/2,windowSizeY/2-menuSizeY/2,menuSizeX,menuSizeY);
-//    menuStart->setAttribute( Qt::WA_DeleteOnClose, true );
+    menuStart->setGeometry(this->size().width()/2-menuSizeX/2,this->size().height()/2-menuSizeY/2,menuSizeX,menuSizeY);
     menuStart->show();
+
+}
+
+void MainGame::resizeEvent(QResizeEvent * event) {
+
+    if (event->size().width() >= windowSizeX || event->size().height() >= windowSizeX)
+    {
+        gameView->resize(event->size().width(),event->size().height());
+        menuStart->setGeometry(event->size().width()/2-menuSizeX/2,event->size().height()/2-menuSizeY/2,menuSizeX,menuSizeY);
+        gameTitle->setGeometry(event->size().width()/2-titleSizeX/2,event->size().height()/2-menuSizeY/2-50,titleSizeX,titleSizeY);
+        quitGame->setGeometry(event->size().width()/2-quitBtnSizeX/2,event->size().height()/2+menuSizeY/2+35,quitBtnSizeX,quitBtnSizeY);
+        menuStart->setGeometry(event->size().width()/2-menuSizeX/2,event->size().height()/2-menuSizeY/2,menuSizeX,menuSizeY);
+        if (toggleGameCreated)
+        {
+            theGame->setGeometry(event->size().width()/2-windowSizeX/2,event->size().height()/2-windowSizeY/2,windowSizeX,windowSizeY);
+        }
+
+    }
 }

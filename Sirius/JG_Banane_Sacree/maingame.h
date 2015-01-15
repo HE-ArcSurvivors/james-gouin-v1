@@ -33,7 +33,6 @@ private:
 
     QGraphicsScene *gameScene;
     QGraphicsView *gameView;
-//    void keyPressEvent(QKeyEvent *event);
     int windowSizeY;
     int windowSizeX;
     int viewPositionX;
@@ -52,15 +51,16 @@ private:
     int titleSizeX;
     int titleSizeY;
 
-    QPoint viewRequested;
-
-    void setViewPosition();
-
     MenuStart *menuStart;
 
     QGraphicsProxyWidget *menuStartProxy;
 
     QLabel *gameTitle;
+
+    void resizeEvent ( QResizeEvent * event );
+
+    bool toggleGameCreated;
+    bool toggleFirstStart;
 
 signals:
 
