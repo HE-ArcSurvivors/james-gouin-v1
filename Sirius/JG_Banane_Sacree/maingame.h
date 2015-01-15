@@ -17,6 +17,8 @@ public:
 
 private:
 
+    QPushButton* quitGame;
+
     Gameboard *theGame;
 
     QGraphicsScene *gameScene;
@@ -33,6 +35,9 @@ private:
 
     int menuSizeX;
     int menuSizeY;
+
+    int quitBtnSizeX;
+    int quitBtnSizeY;
 
     int titleSizeX;
     int titleSizeY;
@@ -51,6 +56,7 @@ signals:
 
 public slots:
     void startGame(int,int,int);
+    void refreshGameMenu();
 
 };
 
