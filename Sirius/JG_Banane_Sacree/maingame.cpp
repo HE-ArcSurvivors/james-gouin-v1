@@ -92,7 +92,8 @@ void MainGame::startGame(int a, int b, int c)
 
 void MainGame::refreshGameMenu()
 {
-    delete this->menuStart;
+//    delete this->menuStart;
+//    this->menuStart = NULL;
     menuStart = new MenuStart(this);
     connect(menuStart,SIGNAL(startGame(int,int,int)),this, SLOT(startGame(int,int,int)));
     connect(menuStart,SIGNAL(refreshGameMenu()),this, SLOT(refreshGameMenu()));

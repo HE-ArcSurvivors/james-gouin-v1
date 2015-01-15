@@ -17,7 +17,7 @@ public:
     QGraphicsScene *populateScene();
     QPoint *getStartingPoint();
     QPoint getViewStart();
-    QGraphicsScene* changeLevel(int levelNumber);
+    int changeLevel(int levelNumber);
     int getLevelNumber();
     QString getDialogText(int value);
 
