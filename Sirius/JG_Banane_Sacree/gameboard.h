@@ -28,6 +28,15 @@ struct slideBloc{
     char sens; //l, r, t, b
 };
 
+/**
+ * \brief La platefrome du jeu.
+ *
+ * C'est LE QWidget qui donne vie au jeu ! Il gère les
+ * transistion de niveaux, le joueur, les ennemies, les
+ * objets, les bloques, les dialogues, le menu pause, et
+ * les interactions.
+ */
+
 class Gameboard : public QWidget
 {
     Q_OBJECT

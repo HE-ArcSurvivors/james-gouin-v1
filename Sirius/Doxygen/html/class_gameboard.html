@@ -88,12 +88,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-slots">Public Slots</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="class_gameboard-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Gameboard Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>La platefrome du jeu.  
+ <a href="class_gameboard.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="gameboard_8h_source.html">gameboard.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for Gameboard:</div>
 <div class="dyncontent">
@@ -117,6 +122,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>SlideBloc</b> ()</td>
 <tr class="memitem:af76ebc877764feed7bc9d90452178f5f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af76ebc877764feed7bc9d90452178f5f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>exitGame</b> ()</td></tr>
 <tr class="separator:af76ebc877764feed7bc9d90452178f5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d4ac38611d2ed24732823656ba613e0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0d4ac38611d2ed24732823656ba613e0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>restartLevel</b> ()</td></tr>
+<tr class="separator:a0d4ac38611d2ed24732823656ba613e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6286269cadea4a1171539b52431d56c5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6286269cadea4a1171539b52431d56c5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>restartGame</b> ()</td></tr>
+<tr class="separator:a6286269cadea4a1171539b52431d56c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -133,23 +144,26 @@ Static Public Member Functions</h2></td></tr>
 static int&#160;</td><td class="memItemRight" valign="bottom"><b>getGameSquares</b> ()</td></tr>
 <tr class="separator:aa10ed162ff321f4fe480e531ef352bd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
 <tr class="memitem:a50499cde2f942a0d18d261a7103e1e2a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a50499cde2f942a0d18d261a7103e1e2a"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>sizeX</b></td></tr>
+static int&#160;</td><td class="memItemRight" valign="bottom"><b>sizeX</b> = 20</td></tr>
 <tr class="separator:a50499cde2f942a0d18d261a7103e1e2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a60c1746c1bfa669b3bf7b3dfc6534d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1a60c1746c1bfa669b3bf7b3dfc6534d"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>sizeY</b></td></tr>
+static int&#160;</td><td class="memItemRight" valign="bottom"><b>sizeY</b> = 15</td></tr>
 <tr class="separator:a1a60c1746c1bfa669b3bf7b3dfc6534d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following files:<ul>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>La platefrome du jeu. </p>
+<p>C'est LE QWidget qui donne vie au jeu ! Il gère les transistion de niveaux, le joueur, les ennemies, les objets, les bloques, les dialogues, le menu pause, et les interactions. </p>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="gameboard_8h_source.html">gameboard.h</a></li>
 <li>gameboard.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 5 2015 15:01:42 for James Gouin et la Banane Sacrée by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 15 2015 10:07:04 for James Gouin et la Banane Sacrée by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

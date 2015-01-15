@@ -1,5 +1,14 @@
 \hypertarget{class_gameboard}{}\section{Gameboard Class Reference}
 \label{class_gameboard}\index{Gameboard@{Gameboard}}
+
+
+La platefrome du jeu.  
+
+
+
+
+{\ttfamily \#include $<$gameboard.\+h$>$}
+
 Inheritance diagram for Gameboard\+:\begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -20,6 +29,12 @@ Inheritance diagram for Gameboard\+:\begin{figure}[H]
 \item 
 \hypertarget{class_gameboard_af76ebc877764feed7bc9d90452178f5f}{}void {\bfseries exit\+Game} ()\label{class_gameboard_af76ebc877764feed7bc9d90452178f5f}
 
+\item 
+\hypertarget{class_gameboard_a0d4ac38611d2ed24732823656ba613e0}{}void {\bfseries restart\+Level} ()\label{class_gameboard_a0d4ac38611d2ed24732823656ba613e0}
+
+\item 
+\hypertarget{class_gameboard_a6286269cadea4a1171539b52431d56c5}{}void {\bfseries restart\+Game} ()\label{class_gameboard_a6286269cadea4a1171539b52431d56c5}
+
 \end{DoxyCompactItemize}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
@@ -36,16 +51,21 @@ Inheritance diagram for Gameboard\+:\begin{figure}[H]
 \hypertarget{class_gameboard_aa10ed162ff321f4fe480e531ef352bd8}{}static int {\bfseries get\+Game\+Squares} ()\label{class_gameboard_aa10ed162ff321f4fe480e531ef352bd8}
 
 \end{DoxyCompactItemize}
-\subsection*{Protected Attributes}
+\subsection*{Static Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{class_gameboard_a50499cde2f942a0d18d261a7103e1e2a}{}int {\bfseries size\+X}\label{class_gameboard_a50499cde2f942a0d18d261a7103e1e2a}
+\hypertarget{class_gameboard_a50499cde2f942a0d18d261a7103e1e2a}{}static int {\bfseries size\+X} = 20\label{class_gameboard_a50499cde2f942a0d18d261a7103e1e2a}
 
 \item 
-\hypertarget{class_gameboard_a1a60c1746c1bfa669b3bf7b3dfc6534d}{}int {\bfseries size\+Y}\label{class_gameboard_a1a60c1746c1bfa669b3bf7b3dfc6534d}
+\hypertarget{class_gameboard_a1a60c1746c1bfa669b3bf7b3dfc6534d}{}static int {\bfseries size\+Y} = 15\label{class_gameboard_a1a60c1746c1bfa669b3bf7b3dfc6534d}
 
 \end{DoxyCompactItemize}
 
+
+\subsection{Detailed Description}
+La platefrome du jeu. 
+
+C\textquotesingle{}est L\+E Q\+Widget qui donne vie au jeu ! Il gère les transistion de niveaux, le joueur, les ennemies, les objets, les bloques, les dialogues, le menu pause, et les interactions. 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 

@@ -103,9 +103,6 @@ Inheritance diagram for Pingouin:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ab12d96478acd217073c566c5785facd5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab12d96478acd217073c566c5785facd5"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Pingouin</b> (int gameSquare)</td></tr>
-<tr class="separator:ab12d96478acd217073c566c5785facd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91f0120d2ee61c6a6ca715a8e88f3d3b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a91f0120d2ee61c6a6ca715a8e88f3d3b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setPos</b> (int, int)</td></tr>
 <tr class="separator:a91f0120d2ee61c6a6ca715a8e88f3d3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -121,21 +118,36 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addToScene</b> (QGrap
 <tr class="memitem:ad91b21a996f75e32a78c203eb7490446"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad91b21a996f75e32a78c203eb7490446"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addObjectToSacoche</b> (<a class="el" href="class_object.html">Object</a> *object)</td></tr>
 <tr class="separator:ad91b21a996f75e32a78c203eb7490446"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2210d1930d4366e3e509210f756bceb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af2210d1930d4366e3e509210f756bceb"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>removeObjectToSacoche</b> (QString object)</td></tr>
-<tr class="separator:af2210d1930d4366e3e509210f756bceb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab284ad635cf9038f979577c81f29cdad"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab284ad635cf9038f979577c81f29cdad"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>checkObjectSacoche</b> (QString object)</td></tr>
-<tr class="separator:ab284ad635cf9038f979577c81f29cdad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea4eb963e4e1a21b11f5b3eebf3c8863"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aea4eb963e4e1a21b11f5b3eebf3c8863"></a>
-<a class="el" href="class_object.html">Object</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getObjectSacoche</b> ()</td></tr>
-<tr class="separator:aea4eb963e4e1a21b11f5b3eebf3c8863"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73130bc706f0c1a40a20f05d0d3a3ffa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a73130bc706f0c1a40a20f05d0d3a3ffa"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>removeObjectFromSacoche</b> (QString object)</td></tr>
+<tr class="separator:a73130bc706f0c1a40a20f05d0d3a3ffa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bc2b0b92b4093f59821a683e6d71b14"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7bc2b0b92b4093f59821a683e6d71b14"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>removeTempFromSacoche</b> ()</td></tr>
+<tr class="separator:a7bc2b0b92b4093f59821a683e6d71b14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53145c212327b2a733237e1eb55aad24"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a53145c212327b2a733237e1eb55aad24"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>checkObjectSacoche</b> (QString object, int quantity=1)</td></tr>
+<tr class="separator:a53145c212327b2a733237e1eb55aad24"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5ed410fe91fcdf598b00baf4c33354f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa5ed410fe91fcdf598b00baf4c33354f"></a>
+QList&lt; <a class="el" href="class_object.html">Object</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getSacoche</b> ()</td></tr>
+<tr class="separator:aa5ed410fe91fcdf598b00baf4c33354f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a736f73e55524b59c00479aef1f91f94d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a736f73e55524b59c00479aef1f91f94d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>printSacoche</b> ()</td></tr>
 <tr class="separator:a736f73e55524b59c00479aef1f91f94d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1adb59f85236324915f9211bc111faa6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1adb59f85236324915f9211bc111faa6"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>emptyTempSacoche</b> ()</td></tr>
+<tr class="separator:a1adb59f85236324915f9211bc111faa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af53b1d8d5167cd2fc039f97219f22064"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af53b1d8d5167cd2fc039f97219f22064"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>emptySacoche</b> ()</td></tr>
+<tr class="separator:af53b1d8d5167cd2fc039f97219f22064"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31dcd728180d2e85cf1c696ad2f0b062"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a31dcd728180d2e85cf1c696ad2f0b062"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSlide</b> ()</td></tr>
 <tr class="separator:a31dcd728180d2e85cf1c696ad2f0b062"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aecce86d070fcfef325a55676043866ab"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aecce86d070fcfef325a55676043866ab"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setSlideAble</b> (bool value)</td></tr>
+<tr class="separator:aecce86d070fcfef325a55676043866ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad571ffa2df0cdb3a6381bd24ec1363eb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad571ffa2df0cdb3a6381bd24ec1363eb"></a>
+QGraphicsRectItem *&#160;</td><td class="memItemRight" valign="bottom"><b>getCollideBloc</b> (char sensDepl)</td></tr>
+<tr class="separator:ad571ffa2df0cdb3a6381bd24ec1363eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab65df246ceda4f50ec939faeb55a9550"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab65df246ceda4f50ec939faeb55a9550"></a>
 QList&lt; QGraphicsItem * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>CollidesRight</b> ()</td></tr>
 <tr class="separator:ab65df246ceda4f50ec939faeb55a9550"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -204,7 +216,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>yPos</b></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 5 2015 15:01:42 for James Gouin et la Banane Sacrée by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 15 2015 10:07:04 for James Gouin et la Banane Sacrée by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

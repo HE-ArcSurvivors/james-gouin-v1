@@ -8,6 +8,16 @@
 class QGraphicsView;
 class QLabel;
 
+/**
+ * \brief QWidget principal gerant le programme du jeu dans le fond.
+ *
+ * Ce QWidget gère le jeu dans son fond. Il affiche le menu
+ * principal du jeu pour commencer. Il premet d'effectuer la transition
+ * entre le menu principal et le Gameboard. Il offre la structure
+ * graphique de base du jeu au niveau software et disposition dans
+ * l'environment de lancement (OS).
+ */
+
 class MainGame : public QWidget
 {
     Q_OBJECT
@@ -17,7 +27,7 @@ public:
 
 private:
 
-    QPushButton* quitGame;
+    QPushButton* quitGame;  /**< \var Boutton pour quitter le jeu completement */
 
     Gameboard *theGame;
 

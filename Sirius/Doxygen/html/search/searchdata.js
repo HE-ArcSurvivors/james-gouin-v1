@@ -1,7 +1,7 @@
 var indexSectionsWithContent =
 {
-  0: "bgmops",
-  1: "bgmops"
+  0: "beglmopsvw",
+  1: "beglmopsvw"
 };
 
 var indexSectionNames =

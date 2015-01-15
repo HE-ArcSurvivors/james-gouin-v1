@@ -9,6 +9,18 @@ class QSignalMapper;
 class QLineEdit;
 class QLabel;
 
+/**
+ * \brief Premier menu (start) que le joueur voie en lancant le jeu.
+ *
+ * QWidget du menu principal du jeu. Celui-ci permet de
+ * créer un profile d'utilisateur et de lancer un partie
+ * déjà existante dans un profile existant.
+ * Les sauvegardes sont sauvées dans le repertoire :
+ * MacOSX : Game.app/Contents/MacOS/save.json
+ * Windows : Dans le meme dossier que Game.exe
+ * A noter que la sauvegarde est en texte et n'est pas encrypté.
+ */
+
 class MenuStart : public QWidget
 {
     Q_OBJECT
