@@ -5,6 +5,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QFormLayout>
+#include <QGraphicsDropShadowEffect>
 
 
 
@@ -17,12 +18,16 @@ public:
 private:
     QFormLayout *layoutMenuPause;
     QLabel *titleMenuPause;
+    QLabel *undertitleMenuPause;
 
     QPushButton *btnMenuPauseResume;
     QPushButton *btnMenuPauseConfigure;
     QPushButton *btnMenuPauseQuit;
     QPushButton *btnMenuPauseRestartLevel;
     QPushButton *btnMenuPauseRestartGame;
+
+    QGraphicsDropShadowEffect* shadowbtn();
+    void paintEvent(QPaintEvent *pe);
 
 signals:
 

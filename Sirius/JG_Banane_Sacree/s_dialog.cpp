@@ -13,11 +13,11 @@ S_Dialog::S_Dialog(QGraphicsItem *parent) : Surface(0, 0, parent)
 
 void S_Dialog::setDesign()
 {
-    QBrush brush;
-    brush.setStyle(Qt::SolidPattern);
-    brush.setColor(Qt::red);
+//    QBrush brush;
+//    brush.setStyle(Qt::SolidPattern);
+//    brush.setColor(Qt::red);
 
-    setBrush(brush);
+//    setBrush(brush);
 }
 
 void S_Dialog::setDialogNumber(int value)

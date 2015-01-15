@@ -32,8 +32,8 @@ struct slideBloc{
  * \brief La platefrome du jeu.
  *
  * C'est LE QWidget qui donne vie au jeu ! Il gère les
- * transistion de niveaux, le joueur, les ennemies, les
- * objets, les bloques, les dialogues, le menu pause, et
+ * transistion de niveaux, le joueur, les ennemis, les
+ * objets, les blocs, les dialogues, le menu pause, et
  * les interactions.
  */
 
@@ -47,41 +47,43 @@ public:
     static int getGameSquares();
     static int sizeX;
     static int sizeY;
+
     QPoint *getCheckPoint();
 
 private:
 
-    QTimer *timerPingouinSlide;
-    QTimer *timerBlocDeplSlide;
-    char cSensPingouinSlide;
-    bool isSliding;
+    /*
+     * METHODES PRIVÉES
+    */
 
-    QGraphicsScene *mainScene;
-    QGraphicsScene *preloadedScene;
-    QGraphicsView *playerView;
-    Pingouin *pingouin;
     void keyPressEvent(QKeyEvent *event);
-    int windowSizeY;
-    int windowSizeX;
-    int viewPositionX;
-    int viewPositionY;
-    static int gameSquares;
-    QString windowTitle;
 
-    Level* currentLevel;
+    //Méthodes de construction
+    void setProxy();
+    void loadLevel();
+    void setLevel(int value);
+    void setTimer();
 
+    //Positionnement et gestion du niveau
     void setViewPosition();
     bool checkPosition(QGraphicsItem *object);
+    void saveCheckpoint();
+    void loadCheckpoint();
 
-    int transition;
-    QPoint viewRequested;
-    QPoint exit;
+    //Gestion des proxy / widgets
+    void setPositionBottom(QWidget* widget);
+    void setPositionCenter(QWidget* widget);
 
+    //Déplacement du Pingouin
     bool MovePingouinToLeft();
     bool MovePingouinToRight();
     bool MovePingouinToTop();
     bool MovePingouinToBottom();
     bool MovePingouin(QList<QGraphicsItem *>, char);
+
+    //Glissement du Pingouin
+    QTimer *timerPingouinSlide;
+    QTimer *timerBlocDeplSlide;
 
     void MoveBloc(char);
 
@@ -90,45 +92,58 @@ private:
     void ChangeView(char sens);
     bool CheckGameOver();
     void CheckItem();
-
-    B_Movable *moveBloc;
-    QList<slideBloc> listSlindingBlocs;
-
-    void populateScene();
-
     void pauseMenu();
 
-    int menuPauseSizeX;
-    int menuPauseSizeY;
+    /*
+     * ATTRIBUTS
+    */
 
-    QFormLayout *layoutMenuPause;
-    QGroupBox *groupBoxMenuPause;
-    QLabel *titleMenuPause;
+    //Scene & Pingouin
+    QGraphicsScene *mainScene;
+    QGraphicsView *playerView;
+    Pingouin *pingouin;
 
-    QPushButton *btnMenuPauseResume;
-    QPushButton *btnMenuPauseConfigure;
-    QPushButton *btnMenuPauseQuit;
+    //Fenêtre
+    int windowSizeY;
+    int windowSizeX;
 
+    //Positionnement et gestion du niveau
+    Level* currentLevel;
     QPoint* checkpoint;
-    void saveCheckpoint();
-    void loadCheckpoint();
+    QPoint viewRequested;
+    int viewPositionX;
+    int viewPositionY;
 
-    // MENU PAUSE
+    //Widgets et Proxy
     M_Pause *menuPauseInGame;
     QGraphicsProxyWidget *proxy;
     bool toggleMenuPause;
 
-    // LIST DES OBJETS
     WidgetObject *objectList;
     QGraphicsProxyWidget *objectListProxy;
 
-    // DIALOG
     WidgetDialog *dialog;
     QGraphicsProxyWidget* dialogProxy;
     bool dialogToogle;
 
-    void setPositionBottom(QWidget* widget);
-    void setPositionCenter(QWidget* widget);
+    //Glissement & Déplacements
+    char cSensPingouinSlide;
+    bool isSliding;
+    B_Movable *moveBloc;
+    QList<slideBloc> listSlindingBlocs;
+    QTimer *timer;
+
+    //Static
+    static int gameSquares;
+
+    //Menu Pause
+    QString windowTitle;
+    QFormLayout *layoutMenuPause;
+    QGroupBox *groupBoxMenuPause;
+    QLabel *titleMenuPause;
+    QPushButton *btnMenuPauseResume;
+    QPushButton *btnMenuPauseConfigure;
+    QPushButton *btnMenuPauseQuit;
 
 protected:
 

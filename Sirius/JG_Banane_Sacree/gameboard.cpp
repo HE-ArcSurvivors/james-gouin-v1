@@ -10,13 +10,11 @@
 #include "s_ice.h"
 #include "s_dialog.h"
 #include "level.h"
-
 #include "ennemi.h"
 #include "e_renard.h"
 #include "e_loup.h"
 
 #include <QtWidgets>
-
 #include <QList>
 #include <QDebug>
 #include <QGraphicsItemGroup>
@@ -45,68 +43,30 @@ int Gameboard::sizeY = 15;
 
 Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
 {
-
-    setFocus();
-    grabKeyboard();
-
-    currentLevel = new Level(0);
     // Les Variables par default du jeu
     windowTitle = tr("James Gouin et la Banane Sacrée");
     windowSizeX = sizeX*gameSquares;
     windowSizeY = sizeY*gameSquares;
 
-    toggleMenuPause = false;
-    isSliding = false;
-
-    moveBloc = NULL;
-    checkpoint = new QPoint();
-
+    setFocus();
+    grabKeyboard();
     this->setWindowTitle(windowTitle);
     this->setFixedSize(windowSizeX,windowSizeY);
     this->resize(windowSizeX,windowSizeY);
 
     mainScene = new QGraphicsScene(this);
-    mainScene = currentLevel->populateScene();
-
-    viewRequested = currentLevel->getViewStart();
-    setViewPosition();
-
     playerView = new QGraphicsView(this);
-
-    playerView->setHorizontalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
-    playerView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    playerView->setSceneRect(viewPositionX,viewPositionY,sizeX*gameSquares,sizeY*gameSquares);
-
-    //On position la vue
-    playerView->setScene(mainScene);
-
-
-    //On ajoute le joueur
     pingouin = new Pingouin();
-    pingouin->addToScene(mainScene);
-    pingouin->setPos(currentLevel->getStartingPoint()->x(), currentLevel->getStartingPoint()->y());
+    checkpoint = new QPoint(0,0);
 
-    saveCheckpoint();
+    playerView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    playerView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    menuPauseInGame = new M_Pause(this);
-    proxy = mainScene->addWidget(menuPauseInGame);
-    proxy->hide();
-    proxy->setZValue(100);
+    setLevel(0);
+    setProxy();
 
-    objectList = new WidgetObject(this);
-    objectListProxy = mainScene->addWidget(objectList);
-    setPositionBottom(objectList);
-    objectListProxy->hide();
-
-    dialog = new WidgetDialog(this);
-    dialogProxy = mainScene->addWidget(dialog);
-    dialogProxy->setZValue(90);
-
-    setPositionCenter(dialog);
-    dialogProxy->show();
-    dialog->setText(currentLevel->getDialogText(1),1);
-    dialogToogle = true;
-   
+    isSliding = false;
+    moveBloc = NULL;   
     //initialisation des timer
     timerPingouinSlide = new QTimer();
     timerBlocDeplSlide = new QTimer();
@@ -114,16 +74,16 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     connect(timerBlocDeplSlide, SIGNAL(timeout()), this, SLOT(SlideBloc()));
 
     //pour annimer !
-    QTimer *timer = new QTimer();
-    QObject::connect(timer, SIGNAL(timeout()), mainScene, SLOT(advance()));
+    timer = new QTimer();
+    setTimer();
     timer->start(1000 / 33); //30fps
 }
+
 void Gameboard::SlideBloc()
 {
     for(int i=0; i<listSlindingBlocs.size(); i++)
     {
         B_Movable* SlidingBloc = listSlindingBlocs.at(i).slidingMovable;
-
         bool removeBloc = true;
 
         if(SlidingBloc->isSlide())
@@ -455,17 +415,7 @@ void Gameboard::CheckChangeView(char sens)
             S_ViewTransition *bloc = dynamic_cast<S_ViewTransition*>(CollidingItems.at(i));
             if(bloc->isEndLevel())
             {
-                mainScene = currentLevel->changeLevel(currentLevel->getLevelNumber()+1);
-                viewRequested = currentLevel->getViewStart();
-                playerView->setScene(mainScene);
-
-                setViewPosition();
-
-                pingouin->addToScene(mainScene);
-                pingouin->setPos(currentLevel->getStartingPoint()->x(), currentLevel->getStartingPoint()->y());
-                saveCheckpoint();
-
-                playerView->setSceneRect(viewPositionX,viewPositionY,windowSizeX,windowSizeY);
+                setLevel(currentLevel->getLevelNumber()+1);
             }
             else
             {
@@ -845,18 +795,15 @@ int Gameboard::getGameSquares()
 
 void Gameboard::pauseMenu()
 {
-    toggleMenuPause = !toggleMenuPause;
-    proxy->setZValue(100);
-    if(toggleMenuPause)
+    if(!toggleMenuPause)
     {
         timerPingouinSlide->stop();
         setPositionCenter(menuPauseInGame);
-
         proxy->show();
-
+        toggleMenuPause = true;
     }else{
-
         proxy->hide();
+        toggleMenuPause = false;
         timerPingouinSlide->start(SLIDE_SPEED);
     }
 }
@@ -870,63 +817,24 @@ void Gameboard::restartLevel()
 {
     mainScene->removeItem(proxy);
     mainScene->removeItem(objectListProxy);
-    mainScene = currentLevel->populateScene();
-    playerView->setScene(mainScene);
+    mainScene->removeItem(dialogProxy);
 
-    pingouin->addToScene(mainScene);
-    pingouin->setPlayerOrientation("down");
-    pingouin->removeTempFromSacoche();
-
-    loadCheckpoint();
-
-    objectList->reloadObjectList(pingouin->getSacoche());
-    setPositionBottom(objectList);
-
-    menuPauseInGame = new M_Pause(this);
-    setPositionCenter(menuPauseInGame);
-    menuPauseInGame->hide();
-    proxy = mainScene->addWidget(menuPauseInGame);
-
-    objectList = new WidgetObject(this);
-    setPositionBottom(objectList);
-    objectListProxy = mainScene->addWidget(objectList);
-
-    dialog = new WidgetDialog(this);
-    setPositionCenter(dialog);
-    dialog->hide();
-    dialogToogle = false;
-    dialogProxy = mainScene->addWidget(dialog);
-    dialogProxy->setZValue(90);
-
-    if(toggleMenuPause)
-    {
-        resumeGame();
-    }
+    loadLevel();
+    setProxy();
+    setTimer();
 }
 
 void Gameboard::restartGame()
 {
     mainScene->removeItem(proxy);
     mainScene->removeItem(objectListProxy);
+    mainScene->removeItem(dialogProxy);
 
-    mainScene = currentLevel->populateScene();
-    viewRequested = currentLevel->getViewStart();
-    playerView->setScene(mainScene);
+    loadLevel();
+    setProxy();
+    setTimer();
 
-    setViewPosition();
-
-    pingouin->addToScene(mainScene);
-    pingouin->setPos(currentLevel->getStartingPoint()->x(), currentLevel->getStartingPoint()->y());
-    saveCheckpoint();
     pingouin->emptySacoche();
-
-    playerView->setSceneRect(viewPositionX,viewPositionY,windowSizeX,windowSizeY);
-
-    menuPauseInGame = new M_Pause(this);
-    proxy = mainScene->addWidget(menuPauseInGame);
-
-    objectList = new WidgetObject(this);
-    objectListProxy = mainScene->addWidget(objectList);
 
     resumeGame();
 }
@@ -966,13 +874,63 @@ void Gameboard::saveCheckpoint()
 {
     checkpoint->setX(pingouin->x());
     checkpoint->setY(pingouin->y());
-    qDebug() << "SAVE Checkpoint" << (checkpoint->x()+gameSquares)/gameSquares << " " << (checkpoint->y()+gameSquares)/gameSquares;
 }
 
 void Gameboard::loadCheckpoint()
 {
     pingouin->setPos((checkpoint->x()+gameSquares)/gameSquares,(checkpoint->y()+gameSquares)/gameSquares);
     CheckItem();
-    qDebug() << "LOAD CHECKPOINT" << (checkpoint->x()+gameSquares)/gameSquares << " " << (checkpoint->y()+gameSquares)/gameSquares;
 }
 
+void Gameboard::setProxy()
+{
+    menuPauseInGame = new M_Pause(this);
+    setPositionCenter(menuPauseInGame);
+    proxy = mainScene->addWidget(menuPauseInGame);
+    proxy->hide();
+    proxy->setZValue(100);
+    toggleMenuPause = false;
+
+    objectList = new WidgetObject(this);
+    objectList->reloadObjectList(pingouin->getSacoche());
+    setPositionBottom(objectList);
+    objectListProxy = mainScene->addWidget(objectList);
+    objectListProxy->hide();
+
+    dialog = new WidgetDialog(this);
+    dialogProxy = mainScene->addWidget(dialog);
+    dialogProxy->setZValue(90);
+    dialogProxy->hide();
+    setPositionCenter(dialog);
+    dialogToogle = false;
+
+}
+
+void Gameboard::setLevel(int value)
+{
+    currentLevel = new Level(value);
+    pingouin->setPos(currentLevel->getStartingPoint()->x(),currentLevel->getStartingPoint()->y());
+    viewRequested = currentLevel->getViewStart();
+    saveCheckpoint();
+    loadLevel();
+}
+
+void Gameboard::loadLevel()
+{
+    qDebug() << "LOAD LEVEL";
+    mainScene = currentLevel->populateScene();
+    setViewPosition();
+
+    playerView->setScene(mainScene);
+    playerView->setSceneRect(viewPositionX,viewPositionY,sizeX*gameSquares,sizeY*gameSquares);
+
+    pingouin->addToScene(mainScene);
+    loadCheckpoint();
+    pingouin->setPlayerOrientation("down");
+    pingouin->removeTempFromSacoche();
+}
+
+void Gameboard::setTimer()
+{
+    QObject::connect(timer, SIGNAL(timeout()), mainScene, SLOT(advance()));
+}

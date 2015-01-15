@@ -32,6 +32,8 @@ Level::Level(int levelNumber)
     viewStart = new QPoint(0,0);
 
     dialogValue = 0;
+
+    getSceneSize();
 }
 
 QPoint* Level::getStartingPoint()
@@ -259,31 +261,6 @@ QGraphicsScene* Level::populateScene()
                     line[line_count]=t.readLine();
                 }
             }
-
-            if(line[line_count].contains("type=Scene_Start"))
-            {
-                line_count ++;
-                line[line_count]=t.readLine();
-                line_count ++;
-                line[line_count]=t.readLine();
-
-                for(matY = 0; matY < maxBlocksHeight; matY++)
-                {
-                    QStringList values = line[line_count].split(",");
-
-                    for (matX = 0; matX < maxBlocksWidth; matX++)
-                    {
-                        if(values.at(matX).toInt() != 0)
-                        {
-                            startingPoint->setX(matX+1);
-                            startingPoint->setY(matY+1);
-                        }
-                    }
-                    line_count++;
-                    line[line_count]=t.readLine();
-                }
-            }
-
             if(line[line_count].contains("type=Scene_End"))
             {
                 line_count ++;
@@ -518,11 +495,11 @@ QGraphicsScene* Level::populateScene()
                 item->setPos(i,j);
                 item->setLevelEnd(false);
 
-                if(Mat_Doors[i][j] > 20 && Mat_Doors[i][j] < 30)
-                {
-                    item->setNbItem(Mat_Doors[i][j]%20);
-                    item->setNeededItem("Poisson");
-                }
+//                if(Mat_Doors[i][j] > 20 && Mat_Doors[i][j] < 30)
+//                {
+//                    item->setNbItem(Mat_Doors[i][j]%20);
+//                    item->setNeededItem("Poisson");
+//                }
 
                 scene->addItem(item);
             }
@@ -596,6 +573,16 @@ void Level::getSceneSize()
                 line[line_count] = t.readLine();
                 QStringList valueViewY = line[line_count].split("=");
                 viewStart->setY(valueViewY.at(1).toInt());
+
+                line_count++;
+                line[line_count] = t.readLine();
+                QStringList valueStartX = line[line_count].split("=");
+                startingPoint->setX(valueStartX.at(1).toInt());
+
+                line_count++;
+                line[line_count] = t.readLine();
+                QStringList valueStartY = line[line_count].split("=");
+                startingPoint->setY(valueStartY.at(1).toInt());
             }
         }
     }
@@ -631,11 +618,10 @@ QPoint Level::getViewStart()
     return *(this->viewStart);
 }
 
-QGraphicsScene* Level::changeLevel(int levelNumber)
-{
-    this->levelNumber = levelNumber;
-    return populateScene();
-}
+//int Level::changeLevel(int levelNumber)
+//{
+//    this->levelNumber = levelNumber;
+//}
 
 int Level::getLevelNumber()
 {

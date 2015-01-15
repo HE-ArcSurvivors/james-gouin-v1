@@ -5,5 +5,6 @@
         <file>maps/-1.txt</file>
         <file>maps/0texte.txt</file>
         <file>maps/0header.txt</file>
+        <file>maps/1header.txt</file>
     </qresource>
 </RCC>
