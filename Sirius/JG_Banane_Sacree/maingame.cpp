@@ -92,10 +92,13 @@ void MainGame::startGame(int a, int b, int c)
 
 void MainGame::refreshGameMenu()
 {
-    delete this->menuStart;
+//    deleteLater()
+    delete menuStart;
+    menuStart = NULL;
     menuStart = new MenuStart(this);
     connect(menuStart,SIGNAL(startGame(int,int,int)),this, SLOT(startGame(int,int,int)));
     connect(menuStart,SIGNAL(refreshGameMenu()),this, SLOT(refreshGameMenu()));
     menuStart->setGeometry(windowSizeX/2-menuSizeX/2,windowSizeY/2-menuSizeY/2,menuSizeX,menuSizeY);
+//    menuStart->setAttribute( Qt::WA_DeleteOnClose, true );
     menuStart->show();
 }
