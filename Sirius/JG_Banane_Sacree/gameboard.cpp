@@ -66,8 +66,7 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     setProxy();
 
     isSliding = false;
-    moveBloc = NULL;
-   
+    moveBloc = NULL;   
     //initialisation des timer
     timerPingouinSlide = new QTimer();
     timerBlocDeplSlide = new QTimer();
