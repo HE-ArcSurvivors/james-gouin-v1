@@ -150,13 +150,12 @@ void MenuStart::newGame()
         loadFile.close();
 
         username->releaseKeyboard();
-//        emit startGame(1,2,3);
 
         validate->hide();
         username->hide();
         textPseudo->hide();
 
-        emit refreshGameMenu();
+        emit startGame(1,2,3);
 
     }
 }

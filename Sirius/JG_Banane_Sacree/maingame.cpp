@@ -83,17 +83,19 @@ void MainGame::setViewPosition()
 
 void MainGame::startGame(int a, int b, int c)
 {
+    refreshGameMenu();
     theGame = new Gameboard;
     theGame->setParent(this);
     theGame->show();
+
 }
 
 void MainGame::refreshGameMenu()
 {
     delete this->menuStart;
     menuStart = new MenuStart(this);
-    menuStart->show();
     connect(menuStart,SIGNAL(startGame(int,int,int)),this, SLOT(startGame(int,int,int)));
     connect(menuStart,SIGNAL(refreshGameMenu()),this, SLOT(refreshGameMenu()));
     menuStart->setGeometry(windowSizeX/2-menuSizeX/2,windowSizeY/2-menuSizeY/2,menuSizeX,menuSizeY);
+    menuStart->show();
 }
