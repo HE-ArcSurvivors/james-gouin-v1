@@ -51,9 +51,6 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     windowSizeX = sizeX*gameSquares;
     windowSizeY = sizeY*gameSquares;
 
-    menuPauseSizeX = 400;
-    menuPauseSizeY = 400;
-    toggleGrabTheWorld = false;
     toggleMenuPause = false;
     isSliding = false;
 
@@ -90,6 +87,7 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     menuPauseInGame = new M_Pause(this);
     proxy = mainScene->addWidget(menuPauseInGame);
     proxy->hide();
+    proxy->setZValue(100);
 
     objectList = new WidgetObject(this);
     objectListProxy = mainScene->addWidget(objectList);
@@ -97,13 +95,12 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     objectListProxy->hide();
 
     dialog = new WidgetDialog(this);
-    dialog->setText("");
     dialogProxy = mainScene->addWidget(dialog);
-    dialogProxy->setZValue(100);
+    dialogProxy->setZValue(90);
 
     setPositionCenter(dialog);
     dialogProxy->show();
-    dialog->setText(currentLevel->getDialogText());
+    dialog->setText(currentLevel->getDialogText(1),1);
     dialogToogle = true;
    
     //initialisation des timer
@@ -359,7 +356,7 @@ void Gameboard::SinkMovable(B_Movable *b)
             QString text = "Tu as bloqué ta sortie!";
             setPositionCenter(dialog);
             dialogProxy->show();
-            dialog->setText(text);
+            dialog->setText(text,2);
 
             dialogToogle = true;
 
@@ -373,12 +370,22 @@ void Gameboard::SinkMovable(B_Movable *b)
         {
             mainScene->removeItem(CollidingItems.at(i));
 
-            QString text = "OUCH! Ce bloc vient d'écraser un objet !";
-            setPositionCenter(dialog);
-            dialogProxy->show();
-            dialog->setText(text);
+            Object *objet = dynamic_cast<Object*>(CollidingItems.at(i));
 
-            dialogToogle = true;
+            if(objet->getName() != "Oeuf")
+            {
+                restartLevel();
+
+                QString text = "OUCH! Ce bloc vient d'écraser un ";
+                text.append(objet->getName());
+                text.append("! Tu recommences au dernier checkpoint! ");
+                setPositionCenter(dialog);
+                dialogProxy->show();
+                dialog->setText(text,2);
+                dialogToogle = true;
+
+
+            }
         }
     }
 }
@@ -422,11 +429,12 @@ void Gameboard::CheckItem()
         }
         if(typeid(*CollidingItems.at(i)).name() == typeid(S_Dialog).name())
         {
+            S_Dialog *item = dynamic_cast<S_Dialog*>(CollidingItems.at(i));
             mainScene->removeItem(CollidingItems.at(i));
 
             setPositionCenter(dialog);
             dialogProxy->show();
-            dialog->setText(currentLevel->getDialogText());
+            dialog->setText(currentLevel->getDialogText(item->getDialogNumber()),1);
 
             dialogToogle = true;
         }
@@ -487,7 +495,7 @@ void Gameboard::CheckChangeView(char sens)
 
                     setPositionCenter(dialog);
                     dialogProxy->show();
-                    dialog->setText(text);
+                    dialog->setText(text,2);
 
                     dialogToogle = true;
 
@@ -539,6 +547,7 @@ void Gameboard::ChangeView(char sens)
 
     objectList->reloadObjectList(pingouin->getSacoche());
     setPositionBottom(objectList);
+    setPositionCenter(dialog);
 }
 
 void Gameboard::setPositionBottom(QWidget* widget)
@@ -833,11 +842,11 @@ int Gameboard::getGameSquares()
 void Gameboard::pauseMenu()
 {
     toggleMenuPause = !toggleMenuPause;
-    grabTheWorld();
+    proxy->setZValue(100);
     if(toggleMenuPause)
     {
         timerPingouinSlide->stop();
-        menuPauseInGame->setGeometry(viewPositionX+windowSizeX/2-menuPauseSizeX/2,viewPositionY+windowSizeY/2-menuPauseSizeY/2,menuPauseSizeX,menuPauseSizeY);
+        setPositionCenter(menuPauseInGame);
 
         proxy->show();
 
@@ -846,59 +855,6 @@ void Gameboard::pauseMenu()
         proxy->hide();
         timerPingouinSlide->start(SLIDE_SPEED);
     }
-}
-
-void Gameboard::grabTheWorld()
-{
-    toggleGrabTheWorld = !toggleGrabTheWorld;
-
-    if(toggleGrabTheWorld)
-    {
-        QList<QGraphicsItem *> items = mainScene->items();
-
-        foreach( QGraphicsItem *item, items )
-        {
-            if(typeid(*item).name() == typeid(S_Snow).name())
-            {
-                item->setZValue(-1);
-            }
-            if(typeid(*item).name() == typeid(B_Movable).name())
-            {
-                item->setZValue(0);
-            }
-            if(typeid(*item).name() == typeid(Pingouin).name())
-            {
-                item->setZValue(0);
-            }
-            if(typeid(*item).name() == typeid(Object).name())
-            {
-                item->setZValue(0);
-            }
-        }
-    }else{
-        QList<QGraphicsItem *> items = mainScene->items();
-
-        foreach( QGraphicsItem *item, items )
-        {
-            if(typeid(*item).name() == typeid(S_Snow).name())
-            {
-                item->setZValue(0);
-            }
-            if(typeid(*item).name() == typeid(B_Movable).name())
-            {
-                item->setZValue(1);
-            }
-            if(typeid(*item).name() == typeid(Pingouin).name())
-            {
-                item->setZValue(2);
-            }
-            if(typeid(*item).name() == typeid(Object).name())
-            {
-                item->setZValue(2);
-            }
-        }
-    }
-
 }
 
 void Gameboard::resumeGame()
@@ -923,12 +879,25 @@ void Gameboard::restartLevel()
     setPositionBottom(objectList);
 
     menuPauseInGame = new M_Pause(this);
+    setPositionCenter(menuPauseInGame);
+    menuPauseInGame->hide();
     proxy = mainScene->addWidget(menuPauseInGame);
 
     objectList = new WidgetObject(this);
+    setPositionBottom(objectList);
     objectListProxy = mainScene->addWidget(objectList);
 
-    resumeGame();
+    dialog = new WidgetDialog(this);
+    setPositionCenter(dialog);
+    dialog->hide();
+    dialogToogle = false;
+    dialogProxy = mainScene->addWidget(dialog);
+    dialogProxy->setZValue(90);
+
+    if(toggleMenuPause)
+    {
+        resumeGame();
+    }
 }
 
 void Gameboard::restartGame()
