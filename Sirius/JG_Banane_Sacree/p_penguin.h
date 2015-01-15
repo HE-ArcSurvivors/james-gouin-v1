@@ -20,16 +20,16 @@ private:
     QGraphicsRectItem *bottomCollideBox;
     QGraphicsRectItem *topCollideBox;
 
-    int gameSquare;
-
     QList<Object *> sacoche;
     QList<Object *> tempSacoche;
     QPoint* lastMove;
 
     bool slideAble;
 
+    int nbLives;
+
 public:
-    Pingouin(int gameSquare);
+    Pingouin();
 
     void setPos(int, int);
     void moveBy(int, int);

@@ -1,5 +1,14 @@
 \hypertarget{class_menu_start}{}\section{Menu\+Start Class Reference}
 \label{class_menu_start}\index{Menu\+Start@{Menu\+Start}}
+
+
+Premier menu (start) que le joueur voie en lancant le jeu.  
+
+
+
+
+{\ttfamily \#include $<$m\+\_\+menustart.\+h$>$}
+
 Inheritance diagram for Menu\+Start\+:\begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -16,6 +25,15 @@ Inheritance diagram for Menu\+Start\+:\begin{figure}[H]
 
 \item 
 \hypertarget{class_menu_start_a27892e476830d761fae92cc8b7db323f}{}void {\bfseries new\+Game\+Form} ()\label{class_menu_start_a27892e476830d761fae92cc8b7db323f}
+
+\end{DoxyCompactItemize}
+\subsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_menu_start_a24c4dbfed1831cca70f027372846d484}{}void {\bfseries start\+Game} (int, int, int)\label{class_menu_start_a24c4dbfed1831cca70f027372846d484}
+
+\item 
+\hypertarget{class_menu_start_a277ad4799e66f6b7e314d159467bc963}{}void {\bfseries refresh\+Game\+Menu} ()\label{class_menu_start_a277ad4799e66f6b7e314d159467bc963}
 
 \end{DoxyCompactItemize}
 \subsection*{Public Member Functions}
@@ -44,8 +62,16 @@ Inheritance diagram for Menu\+Start\+:\begin{figure}[H]
 \item 
 \hypertarget{class_menu_start_a06ebe4101b60777e4e1465e1073d533b}{}Q\+Push\+Button $\ast$ {\bfseries validate}\label{class_menu_start_a06ebe4101b60777e4e1465e1073d533b}
 
+\item 
+\hypertarget{class_menu_start_a427333babe7349783094bc9257462cb0}{}Q\+Label $\ast$ {\bfseries text\+Pseudo}\label{class_menu_start_a427333babe7349783094bc9257462cb0}
+
 \end{DoxyCompactItemize}
 
+
+\subsection{Detailed Description}
+Premier menu (start) que le joueur voie en lancant le jeu. 
+
+Q\+Widget du menu principal du jeu. Celui-\/ci permet de créer un profile d\textquotesingle{}utilisateur et de lancer un partie déjà existante dans un profile existant. Les sauvegardes sont sauvées dans le repertoire \+: Mac\+O\+S\+X \+: Game.\+app/\+Contents/\+Mac\+O\+S/save.json Windows \+: Dans le meme dossier que Game.\+exe A noter que la sauvegarde est en texte et n\textquotesingle{}est pas encrypté. 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 

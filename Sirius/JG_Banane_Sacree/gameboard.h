@@ -28,6 +28,15 @@ struct slideBloc{
     char sens; //l, r, t, b
 };
 
+/**
+ * \brief La platefrome du jeu.
+ *
+ * C'est LE QWidget qui donne vie au jeu ! Il gère les
+ * transistion de niveaux, le joueur, les ennemies, les
+ * objets, les bloques, les dialogues, le menu pause, et
+ * les interactions.
+ */
+
 class Gameboard : public QWidget
 {
     Q_OBJECT
@@ -92,13 +101,6 @@ private:
     int menuPauseSizeX;
     int menuPauseSizeY;
 
-    bool toggleGrabTheWorld;
-    bool toggleMenuPause;
-
-    void grabTheWorld();
-
-    QGraphicsProxyWidget *menuPauseOnTop;
-
     QFormLayout *layoutMenuPause;
     QGroupBox *groupBoxMenuPause;
     QLabel *titleMenuPause;
@@ -111,14 +113,19 @@ private:
     void saveCheckpoint();
     void loadCheckpoint();
 
-	M_Pause *menuPauseInGame;
-    WidgetObject *objectList;
-
+    // MENU PAUSE
+    M_Pause *menuPauseInGame;
     QGraphicsProxyWidget *proxy;
+    bool toggleMenuPause;
+
+    // LIST DES OBJETS
+    WidgetObject *objectList;
     QGraphicsProxyWidget *objectListProxy;
 
+    // DIALOG
     WidgetDialog *dialog;
     QGraphicsProxyWidget* dialogProxy;
+    bool dialogToogle;
 
     void setPositionBottom(QWidget* widget);
     void setPositionCenter(QWidget* widget);

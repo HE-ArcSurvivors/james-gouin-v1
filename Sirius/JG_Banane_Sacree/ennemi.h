@@ -13,6 +13,14 @@ struct ViewBloc{
     bool actif;
 };
 
+/**
+ * \brief Classe parent de touts les ennemis.
+ *
+ * C'est la classe parent des ennemis. Elle permet de
+ * definir, de diriger, et specifier les enemies enfants
+ *
+ */
+
 class Ennemi : public QGraphicsItem
 {
 

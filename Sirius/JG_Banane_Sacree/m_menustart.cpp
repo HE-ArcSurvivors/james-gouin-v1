@@ -24,13 +24,14 @@ MenuStart::MenuStart(QWidget *parent) :
     maxTotalForms = 5;
     listButtonProfil = new QList<QPushButton*>();
 
-    buttonNew = new QPushButton("Nouvelle partie", this);
+    buttonNew = new QPushButton("Nouvelle partie");
 
     layoutMenu = new QVBoxLayout;
 
     getProfil();
     signalMapper = new QSignalMapper();
-    for(int i = 0; i < listButtonProfil->size(); i++)
+    totalForms = listButtonProfil->size();
+    for(int i = 0; i < totalForms; i++)
     {
        layoutMenu->addWidget(listButtonProfil->at(i));
        QObject::connect(listButtonProfil->at(i), SIGNAL(clicked()), signalMapper, SLOT(map()));
@@ -38,12 +39,18 @@ MenuStart::MenuStart(QWidget *parent) :
     }
 
     validate = new QPushButton("Créer");
+    textPseudo = new QLabel("Surnom : ");
 
     QObject::connect(signalMapper, SIGNAL(mapped(QString)),this, SLOT(loadGame(QString)));
     QObject::connect(buttonNew,SIGNAL(clicked()),this,SLOT(newGameForm()));
     QObject::connect(validate,SIGNAL(clicked()),this,SLOT(newGame()));
 
-    layoutMenu->addWidget(buttonNew);
+
+
+    if (totalForms < maxTotalForms)
+    {
+        layoutMenu->addWidget(buttonNew);
+    }
     setLayout(layoutMenu);
 }
 
@@ -58,11 +65,13 @@ bool MenuStart::getProfil()
 
     QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
     QStringList listeProfil = loadDoc.object().keys();
-    for (int i = 0; i < listeProfil.size(); i++)
+    totalForms = listeProfil.size();
+    for (int i = 0; i < totalForms; i++)
     {
         listButtonProfil->append(new QPushButton(listeProfil.at(i)));
         //qDebug() << listeProfil.at(i) << endl;
     }
+    loadFile.close();
     return true;
 }
 
@@ -82,32 +91,34 @@ void MenuStart::loadGame(QString value)
     user.read(object[value].toObject());
     user.print();
 
+    loadFile.close();
+
     emit startGame(0,1,2);
 
 }
 
 void MenuStart::newGameForm()
 {
-    if (totalForms <= maxTotalForms)
+    if (totalForms < maxTotalForms)
     {
+        buttonNew->hide();
         totalForms++;
         username = new QLineEdit(this);
         username->grabKeyboard();
-        QLabel* text = new QLabel("Surnom : ");
 
         QHBoxLayout* layoutNewGame = new QHBoxLayout;
-        layoutNewGame->addWidget(text);
+        layoutNewGame->addWidget(textPseudo);
         layoutNewGame->addWidget(username);
         layoutNewGame->addWidget(validate);
         layoutMenu->addLayout(layoutNewGame);
     }else{
-        buttonNew->hide();
+//        buttonNew->hide();
     }
 }
 
 void MenuStart::newGame()
 {
-    qDebug() << "NEW";
+//    qDebug() << "NEW";
     if (username->text() != "")
     {
         Profil newProfil;
@@ -135,6 +146,17 @@ void MenuStart::newGame()
 
         QJsonDocument saveDoc(gameObject);
         saveFile.write(saveDoc.toJson());
+        saveFile.close();
+        loadFile.close();
+
+        username->releaseKeyboard();
+
+        validate->hide();
+        username->hide();
+        textPseudo->hide();
+
+        emit startGame(1,2,3);
+
     }
 }
 

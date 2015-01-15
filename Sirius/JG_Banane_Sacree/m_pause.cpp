@@ -93,6 +93,7 @@ M_Pause::M_Pause(QWidget *parent)
     layoutMenuPause->addRow(btnMenuPauseConfigure);
     layoutMenuPause->addRow(btnMenuPauseQuit);
 
+    this->resize(400,400);
     this->setLayout(layoutMenuPause);
 }
 
