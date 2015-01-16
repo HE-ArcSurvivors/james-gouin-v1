@@ -2,6 +2,7 @@
 #define MENUSTART_H
 
 #include <QWidget>
+#include "profil.h"
 
 class QPushButton;
 class QVBoxLayout;
@@ -34,11 +35,11 @@ public:
     QPushButton* validate;
     QLabel *textPseudo;
 
-
+    static void saveGame(Profil* currentUser);
     bool getProfil();
 
 signals:
-    void startGame(int,int,int);
+    void startGame(Profil*);
     void refreshGameMenu();
 
 public slots:
@@ -50,6 +51,8 @@ private :
     QSignalMapper* signalMapper;
     int totalForms;
     int maxTotalForms;
+    Profil *user;
+
 
 };
 

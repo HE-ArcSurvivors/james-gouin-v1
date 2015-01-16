@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "gameboard.h"
 #include "m_menustart.h"
+#include "profil.h"
 
 class QGraphicsView;
 class QLabel;
@@ -65,7 +66,7 @@ private:
 signals:
 
 public slots:
-    void startGame(int,int,int);
+    void startGame(Profil *user);
     void refreshGameMenu();
 
 };

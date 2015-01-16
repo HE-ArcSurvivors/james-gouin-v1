@@ -9,6 +9,8 @@
 #include "level.h"
 #include "w_object.h"
 #include "w_dialog.h"
+#include "profil.h"
+#include "w_life.h"
 
 class QGraphicsScene;
 class QGraphicsView;
@@ -49,6 +51,7 @@ public:
     static int sizeY;
 
     QPoint *getCheckPoint();
+    void setPlayerProfil(Profil* playerProfil);
 
 private:
 
@@ -73,6 +76,7 @@ private:
     //Gestion des proxy / widgets
     void setPositionBottom(QWidget* widget);
     void setPositionCenter(QWidget* widget);
+    void setPositionTop(QWidget* widget);
 
     //Déplacement du Pingouin
     bool MovePingouinToLeft();
@@ -113,6 +117,7 @@ private:
     QPoint viewRequested;
     int viewPositionX;
     int viewPositionY;
+    Profil* playerProfil;
 
     //Widgets et Proxy
     M_Pause *menuPauseInGame;
@@ -121,6 +126,9 @@ private:
 
     WidgetObject *objectList;
     QGraphicsProxyWidget *objectListProxy;
+
+    WidgetLife *lifeList;
+    QGraphicsProxyWidget *lifeListProxy;
 
     WidgetDialog *dialog;
     QGraphicsProxyWidget* dialogProxy;
