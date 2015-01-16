@@ -7,6 +7,9 @@
 #include "b_wall.h"
 #include "b_movable.h"
 #include "b_water.h"
+#include "ennemi.h"
+#include "e_renard.h"
+#include "e_loup.h"
 #include "gameboard.h"
 
 #include "s_ice.h"
@@ -89,25 +92,18 @@ bool B_Movable::IsMovable(QList<QGraphicsItem *> l)
     bool bMove = true;
     for(int i=0; i<l.length(); i++)
     {
-        if(typeid(*l.at(i)).name() == typeid(B_Wall).name())
+        if(typeid(*l.at(i)).name() == typeid(B_Wall).name() ||
+           typeid(*l.at(i)).name() == typeid(B_Movable).name() ||
+           typeid(*l.at(i)).name() == typeid(E_Renard).name() ||
+           typeid(*l.at(i)).name() == typeid(E_Loup).name())
         {
             bMove = false;
         }
-        if(typeid(*l.at(i)).name() == typeid(B_Movable).name())
-        {
-            bMove = false;
-        }
-        if(typeid(*l.at(i)).name() == typeid(B_Water).name()) //&& !this->IsSunk
-        {
-            //this->IsSunk = true;
-            bMove = true;
-//            qDebug() << "on water";
-        }
-//        else if(this->IsSunk)
+//        if(typeid(*l.at(i)).name() == typeid(B_Water).name())
 //        {
-////            qDebug() << "blocked on water";
-//            bMove = false;
+//            bMove = true;
 //        }
+
     }
     return bMove;
 }
