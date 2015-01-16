@@ -5,7 +5,7 @@ E_Renard::E_Renard(QList<QPoint> path) : Ennemi(path)
 {
     //vitesse entre 1 et 100
     // 1 étant très rapide, 100 étant très lent
-    speed = 30; //vitesse par défaut
+    speed = 15; //vitesse par défaut
 
     leftSkin = ":/characters/characters/renard_left.png";
     rightSkin = ":/characters/characters/renard_right.png";
