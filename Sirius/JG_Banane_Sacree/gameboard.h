@@ -92,10 +92,10 @@ private:
     void MoveBloc(char);
 
     void SinkMovable(B_Movable *b);
-    void CheckChangeView(char);
+    void checkChangeView(char);
     void ChangeView(char sens);
-    bool CheckGameOver();
-    void CheckItem();
+    bool checkGameOver();
+    void checkItem();
     void pauseMenu();
 
     /*
@@ -118,6 +118,7 @@ private:
     int viewPositionX;
     int viewPositionY;
     Profil* playerProfil;
+    bool endable;
 
     //Widgets et Proxy
     M_Pause *menuPauseInGame;

@@ -73,7 +73,6 @@ void Ennemi::viewBlocActif()
         pen.setColor(Qt::red);
         champVue.at(i).bloc->setPen(pen);
 
-
         //les quels on va désactiver ?
         QList<QGraphicsItem *> CollidingItems = champVue.at(i).bloc->collidingItems();
         bool bUnactivate = false;
@@ -147,8 +146,6 @@ void Ennemi::pinguinDetection()
                     pen.setStyle(Qt::SolidLine);
                     pen.setColor(Qt::yellow);
                     vb.bloc->setPen(pen);
-
-                    //Gameboard::restartLevel();
                 }
             }
         }

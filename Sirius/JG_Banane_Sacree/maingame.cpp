@@ -86,7 +86,6 @@ void MainGame::refreshGameMenu()
 
     menuStart->setGeometry(this->size().width()/2-menuSizeX/2,this->size().height()/2-menuSizeY/2,menuSizeX,menuSizeY);
     menuStart->show();
-
 }
 
 void MainGame::resizeEvent(QResizeEvent * event) {

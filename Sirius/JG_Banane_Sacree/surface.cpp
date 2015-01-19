@@ -3,6 +3,7 @@
 #include <QGraphicsItem>
 #include <QPoint>
 
+#include <QDebug>
 
 Surface::Surface(int xpos, int ypos, QGraphicsItem *parent) : QGraphicsRectItem(0, 0, Gameboard::getGameSquares(), Gameboard::getGameSquares(), parent)
 {
@@ -36,4 +37,12 @@ void Surface::setTexture(QString nom)
     img.append(".png");
     surfaceSkin->setTexture(QPixmap(img));
     setBrush(*surfaceSkin);
+}
+
+void Surface::setColor(QString brushColor)
+{
+    QBrush brush;
+    brush.setStyle(Qt::SolidPattern);
+    brush.setColor(brushColor);
+    setBrush(brush);
 }

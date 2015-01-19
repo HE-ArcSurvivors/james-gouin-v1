@@ -20,9 +20,13 @@ public:
     void setNbItem(int nb);
     int getNbItem();
 
+    void setNextLevel(int nb);
+    int getNextLevel();
+
 private:
     void setDesign();
     bool levelEnd;
+    int nextLevel;
 
     bool needItem;
     int nbItem;
