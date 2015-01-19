@@ -148,7 +148,8 @@ void Ennemi::pinguinDetection()
                     pen.setStyle(Qt::SolidLine);
                     pen.setColor(Qt::yellow);
                     vb.bloc->setPen(pen);
-                  game->restartLevel();                }
+                    game->restartLevel();
+                }
             }
         }
     }

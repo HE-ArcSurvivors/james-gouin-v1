@@ -11,7 +11,7 @@ Profil::Profil()
     this->saveDate = current.toString("dd:MM:yyyy:hh:mm");
     this->loadDate = current.toString("dd:MM:yyyy:hh:mm");
     this->level = 0;
-    this->nbLive = 3;
+    this->nbLive = 1;
     this->difficulty = 1;
 
     for(int i = 0; i < 8; i++)
