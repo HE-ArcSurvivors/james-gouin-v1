@@ -10,7 +10,7 @@ Profil::Profil()
     this->gameTime = "00:00:0000:00:00:00";
     this->saveDate = current.toString("dd:MM:yyyy:hh:mm");
     this->loadDate = current.toString("dd:MM:yyyy:hh:mm");
-    this->level = 2;
+    this->level = 0;
     this->nbLive = 1;
     this->difficulty = 1;
 
