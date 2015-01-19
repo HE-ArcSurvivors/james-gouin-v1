@@ -5,15 +5,15 @@
  </tileset>
  <layer name="Base" width="60" height="30">
   <data encoding="base64" compression="zlib">
-   eJzt1zEOgDAMQ9EcqTACI3Ai7i/C0I3BKhGK2l/JW/Tkji5mNgVl9pTk3uJZg7Lh4eHh4eE15EreDy+XV1/Wfnh4vXm75xBi4o3qKb7iKb1qTtP3lgk3X/bbm694Si/2IB5eH54l7zeSF53s/8XDw8PDG8dr3W/Re/AP79mDN+emm/Y=
+   eJzt1zEKgDAQRNE5UrRUS/VE3h9jkS7FEIMs8S9MtzymnSRp6pQ5JwX3lpy1UzY8PDw8PLyGXMH74cXyykXth4c3mrfnHEZk/rie4zue06vklL+3ZPy82W813/GcXuxBPLwxPAXv9yevXNR+eHh4eHh4rV7rfuu9B7/wnj14A0ytm4A=
   </data>
  </layer>
  <layer name="Walls_Blocks" width="60" height="30">
   <data encoding="base64" compression="zlib">
-   eJzlWNsOgzAI7TdsPm571P3m/nyajIQQoBRpFUdCotYeOYJcXEopy59plIzCu616X3VqXMvCl3KYf9ffzB5tLQtfjYMHL0p6+xd0IuuS0rjIwvex6hPpy7gf9sH92flquamU6/GlfCx57Up86TnI9h6mjvZF483oGPuL+k/K4/PvWrR90WK1j+ZvHNM4xrP4FwuXo2i8SzGekS/3jdJ4l2I8I989vVbrTNFjVtmL/zmZPb3xPfuiRMPzPE+6v9ZXteJ5pSce9AybSH0VV49G2SetSeucz/D9G0epj9LyM35PZ/IvV2cwHvRIcIw51XDxvBAprf6jdml8vYLf00j/1nwS9Q9DkzPFcwuelAtoDB35f8NTQ1rtq82HI/lKs6kFT/ITfVZtPszC17NXw4uSFr5S38TVX8s/Zct3dGR+5r5nXDtqeFY5y/xrqT9R9Ree45lHsusXEldZZg==
+   eJzlWNsOgzAI7TdsPm571P3/F04TSQgBCpVWcSQkau2RI8jFpZSy/JlGySi8x6rPVSfnWha+lMO8X/8ye7S1LHw1Di14UdLbv6ATWZeUxkUWvq9V30g/xv2wD+7PzlfLTaXcjy/lY8lrd+JLz0G29zB1tC8ab0bH2F/Uf1Ien/dr0fZFi9U+mr9xTOMYz+JfLFyOovEuxXhGvtw3SuNdivGMfI/0Wt6ZoseschS/l1134hslGl7L86T7a32VF69VeuJBz7CJ1Fdx9WiUfdKatM75DN+/cZT6KC0/4/d0Jf9ydQbjQY8Ex5hTDRfPC5Hi9R+1S+PbKvg9jfRvzSdR/zA0uVI8e/CkXEBj6Mz/Gy01xGtfbT4cyVeaTS14kp/os2rzYRa+LXs1vCjx8JX6Jq7+Wv4pW76jM/Mz9z3j2lHDs8pV5l9L/Ymqv/Cclnkku/4A459Y5Q==
   </data>
  </layer>
- <layer name="Movable_Blocks" width="60" height="30">
+ <layer name="Movable_Blocks" width="60" height="30" visible="0">
   <data encoding="base64" compression="zlib">
    eJztmN0KgCAMhcX3f+gIugjTOed+Us8HoWU6j5s1TAlYkp+rrEfNpfWcapOM36rvRqlNS+uf1ywXpafNKLTtR+u5qc2htm+1vl+jfVtxVpsHJyZ7fVrlqkj0rqw52r/ea5fT12fU/4jr35VjYIZZ3db5lQXR9iM4UTMAbyT5E6d99F2vvSjNFy1yIg/NvRyPuqfGG7HtCTfX2ynHr2ng+BvwsTrfAUCTU85bAQB+XKFCAOE=
   </data>
@@ -28,7 +28,7 @@
    eJztwQEBAAAAgiD/r25IQAEAAAAAAAAvBhwgAAE=
   </data>
  </layer>
- <layer name="Doors" width="60" height="30">
+ <layer name="Doors" width="60" height="30" visible="0">
   <data encoding="base64" compression="zlib">
    eJzt1rEJACAMAMFsba2TO4BIsEqEuwm+/AgAADpb1QHAYVYHXHTtyozqAACe+FMA+N8GZe4Cfg==
   </data>
