@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="Ice_tiles.png" tilewidth="32" tileheight="32">
+  <image source="../../Images/Tiles/Ice_tiles.png" width="320" height="416"/>
+ </tileset>
+ <layer name="Base" width="60" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt1zEOgDAMBMF7UkgJlIQX8X9h+qQxBlnKFlt6lJRXJC1BVask91ZrC2rHw8PDw8NzdCV/Hx4eHt7M3mG1oPTCk9Pr3Y06lWe/yen17tiDeHh4eN960WX/Lx4eHh7ePF6WPfiH9+zBGzKknRw=
+  </data>
+ </layer>
+ <layer name="Walls_Blocks" width="60" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzlWNsOgzAI7TdsPm571P3m/nyaSEIIFMpoFXcSErX22GORi0spZfkzi0IEt4Xjttp9talxrLfeKB6qYd6vv5m5tbGeeiO5aho8nFHoxQf7CzaRccmoX2TR+1jtiexlnA/z4P7semuxqZTr6aV6LHHtSnrpOWB7D1PH9UXzzegY7xfdPymOz/u1LHo10PiNfRr7eJb8i8HFKOrvko9nqa8wuG+U+rvk4xnr519qLa0+GWne9XxOsPaRej3zolDj8zxPul+rq1r5vOjJBzXDBqmu4vLRqPVJY9I4t2f4/k2jVEfV4jN+T2faXy7PYD6okeAYa9J4j+gXWnsZjc8K/J5G6tX2JOofRg1n8ucWPikWUB868v+GJ4e0rk/rD0fqlXpTC5+0T/RZWn+YRa9nbo0vCi16pbqJy7+Wf8qW7+jI+Mx9zzh3aHxWjOh/LbDkn6j8C8/x9CPZ7QusK13R
+  </data>
+ </layer>
+ <layer name="Movable_Blocks" width="60" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt2NEKwCAIheHw/R96DHblWrSVOuv/IOqujgZBpcCSXEOvVyQd69XobLOy/rlmombPPaPM3j86z+np7rbmkXNHZ/6SNzPv/kaL7q937aTce9Z6j3r7m/kOjNgxN5kBWOCtqcuY+c2ZM+YDaqz+d4CZdvlvBeDnAKx3AH8=
+  </data>
+ </layer>
+ <layer name="Items" width="60" height="30" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAvBhwgAAE=
+  </data>
+ </layer>
+ <layer name="Bonus" width="60" height="30" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAvBhwgAAE=
+  </data>
+ </layer>
+ <layer name="Doors" width="60" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztzkENACAMBLC53huUTwPwuIS0CloFAADAD1Y6cKnTAQCO7HQAAHg2jTcBew==
+  </data>
+ </layer>
+ <layer name="Water_Blocks" width="60" height="30" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztybEJAAAIBLHfxv03tLTSXkjgqksAAABg1NL1AQAA+KMBXnUBrg==
+  </data>
+ </layer>
+ <layer name="Snow_Surface" width="60" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt1LERADAIAzEPzf6XLRICUv+FGycAAAB0Upe717btBfhZxf8CwAQHYZACuQ==
+  </data>
+ </layer>
+ <layer name="Ice_Surface" width="60" height="30" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJzt0sEJAAAIAzH3cv+9XEJQNAf95tWIf2XTeDwej8fj8Xg83j1Pt9v+Px6Px+PxeDwejzfnfaoA/09DpA==
+  </data>
+ </layer>
+ <layer name="Item_Shoes" width="60" height="30" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztzjEBAAAIA6CVsn81W8xDSEACADTNdQAAAAAAeG0BYlAANg==
+  </data>
+ </layer>
+ <layer name="Scene_End" width="60" height="30" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAvBhwgAAE=
+  </data>
+ </layer>
+ <layer name="Scene_Start" width="60" height="30" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztzkERAAAIA6CFtv/ZYj6EBCQAQNNcBwAAAACA1xZ29wB1
+  </data>
+ </layer>
+ <layer name="Enemies" width="60" height="30" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAvBhwgAAE=
+  </data>
+ </layer>
+ <layer name="Dialogs" width="60" height="30" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztzjEBAAAIA6CVsn81W8xDSEACADTNdQAAAAAAeG0BYlAANg==
+  </data>
+ </layer>
+ <layer name="Deco" width="60" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztzkENACAMBLC53huUTwPwuIS0CloFAADAD1Y6cKnTAQCO7HQAAHg2jTcBew==
+  </data>
+ </layer>
+ <layer name="Map2" width="60" height="30" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAvBhwgAAE=
+  </data>
+ </layer>
+</map>
