@@ -746,10 +746,6 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
         {
             bMove = false;
         }
-        else if(typeid(*CollidingItems.at(i)).name() == typeid(B_Water).name())
-        {
-            //bMove = false;
-        }
         else if(typeid(*CollidingItems.at(i)).name() == typeid(B_Movable).name())
         {
             B_Movable *b;
