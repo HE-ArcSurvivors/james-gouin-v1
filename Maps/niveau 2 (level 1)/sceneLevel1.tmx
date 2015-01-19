@@ -65,7 +65,7 @@
  </layer>
  <layer name="Enemies" width="60" height="30" visible="0">
   <data encoding="base64" compression="zlib">
-   eJzt1LENAAAIwzCu5n6eYCjInrNVahXwTS81ZLId3OOXAQAAAEgy7l8CTw==
+   eJzt17EJADAIRUGnzvxZIEXAIFHuarsHwo8AplmPbviTdtCPvwwAANw47QJboadMN82BChsH9AQn
   </data>
  </layer>
  <layer name="Dialogs" width="60" height="30" visible="0">
