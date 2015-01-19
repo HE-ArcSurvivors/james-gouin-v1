@@ -1,4 +1,5 @@
 #include "maingame.h"
+#include "profil.h"
 
 #include <QGraphicsView>
 #include <QLabel>
@@ -10,6 +11,7 @@ MainGame::MainGame(QWidget *parent) : QWidget(parent)
     toggleFirstStart = true;
 
     currentLevel = new Level(-1);
+
     // Les Variables par default du jeu
     windowTitle = tr("James Gouin et la Banane Sacrée");
     windowSizeX = theGame->sizeX*Gameboard::getGameSquares();
@@ -47,15 +49,11 @@ MainGame::MainGame(QWidget *parent) : QWidget(parent)
     gameTitle->setStyleSheet("color: blue; font: bold 30px;");
     gameTitle->setGeometry(windowSizeX/2-titleSizeX/2,windowSizeY/2-menuSizeY/2-50,titleSizeX,titleSizeY);
 
-
     refreshGameMenu();
 
     quitGame = new QPushButton(tr("Quitter le jeu"), this);
     QObject::connect(quitGame,SIGNAL(clicked()),this,SLOT(close()));
     quitGame->setGeometry(windowSizeX/2-quitBtnSizeX/2,windowSizeY/2+menuSizeY/2+35,quitBtnSizeX,quitBtnSizeY);
-
-
-
 }
 
 MainGame::~MainGame()
@@ -63,11 +61,12 @@ MainGame::~MainGame()
 
 }
 
-void MainGame::startGame(int a, int b, int c)
+void MainGame::startGame(Profil* user)
 {
-    theGame = new Gameboard;
+    theGame = new Gameboard();
     refreshGameMenu();
     theGame->setParent(this);
+    theGame->setPlayerProfil(user);
     theGame->show();
     theGame->setGeometry(this->size().width()/2-windowSizeX/2,this->size().height()/2-windowSizeY/2,windowSizeX,windowSizeY);
     toggleGameCreated = true;
@@ -82,8 +81,9 @@ void MainGame::refreshGameMenu()
     }
     toggleFirstStart = false;
     menuStart = new MenuStart(this);
-    connect(menuStart,SIGNAL(startGame(int,int,int)),this, SLOT(startGame(int,int,int)));
+    connect(menuStart,SIGNAL(startGame(Profil*)),this, SLOT(startGame(Profil*)));
     connect(menuStart,SIGNAL(refreshGameMenu()),this, SLOT(refreshGameMenu()));
+
     menuStart->setGeometry(this->size().width()/2-menuSizeX/2,this->size().height()/2-menuSizeY/2,menuSizeX,menuSizeY);
     menuStart->show();
 

@@ -10,7 +10,7 @@
 WidgetObject::WidgetObject(QWidget *parent)
 {
     this->resize(Gameboard::getGameSquares(),Gameboard::getGameSquares());
-    this->setStyleSheet("background-color: white;");
+    this->setAttribute(Qt::WA_TranslucentBackground);
 }
 
 void WidgetObject::paintEvent(QPaintEvent *)

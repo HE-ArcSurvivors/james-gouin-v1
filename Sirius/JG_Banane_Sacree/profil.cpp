@@ -7,8 +7,9 @@ Profil::Profil()
     this->username = "Nouveau";
     QDateTime current = QDateTime::currentDateTime();
     this->startDate = current.toString("dd:MM:yyyy:hh:mm");
-    this->gameTime = "0000:00:00:00:00:00";
+    this->gameTime = "00:00:0000:00:00:00";
     this->saveDate = current.toString("dd:MM:yyyy:hh:mm");
+    this->loadDate = current.toString("dd:MM:yyyy:hh:mm");
     this->level = 0;
     this->nbLive = 3;
     this->difficulty = 1;
@@ -42,6 +43,11 @@ QString Profil::getSaveDate()
 QString Profil::getGameTime()
 {
     return this->gameTime;
+}
+
+QString Profil::getLoadDate()
+{
+    return this->loadDate;
 }
 
 int Profil::getLevel()
@@ -130,6 +136,7 @@ void Profil::print()
     qDebug() << "Start Date : " << this->startDate;
     qDebug() << "Game Time : " << this->gameTime;
     qDebug() << "Save Date : " << this->saveDate;
+    qDebug() << "Load Date : " << this->loadDate;
     qDebug() << "Level : " << this->level;
     qDebug() << "Nb Live : " << this->nbLive;
     qDebug() << "Difficulté : " << this->difficulty;

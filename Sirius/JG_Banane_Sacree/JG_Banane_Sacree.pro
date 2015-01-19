@@ -35,7 +35,8 @@ player.cpp \
     e_renard.cpp \
     e_loup.cpp \
     s_dialog.cpp \
-    w_dialog.cpp
+    w_dialog.cpp \
+    w_life.cpp
 HEADERS  += \
     player.h \
     surface.h \
@@ -58,7 +59,8 @@ HEADERS  += \
     e_renard.h \
     e_loup.h \
     s_dialog.h \
-    w_dialog.h
+    w_dialog.h \
+    w_life.h
 RESOURCES += \
     images.qrc \
     ItemsPopulation.qrc

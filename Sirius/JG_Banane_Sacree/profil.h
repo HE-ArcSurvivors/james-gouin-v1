@@ -15,6 +15,7 @@ public:
     QString getStartDate();
     QString getSaveDate();
     QString getGameTime();
+    QString getLoadDate();
     int getLevel();
     QList<int> getPower();
     int getNbLive();
@@ -38,6 +39,7 @@ public:
     QString startDate;
     QString saveDate;
     QString gameTime;
+    QString loadDate;
     int level;
     QList<int> power;
     int nbLive;

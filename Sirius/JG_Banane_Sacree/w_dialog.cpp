@@ -5,7 +5,6 @@
 WidgetDialog::WidgetDialog(QWidget *parent)
 {
     resize(300,200);
-
 }
 
 void WidgetDialog::setText(QString text, int type)
@@ -25,7 +24,6 @@ void WidgetDialog::paintEvent(QPaintEvent *)
          paint.drawText(10,10,280,20,Qt::TextWordWrap,"Ordre de mission de James Gouin :");
      }
      paint.drawText(10,30,280,80,Qt::TextWordWrap,this->text);
-
      paint.drawText(10,this->height()-20,280,20,Qt::AlignRight,"Espace pour continuer");
 }
 

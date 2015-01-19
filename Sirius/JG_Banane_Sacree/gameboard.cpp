@@ -13,6 +13,7 @@
 #include "ennemi.h"
 #include "e_renard.h"
 #include "e_loup.h"
+#include "profil.h"
 
 #include <QtWidgets>
 #include <QList>
@@ -58,11 +59,12 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     playerView = new QGraphicsView(this);
     pingouin = new Pingouin();
     checkpoint = new QPoint(0,0);
+    playerProfil = new Profil();
+    currentLevel = new Level(0);
 
     playerView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     playerView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    setLevel(0);
     setProxy();
 
     isSliding = false;
@@ -386,10 +388,15 @@ void Gameboard::CheckItem()
             {
                 pingouin->setSlideAble(false);
             }
+            else if(objet->getName() == "Oeuf")
+            {
+                playerProfil->setNbLive(playerProfil->getNbLive()+1);
+                lifeList->updateHearts(playerProfil->getNbLive());
+            }
 
-            qDebug() << "Call Reload";
             objectList->reloadObjectList(pingouin->getSacoche());
             setPositionBottom(objectList);
+            objectList->show();
         }
         if(typeid(*CollidingItems.at(i)).name() == typeid(S_Dialog).name())
         {
@@ -416,6 +423,7 @@ void Gameboard::CheckChangeView(char sens)
             if(bloc->isEndLevel())
             {
                 setLevel(currentLevel->getLevelNumber()+1);
+                setProxy();
             }
             else
             {
@@ -502,6 +510,7 @@ void Gameboard::ChangeView(char sens)
     objectList->reloadObjectList(pingouin->getSacoche());
     setPositionBottom(objectList);
     setPositionCenter(dialog);
+    setPositionTop(lifeList);
 }
 
 void Gameboard::setPositionBottom(QWidget* widget)
@@ -518,6 +527,14 @@ void Gameboard::setPositionCenter(QWidget* widget)
     int height = widget->height();
 
     widget->setGeometry(viewPositionX+(gameSquares*(sizeX)-width)/2,viewPositionY+(gameSquares*(sizeY)-height)/2,width,height);
+}
+
+void Gameboard::setPositionTop(QWidget* widget)
+{
+    int width = widget->width();
+    int height = widget->height();
+
+    widget->setGeometry(viewPositionX,viewPositionY,width,height);
 }
 
 void Gameboard::MoveBloc(char sens)
@@ -813,7 +830,11 @@ void Gameboard::restartLevel()
 {
     mainScene->removeItem(proxy);
     mainScene->removeItem(objectListProxy);
+    mainScene->removeItem(lifeListProxy);
     mainScene->removeItem(dialogProxy);
+
+    playerProfil->setNbLive(playerProfil->getNbLive()-1);
+    lifeList->updateHearts(playerProfil->getNbLive());
 
     loadLevel();
     setProxy();
@@ -824,6 +845,7 @@ void Gameboard::restartGame()
 {
     mainScene->removeItem(proxy);
     mainScene->removeItem(objectListProxy);
+    mainScene->removeItem(lifeListProxy);
     mainScene->removeItem(dialogProxy);
 
     loadLevel();
@@ -831,8 +853,6 @@ void Gameboard::restartGame()
     setTimer();
 
     pingouin->emptySacoche();
-
-    resumeGame();
 }
 
 void Gameboard::exitGame()
@@ -840,19 +860,23 @@ void Gameboard::exitGame()
     QMessageBox msgBox;
     msgBox.setText(tr("Vous êtes sur le point de quitter le jeu"));
     msgBox.setInformativeText("Voulez vous sauvegarder ?");
-    msgBox.addButton("Ne pas Sauvegarder", QMessageBox::DestructiveRole);
-    msgBox.addButton("Annuler", QMessageBox::RejectRole);
     msgBox.addButton("Sauvegarder", QMessageBox::AcceptRole);
+    msgBox.addButton("Annuler", QMessageBox::RejectRole);
+    msgBox.addButton("Ne pas Sauvegarder", QMessageBox::DestructiveRole);
+
 
     int ret = msgBox.exec();
     switch (ret) {
     case QMessageBox::AcceptRole:
+        qDebug() << "Accept";
+        MenuStart::saveGame(playerProfil);
         close();
         break;
     case QMessageBox::RejectRole:
-
+        qDebug() << "Reject";
         break;
     case QMessageBox::DestructiveRole:
+        qDebug() << "Destruct";
         close();
         break;
     default:
@@ -893,17 +917,23 @@ void Gameboard::setProxy()
     objectListProxy = mainScene->addWidget(objectList);
     objectListProxy->hide();
 
+    lifeList = new WidgetLife(this);
+    lifeList->updateHearts(playerProfil->getNbLive());
+    setPositionTop(lifeList);
+    lifeListProxy = mainScene->addWidget(lifeList);
+    lifeListProxy->show();
+
     dialog = new WidgetDialog(this);
     dialogProxy = mainScene->addWidget(dialog);
     dialogProxy->setZValue(90);
     dialogProxy->hide();
     setPositionCenter(dialog);
     dialogToogle = false;
-
 }
 
 void Gameboard::setLevel(int value)
 {
+    playerProfil->setLevel(value);
     currentLevel = new Level(value);
     pingouin->setPos(currentLevel->getStartingPoint()->x(),currentLevel->getStartingPoint()->y());
     viewRequested = currentLevel->getViewStart();
@@ -929,4 +959,12 @@ void Gameboard::loadLevel()
 void Gameboard::setTimer()
 {
     QObject::connect(timer, SIGNAL(timeout()), mainScene, SLOT(advance()));
+}
+
+void Gameboard::setPlayerProfil(Profil *playerProfil)
+{
+    this->playerProfil = playerProfil;
+    setLevel(playerProfil->getLevel());
+    setProxy();
+    setTimer();
 }
