@@ -37,6 +37,7 @@ player.cpp \
     s_dialog.cpp \
     w_dialog.cpp \
     w_life.cpp
+
 HEADERS  += \
     player.h \
     surface.h \

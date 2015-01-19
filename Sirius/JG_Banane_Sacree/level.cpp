@@ -21,8 +21,9 @@
 #include <QDebug>
 #include <QList>
 
-Level::Level(int levelNumber)
+Level::Level(int levelNumber, Gameboard *game)
 {
+    this->game = game;
     this->levelNumber = levelNumber;
 
     maxBlocksHeight = 2*Gameboard::sizeY;
@@ -468,12 +469,12 @@ QGraphicsScene* Level::populateScene()
                 switch(Mat_Enemies[i][j])
                 {
                 case 1: {
-                    E_Renard *item2 = new E_Renard(ennemi.at(k));
+                    E_Renard *item2 = new E_Renard(ennemi.at(k), game);
                     item2->addToScene(scene);
                     break;
                 }
                 case 2: {
-                    E_Loup *item2 = new E_Loup(ennemi.at(k));
+                    E_Loup *item2 = new E_Loup(ennemi.at(k), game);
                     item2->addToScene(scene);
                     break;
                     }

@@ -4,6 +4,7 @@
 #include <QGraphicsItem>
 class QPoint;
 class QGraphicsRectItem;
+class Gameboard;
 
 
 struct ViewBloc{
@@ -25,7 +26,7 @@ class Ennemi : public QGraphicsItem
 {
 
 public:
-    Ennemi(QList<QPoint>);
+    Ennemi(QList<QPoint>, Gameboard *g);
     void addToScene(QGraphicsScene*);
 
     QRectF boundingRect() const;
@@ -71,6 +72,8 @@ private:
 
     void viewBlocActif();
     void pinguinDetection();
+
+    Gameboard *game;
 
 
 };

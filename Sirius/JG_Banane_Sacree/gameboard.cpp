@@ -60,7 +60,7 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     pingouin = new Pingouin();
     checkpoint = new QPoint(0,0);
     playerProfil = new Profil();
-    currentLevel = new Level(0);
+    currentLevel = new Level(0, this);
 
     playerView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     playerView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -934,7 +934,7 @@ void Gameboard::setProxy()
 void Gameboard::setLevel(int value)
 {
     playerProfil->setLevel(value);
-    currentLevel = new Level(value);
+    currentLevel = new Level(value, this);
     pingouin->setPos(currentLevel->getStartingPoint()->x(),currentLevel->getStartingPoint()->y());
     viewRequested = currentLevel->getViewStart();
     saveCheckpoint();

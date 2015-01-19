@@ -27,8 +27,10 @@
     #include <typeinfo.h>
 #endif
 
-Ennemi::Ennemi(QList<QPoint> path)
+Ennemi::Ennemi(QList<QPoint> path, Gameboard *g)
 {
+    game = g;
+
     sens = true;
     detectPinguin = false;
 
@@ -148,6 +150,7 @@ void Ennemi::pinguinDetection()
                     pen.setColor(Qt::yellow);
                     vb.bloc->setPen(pen);
 
+                    game->restartLevel();
                     //Gameboard::restartLevel();
                 }
             }
