@@ -60,7 +60,7 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     pingouin = new Pingouin();
     checkpoint = new QPoint(0,0);
     playerProfil = new Profil();
-    currentLevel = new Level(0);
+    currentLevel = new Level(0, this);
 
     playerView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     playerView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -795,10 +795,6 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
         {
             bMove = false;
         }
-        else if(typeid(*CollidingItems.at(i)).name() == typeid(B_Water).name())
-        {
-            //bMove = false;
-        }
         else if(typeid(*CollidingItems.at(i)).name() == typeid(B_Movable).name())
         {
             B_Movable *b;
@@ -978,7 +974,7 @@ void Gameboard::setProxy()
 void Gameboard::setLevel(int value)
 {
     playerProfil->setLevel(value);
-    currentLevel = new Level(value);
+    currentLevel = new Level(value, this);
     pingouin->setPos(currentLevel->getStartingPoint()->x(),currentLevel->getStartingPoint()->y());
     viewRequested = currentLevel->getViewStart();
     saveCheckpoint();

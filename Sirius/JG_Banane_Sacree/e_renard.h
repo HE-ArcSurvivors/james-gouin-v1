@@ -16,7 +16,7 @@
 class E_Renard : public Ennemi
 {
 public:
-    E_Renard(QList<QPoint> path);
+    E_Renard(QList<QPoint> path, Gameboard *g);
 };
 
 #endif // E_RENARD_H

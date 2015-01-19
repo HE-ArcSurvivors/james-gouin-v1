@@ -1,7 +1,7 @@
 #include "e_renard.h"
 #include "gameboard.h"
 
-E_Renard::E_Renard(QList<QPoint> path) : Ennemi(path)
+E_Renard::E_Renard(QList<QPoint> path, Gameboard *g) : Ennemi(path, g)
 {
     //vitesse entre 1 et 100
     // 1 étant très rapide, 100 étant très lent
