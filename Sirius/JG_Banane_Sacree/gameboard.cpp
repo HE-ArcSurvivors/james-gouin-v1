@@ -272,6 +272,7 @@ void Gameboard::SlidePingouin()
         checkChangeView(cSensPingouinSlide);
         timerPingouinSlide->stop();
         isSliding=false;
+        moveBloc = NULL;
     }
 }
 
