@@ -222,21 +222,20 @@ void Gameboard::SlidePingouin()
 
     case 'l':
 
-        if(MovePingouinToLeft() && pingouin->isSlide())
+        if(MovePingouinToLeft() && pingouin->isSlide() && !checkGameOver())
         {
-           if(!checkGameOver())
-           {
-                checkItem();
-                checkChangeView(cSensPingouinSlide);
-                pingouin->moveBy(-1, 0);
 
-                if(moveBloc != NULL)
-                {
-                    moveBloc->moveBy(-1,0);
-                    SinkMovable(moveBloc);
-                    moveBloc = NULL;
-                }
+            checkItem();
+            checkChangeView(cSensPingouinSlide);
+            pingouin->moveBy(-1, 0);
+
+            if(moveBloc != NULL)
+            {
+                moveBloc->moveBy(-1,0);
+                SinkMovable(moveBloc);
+                moveBloc = NULL;
             }
+
            endSlide = false;
         }
         break;
