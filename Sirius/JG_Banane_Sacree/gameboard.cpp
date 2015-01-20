@@ -428,13 +428,19 @@ void Gameboard::checkItem()
     }
     if(pingouin->x() == currentLevel->getUnlockEndPoint().x() && pingouin->y() == currentLevel->getUnlockEndPoint().y())
     {
+        qDebug() << "UNLOCKEND";
+
         int levelNumber = currentLevel->getLevelNumber();
         QString background = ":/maps/maps/";
         background.append(QString("%1").arg(levelNumber));
         background.append("Ouvert");
         background.append(".png");
         QPixmap pixmapBackground(background);
-        mainScene->setBackgroundBrush(pixmapBackground);
+
+        if(!pixmapBackground.isNull())
+        {
+            mainScene->setBackgroundBrush(pixmapBackground);
+        }
 
         endable = true;
     }
@@ -450,8 +456,10 @@ void Gameboard::checkChangeView(char sens)
             S_ViewTransition *bloc = dynamic_cast<S_ViewTransition*>(CollidingItems.at(i));
             if(bloc->isEndLevel() && endable)
             {
+                endable = false;
                 setLevel(bloc->getNextLevel());
                 setProxy();
+                setFirstDialog();
             }
             else if(bloc->isEndLevel())
             {
@@ -666,7 +674,6 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
                         }
                     }
                 }
-
             }
             if(event->key() == Qt::Key_S || event->key() == Qt::Key_Down)
             {
@@ -745,10 +752,7 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
             }
             if(event->key() == Qt::Key_0)
             {
-                /*MenuStart* menuStart = new MenuStart();
-                mainScene->addWidget(menuStart);*/
-
-                pingouin->printSacoche();
+                restartLevel();
             }
         }
         else
@@ -860,17 +864,25 @@ void Gameboard::resumeGame()
 
 void Gameboard::restartLevel()
 {
-    mainScene->removeItem(proxy);
-    mainScene->removeItem(objectListProxy);
-    mainScene->removeItem(lifeListProxy);
-    mainScene->removeItem(dialogProxy);
+    if(playerProfil->getNbLive()>0)
+    {
+        mainScene->removeItem(proxy);
+        mainScene->removeItem(objectListProxy);
+        mainScene->removeItem(lifeListProxy);
+        mainScene->removeItem(dialogProxy);
 
-    playerProfil->setNbLive(playerProfil->getNbLive()-1);
-    lifeList->updateHearts(playerProfil->getNbLive());
+        playerProfil->setNbLive(playerProfil->getNbLive()-1);
+        lifeList->updateHearts(playerProfil->getNbLive());
 
-    loadLevel();
-    setProxy();
-    setTimer();
+        loadLevel();
+        setProxy();
+        setTimer();
+    }
+    else
+    {
+        playerProfil->setNbLive(4);
+        restartGame();
+    }
 }
 
 void Gameboard::restartGame()
@@ -889,10 +901,7 @@ void Gameboard::restartGame()
     playerProfil->setNbLive(playerProfil->getNbLive()-1);
     lifeList->updateHearts(playerProfil->getNbLive());
 
-    setPositionCenter(dialog);
-    dialogProxy->show();
-    dialog->setText(currentLevel->getDialogText(1),1);
-    dialogToogle = true;
+    setFirstDialog();
 }
 
 void Gameboard::exitGame()
@@ -1009,6 +1018,11 @@ void Gameboard::setPlayerProfil(Profil *playerProfil)
     setProxy();
     setTimer();
 
+    setFirstDialog();
+}
+
+void Gameboard::setFirstDialog()
+{
     setPositionCenter(dialog);
     dialogProxy->show();
     dialog->setText(currentLevel->getDialogText(1),1);
