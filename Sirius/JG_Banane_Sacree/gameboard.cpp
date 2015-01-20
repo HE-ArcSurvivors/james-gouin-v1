@@ -477,7 +477,7 @@ void Gameboard::checkChangeView(char sens)
 
                     ChangeView(sens);
                 }
-                else if(bloc->isNeedingItem() && pingouin->checkObjectSacoche(*bloc->getNeededItem(), bloc->getNbItem()))
+                else if(bloc->isNeedingItem() && pingouin->checkObjectSacoche(bloc->getNeededItem(), bloc->getNbItem()))
                 {
                     if(pingouin->checkObjectSacoche(QString("Chaussure")))
                     {
@@ -492,7 +492,7 @@ void Gameboard::checkChangeView(char sens)
                     QString text = "Il te faut ";
                     text.append(QString::number(bloc->getNbItem()));
                     text.append("x l'objet \"");
-                    text.append(*(bloc->getNeededItem()));
+                    text.append((bloc->getNeededItem()));
                     text.append("\" pour aller plus loin ;) ");
 
                     setPositionCenter(dialog);

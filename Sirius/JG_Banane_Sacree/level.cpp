@@ -504,6 +504,7 @@ QGraphicsScene* Level::populateScene()
                 {
                     item->setNbItem(Mat_Doors[i][j]%20);
                     item->setNeededItem("Poisson");
+
                 }
 
                 scene->addItem(item);

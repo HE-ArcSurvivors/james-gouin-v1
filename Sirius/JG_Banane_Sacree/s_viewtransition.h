@@ -14,7 +14,7 @@ public:
     void setLevelEnd(bool value);
     void setNeededItem(QString value);
 
-    QString *getNeededItem();
+    QString getNeededItem();
     bool isNeedingItem();
 
     void setNbItem(int nb);
