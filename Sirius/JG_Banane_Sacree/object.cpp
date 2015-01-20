@@ -5,6 +5,7 @@
 Object::Object(int xpos, int ypos, QGraphicsItem *parent) : Surface(xpos, ypos, parent)
 {
     setDesign();
+
 }
 Object::Object(QString new_nom, QGraphicsItem *parent) : Surface(0, 0, parent)
 {

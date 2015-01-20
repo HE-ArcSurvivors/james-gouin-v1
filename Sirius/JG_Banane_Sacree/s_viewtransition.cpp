@@ -10,12 +10,14 @@ S_ViewTransition::S_ViewTransition(int xpos, int ypos, QGraphicsItem *parent) : 
     nextLevel = 0;
     neededItem = new QString("");
     needItem = false;
-
-    setZValue(99);
 }
 S_ViewTransition::S_ViewTransition(QGraphicsItem *parent) : Surface(0, 0, parent)
 {
     setDesign();
+    levelEnd = false;
+    nextLevel = 0;
+    neededItem = new QString("");
+    needItem = false;
 }
 
 void S_ViewTransition::setDesign()
@@ -42,9 +44,9 @@ void S_ViewTransition::setNeededItem(QString value)
     this->neededItem = new QString(value);
 }
 
-QString* S_ViewTransition::getNeededItem()
+QString S_ViewTransition::getNeededItem()
 {
-    return this->neededItem;
+    return *this->neededItem;
 }
 
 bool S_ViewTransition::isNeedingItem()
