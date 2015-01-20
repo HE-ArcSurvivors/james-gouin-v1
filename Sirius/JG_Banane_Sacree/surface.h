@@ -13,6 +13,7 @@ public:
     ~Surface();
     void setPos(int, int);
     QPoint getPos();
+    void setColor(QString brushColor);
 };
 
 #endif // SURFACE_H

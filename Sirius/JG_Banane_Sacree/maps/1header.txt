@@ -1,13 +1,10 @@
 [header]
-width=40
+width=20
 height=15
 viewRequestedX=1
 viewRequestedY=1
-levelStartX=5
-levelStartY=6
+levelStartX=10
+levelStartY=12
 tilewidth=32
 tileheight=32
-
-[tilesets]
-tileset=../../Images/Tiles/Pokemon_Ice_tiles.png,32,32,0,0
-tileset=../../Images/Tiles/Ice_tiles.png,32,32,0,0
+orientation=orthogonal

@@ -7,8 +7,11 @@ S_ViewTransition::S_ViewTransition(int xpos, int ypos, QGraphicsItem *parent) : 
 {
     setDesign();
     levelEnd = false;
+    nextLevel = 0;
     neededItem = new QString("");
     needItem = false;
+
+    setZValue(99);
 }
 S_ViewTransition::S_ViewTransition(QGraphicsItem *parent) : Surface(0, 0, parent)
 {
@@ -17,10 +20,10 @@ S_ViewTransition::S_ViewTransition(QGraphicsItem *parent) : Surface(0, 0, parent
 
 void S_ViewTransition::setDesign()
 {
-    /*QBrush brush;
-    brush.setStyle(Qt::SolidPattern);
-    brush.setColor(Qt::green);
-    setBrush(brush);*/
+//    QBrush brush;
+//    brush.setStyle(Qt::Dense7Pattern);
+//    brush.setColor(Qt::blue);
+//    setBrush(brush);
 }
 
 bool S_ViewTransition::isEndLevel()
@@ -57,4 +60,14 @@ void S_ViewTransition::setNbItem(int nb)
 int S_ViewTransition::getNbItem()
 {
     return this->nbItem;
+}
+
+void S_ViewTransition::setNextLevel(int nb)
+{
+    this->nextLevel = nb;
+}
+
+int S_ViewTransition::getNextLevel()
+{
+    return this->nextLevel;
 }

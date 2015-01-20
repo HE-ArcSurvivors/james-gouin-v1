@@ -19,16 +19,18 @@ class Level
 public:
     Level(int levelNumber, Gameboard *game);
     QGraphicsScene *populateScene();
-    QPoint *getStartingPoint();
+    QPoint* getStartingPoint();
     QPoint getViewStart();
     int changeLevel(int levelNumber);
     int getLevelNumber();
     QString getDialogText(int value);
+    QPoint getUnlockEndPoint();
 
 private:
     int levelNumber;
     QPoint* startingPoint;
     QPoint* viewStart;
+    QPoint* unlockEnd;
 
     Gameboard *game;
 

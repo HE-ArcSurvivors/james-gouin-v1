@@ -1,0 +1,12 @@
+[header]
+width=60
+height=30
+viewRequestedX=3
+viewRequestedY=1
+levelStartX=60
+levelStartY=8
+tilewidth=32
+tileheight=32
+
+[tilesets]
+tileset=../../Images/Tiles/Ice_tiles.png,32,32,0,0

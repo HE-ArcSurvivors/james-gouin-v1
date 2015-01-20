@@ -40,7 +40,7 @@ void B_Movable::setDesign(int xpos, int ypos)
 {
     QBrush brush;
     brush.setStyle(Qt::SolidPattern);
-    brush.setColor(Qt::gray);
+    brush.setColor("gray");
 
     setBrush(brush);
 

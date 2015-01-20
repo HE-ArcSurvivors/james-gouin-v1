@@ -26,5 +26,7 @@
         <file>maps/0.png</file>
         <file>maps/1.png</file>
         <file>maps/-1.png</file>
+        <file>maps/2.png</file>
+        <file>maps/0Ouvert.png</file>
     </qresource>
 </RCC>

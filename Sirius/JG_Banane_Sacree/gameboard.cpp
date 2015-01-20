@@ -68,7 +68,9 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     setProxy();
 
     isSliding = false;
-    moveBloc = NULL;   
+    moveBloc = NULL;
+    endable = false;
+
     //initialisation des timer
     timerPingouinSlide = new QTimer();
     timerBlocDeplSlide = new QTimer();
@@ -177,10 +179,10 @@ void Gameboard::SlidePingouin()
 
         if(MovePingouinToTop() && pingouin->isSlide())
         {
-                if(!CheckGameOver())
+                if(!checkGameOver())
                 {
-                    CheckItem();
-                    CheckChangeView(cSensPingouinSlide);
+                    checkItem();
+                    checkChangeView(cSensPingouinSlide);
                     pingouin->moveBy(0, -1);
 
                     if(moveBloc != NULL)
@@ -200,10 +202,10 @@ void Gameboard::SlidePingouin()
 
         if(MovePingouinToBottom() && pingouin->isSlide())
         {
-            if(!CheckGameOver())
+            if(!checkGameOver())
             {
-                CheckItem();
-                CheckChangeView(cSensPingouinSlide);
+                checkItem();
+                checkChangeView(cSensPingouinSlide);
                 pingouin->moveBy(0, 1);
 
                 if(moveBloc != NULL)
@@ -222,10 +224,10 @@ void Gameboard::SlidePingouin()
 
         if(MovePingouinToLeft() && pingouin->isSlide())
         {
-           if(!CheckGameOver())
+           if(!checkGameOver())
            {
-                CheckItem();
-                CheckChangeView(cSensPingouinSlide);
+                checkItem();
+                checkChangeView(cSensPingouinSlide);
                 pingouin->moveBy(-1, 0);
 
                 if(moveBloc != NULL)
@@ -243,11 +245,11 @@ void Gameboard::SlidePingouin()
 
         if(MovePingouinToRight() && pingouin->isSlide())
         {
-            if(!CheckGameOver())
+            if(!checkGameOver())
                 {
                    pingouin->moveBy(1, 0);
-                   CheckItem();
-                   CheckChangeView(cSensPingouinSlide);
+                   checkItem();
+                   checkChangeView(cSensPingouinSlide);
 
                    if(moveBloc != NULL)
                     {
@@ -266,8 +268,8 @@ void Gameboard::SlidePingouin()
 
     if(endSlide)
     {
-        CheckItem();
-        CheckChangeView(cSensPingouinSlide);
+        checkItem();
+        checkChangeView(cSensPingouinSlide);
         timerPingouinSlide->stop();
         isSliding=false;
     }
@@ -307,14 +309,13 @@ void Gameboard::SinkMovable(B_Movable *b)
         QPoint p = b->getPos();
         if(typeid(*CollidingItems.at(i)).name() == typeid(B_Water).name())
         {
-            //SINK IT !
-        
             qDebug() << "Sink it ! : " << p.x() << " " << p.y();
 
             b->removeFromScene(mainScene);
             mainScene->removeItem(CollidingItems.at(i));
 
             S_Snow *sunk = new S_Snow(p.x(),p.y());
+            sunk->setColor("white");
             mainScene->addItem(sunk);
         }
         if(typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
@@ -330,6 +331,7 @@ void Gameboard::SinkMovable(B_Movable *b)
             mainScene->removeItem(CollidingItems.at(i));
 
             B_Wall *wall = new B_Wall(p.x(),p.y());
+            wall->setColor("gray");
             mainScene->addItem(wall);
         }
         if(typeid(*CollidingItems.at(i)).name() == typeid(Object).name())
@@ -349,14 +351,12 @@ void Gameboard::SinkMovable(B_Movable *b)
                 dialogProxy->show();
                 dialog->setText(text,2);
                 dialogToogle = true;
-
-
             }
         }
     }
 }
 
-bool Gameboard::CheckGameOver()
+bool Gameboard::checkGameOver()
 {
     QList<QGraphicsItem *> CollidingItems = pingouin->CollidesCenter();
 
@@ -365,13 +365,30 @@ bool Gameboard::CheckGameOver()
         if(typeid(*CollidingItems.at(i)).name() == typeid(B_Water).name())
         {
             restartLevel();
+
+            setPositionCenter(dialog);
+            dialogProxy->show();
+            dialog->setText("Plouf, dans l'eau! Tu recommences au dernier checkpoint",2);
+            dialogToogle = true;
+
+            return true;
+        }
+        if(typeid(*CollidingItems.at(i)).name() == typeid(E_Renard).name() || typeid(*CollidingItems.at(i)).name() == typeid(E_Loup).name())
+        {
+            restartLevel();
+
+            setPositionCenter(dialog);
+            dialogProxy->show();
+            dialog->setText("Tu t'es fait repéré par un ennemi",2);
+            dialogToogle = true;
+
             return true;
         }
     }
     return false;
 }
 
-void Gameboard::CheckItem()
+void Gameboard::checkItem()
 {
     QList<QGraphicsItem *> CollidingItems = pingouin->CollidesCenter();
 
@@ -406,13 +423,24 @@ void Gameboard::CheckItem()
             setPositionCenter(dialog);
             dialogProxy->show();
             dialog->setText(currentLevel->getDialogText(item->getDialogNumber()),1);
-
             dialogToogle = true;
         }
     }
+    if(pingouin->x() == currentLevel->getUnlockEndPoint().x() && pingouin->y() == currentLevel->getUnlockEndPoint().y())
+    {
+        int levelNumber = currentLevel->getLevelNumber();
+        QString background = ":/maps/maps/";
+        background.append(QString("%1").arg(levelNumber));
+        background.append("Ouvert");
+        background.append(".png");
+        QPixmap pixmapBackground(background);
+        mainScene->setBackgroundBrush(pixmapBackground);
+
+        endable = true;
+    }
 }
 
-void Gameboard::CheckChangeView(char sens)
+void Gameboard::checkChangeView(char sens)
 {
     QList<QGraphicsItem *> CollidingItems = pingouin->CollidesCenter();
     for(int i=0; i<CollidingItems.length(); i++)
@@ -420,10 +448,14 @@ void Gameboard::CheckChangeView(char sens)
         if(typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
         {
             S_ViewTransition *bloc = dynamic_cast<S_ViewTransition*>(CollidingItems.at(i));
-            if(bloc->isEndLevel())
+            if(bloc->isEndLevel() && endable)
             {
-                setLevel(currentLevel->getLevelNumber()+1);
+                setLevel(bloc->getNextLevel());
                 setProxy();
+            }
+            else if(bloc->isEndLevel())
+            {
+                pingouin->moveBack();
             }
             else
             {
@@ -617,10 +649,10 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
                 {
                     pingouin->moveBy(0, -1);
 
-                    if(!CheckGameOver())
+                    if(!checkGameOver())
                     {
-                        CheckItem();
-                        CheckChangeView('t');
+                        checkItem();
+                        checkChangeView('t');
 
                         if(moveBloc != NULL)
                         {
@@ -644,10 +676,10 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
                 {
                     pingouin->moveBy(0, 1);
 
-                    if(!CheckGameOver() && checkPosition(pingouin))
+                    if(!checkGameOver() && checkPosition(pingouin))
                     {
-                        CheckItem();
-                        CheckChangeView('b');
+                        checkItem();
+                        checkChangeView('b');
                         if(moveBloc != NULL)
                         {
                             MoveBloc('b');
@@ -669,10 +701,10 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
                 {
                     pingouin->moveBy(-1, 0);
 
-                    if(!CheckGameOver())
+                    if(!checkGameOver())
                     {
-                        CheckItem();
-                        CheckChangeView('l');
+                        checkItem();
+                        checkChangeView('l');
                         if(moveBloc != NULL)
                         {
                             MoveBloc('l');
@@ -694,10 +726,10 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
                 {
                     pingouin->moveBy(1, 0);
 
-                    if(!CheckGameOver())
+                    if(!checkGameOver())
                     {
-                        CheckItem();
-                        CheckChangeView('r');
+                        checkItem();
+                        checkChangeView('r');
                         if(moveBloc != NULL)
                         {
                             MoveBloc('r');
@@ -794,10 +826,10 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
             bMove = true;
         }
     }
-    /*if(bMove && (!checkPosition(pingouin->getCollideBloc(sensDepl))))
+    if(bMove && (!checkPosition(pingouin->getCollideBloc(sensDepl))))
     {
         bMove=false;
-    }*/
+    }
     return bMove;
 }
 
@@ -848,11 +880,19 @@ void Gameboard::restartGame()
     mainScene->removeItem(lifeListProxy);
     mainScene->removeItem(dialogProxy);
 
-    loadLevel();
+    pingouin->emptySacoche();
+
+    setLevel(currentLevel->getLevelNumber());
     setProxy();
     setTimer();
 
-    pingouin->emptySacoche();
+    playerProfil->setNbLive(playerProfil->getNbLive()-1);
+    lifeList->updateHearts(playerProfil->getNbLive());
+
+    setPositionCenter(dialog);
+    dialogProxy->show();
+    dialog->setText(currentLevel->getDialogText(1),1);
+    dialogToogle = true;
 }
 
 void Gameboard::exitGame()
@@ -899,7 +939,7 @@ void Gameboard::saveCheckpoint()
 void Gameboard::loadCheckpoint()
 {
     pingouin->setPos((checkpoint->x()+gameSquares)/gameSquares,(checkpoint->y()+gameSquares)/gameSquares);
-    CheckItem();
+    checkItem();
 }
 
 void Gameboard::setProxy()
@@ -915,7 +955,7 @@ void Gameboard::setProxy()
     objectList->reloadObjectList(pingouin->getSacoche());
     setPositionBottom(objectList);
     objectListProxy = mainScene->addWidget(objectList);
-    objectListProxy->hide();
+    objectListProxy->show();
 
     lifeList = new WidgetLife(this);
     lifeList->updateHearts(playerProfil->getNbLive());
@@ -951,9 +991,10 @@ void Gameboard::loadLevel()
     playerView->setSceneRect(viewPositionX,viewPositionY,sizeX*gameSquares,sizeY*gameSquares);
 
     pingouin->addToScene(mainScene);
-    loadCheckpoint();
-    pingouin->setPlayerOrientation("down");
+
     pingouin->removeTempFromSacoche();
+    pingouin->setPlayerOrientation("down");
+    loadCheckpoint();
 }
 
 void Gameboard::setTimer()
@@ -967,4 +1008,9 @@ void Gameboard::setPlayerProfil(Profil *playerProfil)
     setLevel(playerProfil->getLevel());
     setProxy();
     setTimer();
+
+    setPositionCenter(dialog);
+    dialogProxy->show();
+    dialog->setText(currentLevel->getDialogText(1),1);
+    dialogToogle = true;
 }

@@ -31,6 +31,7 @@ Level::Level(int levelNumber, Gameboard *game)
 
     startingPoint = new QPoint(0,0);
     viewStart = new QPoint(0,0);
+    unlockEnd = new QPoint(0,0);
 
     dialogValue = 0;
 
@@ -488,6 +489,9 @@ QGraphicsScene* Level::populateScene()
                 S_ViewTransition *item = new S_ViewTransition();
                 item->setLevelEnd(true);
                 item->setPos(i, j);
+
+                item->setNextLevel(Mat_Scene_End[i][j]);
+
                 scene->addItem(item);
             }
             if (Mat_Doors[i][j] != 0)
@@ -496,11 +500,11 @@ QGraphicsScene* Level::populateScene()
                 item->setPos(i,j);
                 item->setLevelEnd(false);
 
-//                if(Mat_Doors[i][j] > 20 && Mat_Doors[i][j] < 30)
-//                {
-//                    item->setNbItem(Mat_Doors[i][j]%20);
-//                    item->setNeededItem("Poisson");
-//                }
+                if(Mat_Doors[i][j] > 20 && Mat_Doors[i][j] < 30)
+                {
+                    item->setNbItem(Mat_Doors[i][j]%20);
+                    item->setNeededItem("Poisson");
+                }
 
                 scene->addItem(item);
             }
@@ -584,6 +588,16 @@ void Level::getSceneSize()
                 line[line_count] = t.readLine();
                 QStringList valueStartY = line[line_count].split("=");
                 startingPoint->setY(valueStartY.at(1).toInt());
+
+                line_count++;
+                line[line_count] = t.readLine();
+                QStringList unlockEndX = line[line_count].split("=");
+                unlockEnd->setX(unlockEndX.at(1).toInt()*Gameboard::getGameSquares());
+
+                line_count++;
+                line[line_count] = t.readLine();
+                QStringList unlockEndY = line[line_count].split("=");
+                unlockEnd->setY(unlockEndY.at(1).toInt()*Gameboard::getGameSquares());
             }
         }
     }
@@ -617,6 +631,11 @@ void Level::getSceneDialog()
 QPoint Level::getViewStart()
 {
     return *(this->viewStart);
+}
+
+QPoint Level::getUnlockEndPoint()
+{
+    return *(this->unlockEnd);
 }
 
 //int Level::changeLevel(int levelNumber)
