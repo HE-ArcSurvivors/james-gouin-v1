@@ -917,8 +917,7 @@ void Gameboard::returnIsland()
     pingouin->emptySacoche();
 
     setLevel(1);
-
-    setFirstDialog();
+    pauseMenu();
 }
 
 void Gameboard::exitGame()
