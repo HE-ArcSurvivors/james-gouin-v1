@@ -49,7 +49,6 @@ WidgetDialog::WidgetDialog(QWidget *parent)
     layout->addStretch(1);
     layout->addWidget(escapeText);
 
-
     this->setLayout(layout);
 }
 

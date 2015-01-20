@@ -599,6 +599,9 @@ void Level::getSceneSize()
                 line[line_count] = t.readLine();
                 QStringList unlockEndY = line[line_count].split("=");
                 unlockEnd->setY(unlockEndY.at(1).toInt()*Gameboard::getGameSquares());
+
+                qDebug() << "StartingPoint" << startingPoint->x() << " " << startingPoint->y();
+                qDebug() << "UnlockEnd" << unlockEnd->x() << " " << unlockEnd->y();
             }
         }
     }
@@ -625,6 +628,8 @@ void Level::getSceneDialog()
             line[line_count]=t.readLine();
             dialogList.append(line[line_count]);
         }
+
+        qDebug() << dialogList.at(0);
     }
     f.close();
  }
@@ -639,11 +644,6 @@ QPoint Level::getUnlockEndPoint()
     return *(this->unlockEnd);
 }
 
-//int Level::changeLevel(int levelNumber)
-//{
-//    this->levelNumber = levelNumber;
-//}
-
 int Level::getLevelNumber()
 {
     return this->levelNumber;
@@ -651,7 +651,7 @@ int Level::getLevelNumber()
 
 QString Level::getDialogText(int value)
 {
-    if(value<dialogList.size())
+    if(value<=dialogList.size())
     {
         return dialogList.at(value-1);
     }

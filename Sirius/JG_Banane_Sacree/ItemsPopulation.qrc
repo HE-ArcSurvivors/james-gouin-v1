@@ -9,5 +9,9 @@
         <file>maps/2.txt</file>
         <file>maps/2header.txt</file>
         <file>maps/2texte.txt</file>
+        <file>maps/1texte.txt</file>
+        <file>maps/3.txt</file>
+        <file>maps/3header.txt</file>
+        <file>maps/3texte.txt</file>
     </qresource>
 </RCC>

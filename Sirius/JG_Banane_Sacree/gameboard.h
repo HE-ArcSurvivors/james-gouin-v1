@@ -72,6 +72,7 @@ private:
     bool checkPosition(QGraphicsItem *object);
     void saveCheckpoint();
     void loadCheckpoint();
+    void setFirstDialog();
 
     //Gestion des proxy / widgets
     void setPositionBottom(QWidget* widget);
