@@ -1,7 +1,7 @@
 #include "e_loup.h"
 #include "gameboard.h"
 
-E_Loup::E_Loup(QList<QPoint> path) : Ennemi(path)
+E_Loup::E_Loup(QList<QPoint> path, Gameboard *g) : Ennemi(path, g)
 {
     //vitesse entre 1 et 100
     // 1 étant très rapide, 100 étant très lent
