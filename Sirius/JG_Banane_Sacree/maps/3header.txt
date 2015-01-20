@@ -9,5 +9,4 @@ tilewidth=32
 tileheight=32
 
 [tilesets]
-tileset=../../Images/Tiles/Pokemon_Ice_tiles.png,32,32,0,0
 tileset=../../Images/Tiles/Ice_tiles.png,32,32,0,0
