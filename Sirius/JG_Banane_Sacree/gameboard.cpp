@@ -228,6 +228,7 @@ void Gameboard::SlidePingouin()
             checkItem();
             checkChangeView(cSensPingouinSlide);
             pingouin->moveBy(-1, 0);
+            checkGameOver();
 
             if(moveBloc != NULL)
             {
@@ -900,6 +901,22 @@ void Gameboard::restartGame()
 
     playerProfil->setNbLive(playerProfil->getNbLive()-1);
     lifeList->updateHearts(playerProfil->getNbLive());
+
+    setFirstDialog();
+}
+
+
+
+void Gameboard::returnIsland()
+{
+    mainScene->removeItem(proxy);
+    mainScene->removeItem(objectListProxy);
+    mainScene->removeItem(lifeListProxy);
+    mainScene->removeItem(dialogProxy);
+
+    pingouin->emptySacoche();
+
+    setLevel(1);
 
     setFirstDialog();
 }

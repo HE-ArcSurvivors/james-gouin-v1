@@ -59,17 +59,17 @@ M_Pause::M_Pause(QWidget *parent)
 //    this->setGraphicsEffect(effect);
 
 
-    btnMenuPauseResume = new QPushButton(tr("Resume"));
-    btnMenuPauseRestartLevel = new QPushButton(tr("Restart Level"));
-    btnMenuPauseRestartGame = new QPushButton(tr("Restart Game"));
-    btnMenuPauseConfigure = new QPushButton(tr("Configure"));
-    btnMenuPauseQuit = new QPushButton(tr("Quit"));
+    btnMenuPauseResume = new QPushButton(tr("Reprendre la Partie"));
+    btnMenuPauseRestartLevel = new QPushButton(tr("Redémarrer le Niveau"));
+    btnMenuPauseRestartGame = new QPushButton(tr("Redémarrer le Jeu"));
+    btnMenuPauseIsland = new QPushButton(tr("Aller sur l'île"));
+    btnMenuPauseQuit = new QPushButton(tr("Menu Principal"));
 
 
     btnMenuPauseResume->setStyleSheet(styleBtn);
     btnMenuPauseRestartLevel->setStyleSheet(styleBtn);
     btnMenuPauseQuit->setStyleSheet(styleBtn);
-    btnMenuPauseConfigure->setStyleSheet(styleBtn);
+    btnMenuPauseIsland->setStyleSheet(styleBtn);
     btnMenuPauseRestartGame->setStyleSheet(styleBtn);
 
 
@@ -84,13 +84,14 @@ M_Pause::M_Pause(QWidget *parent)
     connect(btnMenuPauseResume, SIGNAL(clicked()),parent, SLOT(resumeGame()));
     connect(btnMenuPauseRestartLevel, SIGNAL(clicked()),parent, SLOT(restartLevel()));
     connect(btnMenuPauseRestartGame, SIGNAL(clicked()),parent, SLOT(restartGame()));
+    connect(btnMenuPauseIsland, SIGNAL(clicked()),parent, SLOT(returnIsland()));
 
     layoutMenuPause->addRow(titleMenuPause);
     layoutMenuPause->addRow(undertitleMenuPause);
     layoutMenuPause->addRow(btnMenuPauseResume);
     layoutMenuPause->addRow(btnMenuPauseRestartLevel);
     layoutMenuPause->addRow(btnMenuPauseRestartGame);
-    layoutMenuPause->addRow(btnMenuPauseConfigure);
+    layoutMenuPause->addRow(btnMenuPauseIsland);
     layoutMenuPause->addRow(btnMenuPauseQuit);
 
     this->resize(400,400);

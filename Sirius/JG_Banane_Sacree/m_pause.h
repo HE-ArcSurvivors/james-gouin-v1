@@ -21,7 +21,7 @@ private:
     QLabel *undertitleMenuPause;
 
     QPushButton *btnMenuPauseResume;
-    QPushButton *btnMenuPauseConfigure;
+    QPushButton *btnMenuPauseIsland;
     QPushButton *btnMenuPauseQuit;
     QPushButton *btnMenuPauseRestartLevel;
     QPushButton *btnMenuPauseRestartGame;

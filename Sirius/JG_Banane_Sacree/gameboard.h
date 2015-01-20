@@ -167,6 +167,7 @@ public slots:
     void exitGame();
     void restartLevel();
     void restartGame();
+    void returnIsland();
 };
 
 #endif // GAMEBOARD_H
