@@ -63,7 +63,7 @@
    eJztzkERAAAIA6CFtv/ZYj6EBCQAQNNcBwAAAACA1xZ29wB1
   </data>
  </layer>
- <layer name="Enemies" width="60" height="30" visible="0">
+ <layer name="Enemies" width="60" height="30">
   <data encoding="base64" compression="zlib">
    eJzt17EJADAIRUGnzvxZIEXAIFHuarsHwo8AplmPbviTdtCPvwwAANw47QJboadMN82BChsH9AQn
   </data>
