@@ -2,6 +2,7 @@
 #define W_LIFE_H
 
 #include <QWidget>
+#include <QHBoxLayout>
 
 class WidgetLife : public QWidget
 {
@@ -17,6 +18,7 @@ public slots:
 
 private:
     int totalLife;
+    QHBoxLayout* layout;
 
 };
 

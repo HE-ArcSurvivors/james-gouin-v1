@@ -46,7 +46,14 @@ MainGame::MainGame(QWidget *parent) : QWidget(parent)
 
     gameTitle = new QLabel(this);
     gameTitle->setText(tr("James Gouin et la Banane Sacrée"));
-    gameTitle->setStyleSheet("color: blue; font: bold 30px;");
+
+
+    gameTitle->setStyleSheet(
+                        "color: #2e2e2e;"
+                        "font: bold 30px;"
+                        "font-family: Century Gothic;"
+                        );
+
     gameTitle->setGeometry(windowSizeX/2-titleSizeX/2,windowSizeY/2-menuSizeY/2-50,titleSizeX,titleSizeY);
 
     refreshGameMenu();

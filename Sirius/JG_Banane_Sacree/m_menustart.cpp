@@ -23,11 +23,28 @@
 MenuStart::MenuStart(QWidget *parent) :
     QWidget(parent)
 {
+
+    this->setStyleSheet(
+                        "color: #2e2e2e;"
+                        "font-family: Century Gothic;"
+                        );
+
+    QString styleBtn = "border-style: none;"
+                       "border-radius: 5px;"
+                       "padding: 6px;"
+                       "margin: 5px;"
+
+                       "background-color: white;"
+                       "color: white;"
+                       "font-weight: bold;"
+                       "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #00A5FF, stop: 1 #3087F2);";
+
     user = new Profil();
     maxTotalForms = 5;
     listButtonProfil = new QList<QPushButton*>();
 
     buttonNew = new QPushButton("Nouvelle partie");
+    buttonNew->setStyleSheet(styleBtn);
 
     layoutMenu = new QVBoxLayout;
 
@@ -37,6 +54,7 @@ MenuStart::MenuStart(QWidget *parent) :
     for(int i = 0; i < totalForms; i++)
     {
        layoutMenu->addWidget(listButtonProfil->at(i));
+       listButtonProfil->at(i)->setStyleSheet(styleBtn);
        QObject::connect(listButtonProfil->at(i), SIGNAL(clicked()), signalMapper, SLOT(map()));
        signalMapper->setMapping(listButtonProfil->at(i),listButtonProfil->at(i)->text());
     }

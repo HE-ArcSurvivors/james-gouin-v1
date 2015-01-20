@@ -2,6 +2,7 @@
 #define W_DIALOG_H
 
 #include <QWidget>
+class QLabel;
 
 class WidgetDialog : public QWidget
 {
@@ -16,8 +17,10 @@ signals:
 public slots:
 
 private:
-    QString text;
     int type;
+    QLabel* title;
+    QLabel* text;
+    QLabel* escapeText;
 
 };
 

@@ -151,7 +151,6 @@ void Ennemi::pinguinDetection()
                     vb.bloc->setPen(pen);
 
                     game->restartLevel();
-                    //Gameboard::restartLevel();
                 }
             }
         }

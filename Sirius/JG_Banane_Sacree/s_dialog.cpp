@@ -18,6 +18,8 @@ void S_Dialog::setDesign()
 //    brush.setColor(Qt::red);
 
 //    setBrush(brush);
+
+
 }
 
 void S_Dialog::setDialogNumber(int value)
