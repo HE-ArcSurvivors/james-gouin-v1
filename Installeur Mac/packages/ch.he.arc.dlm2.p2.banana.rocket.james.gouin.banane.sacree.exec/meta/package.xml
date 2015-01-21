@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+     <DisplayName>Executable</DisplayName>
+     <Description>It's source code of the game.</Description>
+     <Version>1.0.0</Version>
+     <ReleaseDate>2015-01-27</ReleaseDate>
+     <Name>ch.he.arc.dlm2.p2.banana.rocket.james.gouin.banane.sacree.exec</Name>
+     <Licenses>
+         <License name="License Agreement" file="licenseExec.txt" />
+     </Licenses>
+     <Script>installscript.qs</Script>
+     <SortingPriority>2</SortingPriority>
+     <Default>true</Default>
+     <ForcedInstallation>false</ForcedInstallation>
+</Package>
