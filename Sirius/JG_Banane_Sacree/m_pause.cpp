@@ -17,7 +17,7 @@ M_Pause::M_Pause(QWidget *parent)
                         "border-radius: 8px;"
                         );
 
-    QString styleBtn = "border-style: none;"
+    styleBtn = "border-style: none;"
                        "border-radius: 5px;"
                        "padding: 6px;"
                        "margin: 5px;"
@@ -26,8 +26,6 @@ M_Pause::M_Pause(QWidget *parent)
                        "color: white;"
                        "font-weight: bold;"
                        "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #00A5FF, stop: 1 #3087F2);";
-
-
 
     layoutMenuPause = new QFormLayout;
     titleMenuPause = new QLabel(tr("Pause"));
@@ -115,4 +113,42 @@ void M_Pause::paintEvent(QPaintEvent *pe)
   QPainter p(this);
   style()->drawPrimitive(
   QStyle::PE_Widget, &o, &p, this);
+}
+
+void M_Pause::setUnableMenu(int levelValue)
+{
+    QString styleBtnUnable = "border-style: none;"
+                       "border-radius: 5px;"
+                       "padding: 6px;"
+                       "margin: 5px;"
+                       "font-family: Century Gothic;"
+                       "background-color: white;"
+                       "color: white;"
+                       "font-weight: bold;"
+                       "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #c6c6c6, stop: 1 #b3b3b3);";
+
+    switch(levelValue)
+    {
+    case 0: btnMenuPauseIsland->setDisabled(true);
+            btnMenuPauseIsland->setStyleSheet(styleBtnUnable);
+            break;
+    case 1: btnMenuPauseIsland->setDisabled(true);
+            btnMenuPauseIsland->setStyleSheet(styleBtnUnable);
+            btnMenuPauseRestartGame->setDisabled(true);
+            btnMenuPauseRestartGame->setStyleSheet(styleBtnUnable);
+            btnMenuPauseRestartLevel->setDisabled(true);
+            btnMenuPauseRestartLevel->setStyleSheet(styleBtnUnable);
+            break;
+    default:
+        btnMenuPauseResume->setDisabled(false);
+        btnMenuPauseRestartLevel->setDisabled(false);
+        btnMenuPauseQuit->setDisabled(false);
+        btnMenuPauseIsland->setDisabled(false);
+        btnMenuPauseRestartGame->setDisabled(false);
+        btnMenuPauseResume->setStyleSheet(styleBtn);
+        btnMenuPauseRestartLevel->setStyleSheet(styleBtn);
+        btnMenuPauseQuit->setStyleSheet(styleBtn);
+        btnMenuPauseIsland->setStyleSheet(styleBtn);
+        btnMenuPauseRestartGame->setStyleSheet(styleBtn);
+    }
 }

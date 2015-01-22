@@ -15,6 +15,8 @@ class M_Pause : public QWidget
 public:
     M_Pause(QWidget *parent);
 
+    void setUnableMenu(int levelValue);
+
 private:
     QFormLayout *layoutMenuPause;
     QLabel *titleMenuPause;
@@ -25,6 +27,8 @@ private:
     QPushButton *btnMenuPauseQuit;
     QPushButton *btnMenuPauseRestartLevel;
     QPushButton *btnMenuPauseRestartGame;
+
+    QString styleBtn;
 
     QGraphicsDropShadowEffect* shadowbtn();
     void paintEvent(QPaintEvent *pe);

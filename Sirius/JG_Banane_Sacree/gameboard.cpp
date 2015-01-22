@@ -848,6 +848,7 @@ void Gameboard::pauseMenu()
     if(!toggleMenuPause)
     {
         timerPingouinSlide->stop();
+        menuPauseInGame->setUnableMenu(currentLevel->getLevelNumber());
         setPositionCenter(menuPauseInGame);
         proxy->show();
         toggleMenuPause = true;
@@ -883,6 +884,11 @@ void Gameboard::restartLevel()
     {
         playerProfil->setNbLive(4);
         restartGame();
+
+        setPositionCenter(dialog);
+        dialogProxy->show();
+        dialog->setText("Tu as perdu toutes tes vies! Tu recommences au début du niveau.",1);
+        dialogToogle = true;
     }
 }
 
@@ -917,7 +923,11 @@ void Gameboard::returnIsland()
     pingouin->emptySacoche();
 
     setLevel(1);
-    pauseMenu();
+    setProxy();
+    setFirstDialog();
+
+    objectListProxy->hide();
+    lifeListProxy->hide();
 }
 
 void Gameboard::exitGame()
