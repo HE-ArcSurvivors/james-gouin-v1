@@ -178,12 +178,13 @@ void Gameboard::SlidePingouin()
     {
     case 't':
 
-        if(MovePingouinToTop() && pingouin->isSlide() && !checkGameOver())
+        if(MovePingouinToTop() && pingouin->isSlide())
         {
 
             checkItem();
             checkChangeView(cSensPingouinSlide);
             pingouin->moveBy(0, -1);
+            checkGameOver();
 
             if(moveBloc != NULL)
             {
@@ -199,12 +200,13 @@ void Gameboard::SlidePingouin()
 
     case 'b':
 
-        if(MovePingouinToBottom() && pingouin->isSlide() && !checkGameOver())
+        if(MovePingouinToBottom() && pingouin->isSlide())
         {
 
                 checkItem();
                 checkChangeView(cSensPingouinSlide);
                 pingouin->moveBy(0, 1);
+                checkGameOver();
 
                 if(moveBloc != NULL)
                 {
@@ -220,7 +222,7 @@ void Gameboard::SlidePingouin()
 
     case 'l':
 
-        if(MovePingouinToLeft() && pingouin->isSlide() && !checkGameOver())
+        if(MovePingouinToLeft() && pingouin->isSlide())
         {
 
             checkItem();
@@ -241,12 +243,13 @@ void Gameboard::SlidePingouin()
 
     case 'r':
 
-        if(MovePingouinToRight() && pingouin->isSlide() && !checkGameOver())
+        if(MovePingouinToRight() && pingouin->isSlide())
         {
 
                pingouin->moveBy(1, 0);
                checkItem();
                checkChangeView(cSensPingouinSlide);
+               checkGameOver();
 
                if(moveBloc != NULL)
                 {
