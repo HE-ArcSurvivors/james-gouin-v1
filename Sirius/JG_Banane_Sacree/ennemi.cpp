@@ -55,35 +55,33 @@ void Ennemi::viewBlocActif()
     QBrush brush;
     QPen pen;
 
+    //Design Activated
+    brush.setStyle(Qt::DiagCrossPattern);
+    brush.setColor(Qt::red);
+    pen.setStyle(Qt::SolidLine);
+    pen.setColor(Qt::red);
+
     QList<QPoint> toDesactivate;
     bool allunactived = false;
 
-    for(int i=0; i<champVue.size(); i++)
+    QList<ViewBloc>::iterator it;
+    for (it = champVue.begin(); it != champVue.end(); ++it)
     {
         //On les actives tous !
-        ViewBloc nBloc;
-        nBloc = champVue.at(i);
-        nBloc.actif=true;
-        champVue.replace(i,nBloc);
+        (*it).actif = true;
 
         //Design Activated
-        brush.setStyle(Qt::DiagCrossPattern);
-        brush.setColor(Qt::red);
-        champVue.at(i).bloc->setBrush(brush);
+        (*it).bloc->setBrush(brush);
+        (*it).bloc->setPen(pen);
 
-        pen.setStyle(Qt::SolidLine);
-        pen.setColor(Qt::red);
-        champVue.at(i).bloc->setPen(pen);
-
-        //les quels on va désactiver ?
-        QList<QGraphicsItem *> CollidingItems = champVue.at(i).bloc->collidingItems();
+        //lesquels on va désactiver ?
+        QList<QGraphicsItem *> CollidingItems = (*it).bloc->collidingItems();
         bool bUnactivate = false;
 
-        for(int j=0; j<CollidingItems.length(); j++)
-        {
-            if(typeid(*CollidingItems.at(j)).name() == typeid(B_Movable).name()
-            || typeid(*CollidingItems.at(j)).name() == typeid(B_Wall).name()
-            || typeid(*CollidingItems.at(j)).name() == typeid(Ennemi).name())
+        foreach (QGraphicsItem *item, CollidingItems) {
+            if(typeid(*item).name() == typeid(B_Movable).name()
+            || typeid(*item).name() == typeid(B_Wall).name()
+            || typeid(*item).name() == typeid(Ennemi).name())
             {
                 bUnactivate = true;
             }
@@ -91,34 +89,33 @@ void Ennemi::viewBlocActif()
 
         if(bUnactivate)
         {
-            if(champVue.at(i).ligne==0 && champVue.at(i).colonne ==1) //si c'est le bloc 1
+            if((*it).ligne==0 && (*it).colonne ==1) //si c'est le bloc 1
             {
                 allunactived = true;
             }
-            toDesactivate.append(QPoint(champVue.at(i).ligne, champVue.at(i).colonne));
+            toDesactivate.append(QPoint((*it).ligne, (*it).colonne));
         }
     }
+
+    //Design Unactivated
+    brush.setStyle(Qt::Dense6Pattern);
+    brush.setColor(Qt::green);
+    pen.setStyle(Qt::NoPen);
 
     //on déactive ce qu'il faut
     foreach (QPoint toDes, toDesactivate)
     {
-        for(int i=0; i<champVue.size(); i++)
+        QList<ViewBloc>::iterator it;
+        for (it = champVue.begin(); it != champVue.end(); ++it)
         {
             //on désactive la ligne
-            if((champVue.at(i).colonne >= toDes.y() && champVue.at(i).ligne == toDes.x()) || allunactived)
+            if(((*it).colonne >= toDes.y() && (*it).ligne == toDes.x()) || allunactived)
             {
-                ViewBloc nBloc;
-                nBloc = champVue.at(i);
-                nBloc.actif=false;
-                champVue.replace(i,nBloc);
+                (*it).actif=false;
 
                 //Design Unactivated
-                brush.setStyle(Qt::Dense6Pattern);
-                brush.setColor(Qt::green);
-                champVue.at(i).bloc->setBrush(brush);
-
-                pen.setStyle(Qt::NoPen);
-                champVue.at(i).bloc->setPen(pen);
+                (*it).bloc->setBrush(brush);
+                (*it).bloc->setPen(pen);
             }
         }
     }
@@ -127,6 +124,14 @@ void Ennemi::viewBlocActif()
 
 void Ennemi::pinguinDetection()
 {
+    QBrush brush;
+    brush.setStyle(Qt::DiagCrossPattern);
+    brush.setColor(Qt::yellow);
+
+    QPen pen;
+    pen.setStyle(Qt::SolidLine);
+    pen.setColor(Qt::yellow);
+
     detectPinguin = false;
     foreach (ViewBloc vb, champVue)
     {
@@ -139,14 +144,7 @@ void Ennemi::pinguinDetection()
                 if(typeid(*CollidingItems.at(i)).name() == typeid(Pingouin).name())
                 {
                     this->detectPinguin = true;
-
-                    QBrush brush;
-                    brush.setStyle(Qt::DiagCrossPattern);
-                    brush.setColor(Qt::yellow);
                     vb.bloc->setBrush(brush);
-                    QPen pen;
-                    pen.setStyle(Qt::SolidLine);
-                    pen.setColor(Qt::yellow);
                     vb.bloc->setPen(pen);
                     game->restartLevel();
                 }

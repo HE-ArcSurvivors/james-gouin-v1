@@ -113,6 +113,7 @@ void Gameboard::SlideBloc()
                 if(SlidingBloc->IsMovableToBottom())
                 {
                     SlidingBloc->moveBy(0,1);
+
                     if(checkPosition(SlidingBloc))
                     {
                         SinkMovable(SlidingBloc);
@@ -177,21 +178,19 @@ void Gameboard::SlidePingouin()
     {
     case 't':
 
-        if(MovePingouinToTop() && pingouin->isSlide())
+        if(MovePingouinToTop() && pingouin->isSlide() && !checkGameOver())
         {
-                if(!checkGameOver())
-                {
-                    checkItem();
-                    checkChangeView(cSensPingouinSlide);
-                    pingouin->moveBy(0, -1);
 
-                    if(moveBloc != NULL)
-                    {
-                        moveBloc->moveBy(0,-1);
-                        SinkMovable(moveBloc);
-                        moveBloc = NULL;
-                    }
-                }
+            checkItem();
+            checkChangeView(cSensPingouinSlide);
+            pingouin->moveBy(0, -1);
+
+            if(moveBloc != NULL)
+            {
+                moveBloc->moveBy(0,-1);
+                SinkMovable(moveBloc);
+                moveBloc = NULL;
+            }
              endSlide = false;
 
         }
@@ -200,10 +199,9 @@ void Gameboard::SlidePingouin()
 
     case 'b':
 
-        if(MovePingouinToBottom() && pingouin->isSlide())
+        if(MovePingouinToBottom() && pingouin->isSlide() && !checkGameOver())
         {
-            if(!checkGameOver())
-            {
+
                 checkItem();
                 checkChangeView(cSensPingouinSlide);
                 pingouin->moveBy(0, 1);
@@ -214,7 +212,7 @@ void Gameboard::SlidePingouin()
                     SinkMovable(moveBloc);
                     moveBloc = NULL;
                 }
-            }
+
 
             endSlide = false;
         }
@@ -222,10 +220,9 @@ void Gameboard::SlidePingouin()
 
     case 'l':
 
-        if(MovePingouinToLeft() && pingouin->isSlide())
+        if(MovePingouinToLeft() && pingouin->isSlide() && !checkGameOver())
         {
-           if(!checkGameOver())
-           {
+
                 checkItem();
                 checkChangeView(cSensPingouinSlide);
                 pingouin->moveBy(-1, 0);
@@ -236,28 +233,26 @@ void Gameboard::SlidePingouin()
                     SinkMovable(moveBloc);
                     moveBloc = NULL;
                 }
-            }
+
            endSlide = false;
         }
         break;
 
     case 'r':
 
-        if(MovePingouinToRight() && pingouin->isSlide())
+        if(MovePingouinToRight() && pingouin->isSlide() && !checkGameOver())
         {
-            if(!checkGameOver())
-                {
-                   pingouin->moveBy(1, 0);
-                   checkItem();
-                   checkChangeView(cSensPingouinSlide);
 
-                   if(moveBloc != NULL)
-                    {
-                        moveBloc->moveBy(1,0);
-                        SinkMovable(moveBloc);
-                        moveBloc = NULL;
-                    }
-                 }
+               pingouin->moveBy(1, 0);
+               checkItem();
+               checkChangeView(cSensPingouinSlide);
+
+               if(moveBloc != NULL)
+                {
+                    moveBloc->moveBy(1,0);
+                    SinkMovable(moveBloc);
+                    moveBloc = NULL;
+               }
 
                endSlide = false;
         }
@@ -272,6 +267,7 @@ void Gameboard::SlidePingouin()
         checkChangeView(cSensPingouinSlide);
         timerPingouinSlide->stop();
         isSliding=false;
+        moveBloc=NULL;
     }
 }
 
@@ -459,6 +455,8 @@ void Gameboard::checkChangeView(char sens)
             }
             else
             {
+                qDebug()<< "bool obj : " << bloc->isNeedingItem();
+                qDebug()<< "getNeededItem" << bloc->getNeededItem();
                 if(!bloc->isNeedingItem())
                 {
                     if(pingouin->checkObjectSacoche(QString("Chaussure")))
@@ -469,7 +467,7 @@ void Gameboard::checkChangeView(char sens)
 
                     ChangeView(sens);
                 }
-                else if(bloc->isNeedingItem() && pingouin->checkObjectSacoche(*bloc->getNeededItem(), bloc->getNbItem()))
+                else if(bloc->isNeedingItem() && pingouin->checkObjectSacoche(bloc->getNeededItem(), bloc->getNbItem()))
                 {
                     if(pingouin->checkObjectSacoche(QString("Chaussure")))
                     {
@@ -479,22 +477,22 @@ void Gameboard::checkChangeView(char sens)
 
                     ChangeView(sens);
                 }
-                else
-                {
-                    QString text = "Il te faut ";
-                    text.append(QString::number(bloc->getNbItem()));
-                    text.append("x l'objet \"");
-                    text.append(*(bloc->getNeededItem()));
-                    text.append("\" pour aller plus loin ;) ");
+//                else
+//                {
+//                    QString text = "Il te faut ";
+//                    text.append(QString::number(bloc->getNbItem()));
+//                    text.append("x l'objet \"");
+//                    text.append(bloc->getNeededItem());
+//                    text.append("\" pour aller plus loin ;) ");
 
-                    setPositionCenter(dialog);
-                    dialogProxy->show();
-                    dialog->setText(text,2);
+//                    setPositionCenter(dialog);
+//                    dialogProxy->show();
+//                    dialog->setText(text,2);
 
-                    dialogToogle = true;
+//                    dialogToogle = true;
 
-                    pingouin->moveBack();
-                }
+//                    pingouin->moveBack();
+//                }
             }
         }
     }
