@@ -94,9 +94,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aba678023dfd388f8ca54dc6a51f8f3e3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aba678023dfd388f8ca54dc6a51f8f3e3"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Level</b> (int levelNumber)</td></tr>
-<tr class="separator:aba678023dfd388f8ca54dc6a51f8f3e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88a7dfc5743b8beda252398ab1676f39"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a88a7dfc5743b8beda252398ab1676f39"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Level</b> (int levelNumber, <a class="el" href="class_gameboard.html">Gameboard</a> *game)</td></tr>
+<tr class="separator:a88a7dfc5743b8beda252398ab1676f39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a898937cdec40914b45ecb23649cd5e2a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a898937cdec40914b45ecb23649cd5e2a"></a>
 QGraphicsScene *&#160;</td><td class="memItemRight" valign="bottom"><b>populateScene</b> ()</td></tr>
 <tr class="separator:a898937cdec40914b45ecb23649cd5e2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -106,15 +106,18 @@ QPoint *&#160;</td><td class="memItemRight" valign="bottom"><b>getStartingPoint<
 <tr class="memitem:aa1d6d7b228f5b64d697c0cd3666ea836"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa1d6d7b228f5b64d697c0cd3666ea836"></a>
 QPoint&#160;</td><td class="memItemRight" valign="bottom"><b>getViewStart</b> ()</td></tr>
 <tr class="separator:aa1d6d7b228f5b64d697c0cd3666ea836"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adce6f00bfa320883323a9892646cdaa8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adce6f00bfa320883323a9892646cdaa8"></a>
-QGraphicsScene *&#160;</td><td class="memItemRight" valign="bottom"><b>changeLevel</b> (int levelNumber)</td></tr>
-<tr class="separator:adce6f00bfa320883323a9892646cdaa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a34f3b2d48e3b1e11b864108cd08ddf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1a34f3b2d48e3b1e11b864108cd08ddf"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>changeLevel</b> (int levelNumber)</td></tr>
+<tr class="separator:a1a34f3b2d48e3b1e11b864108cd08ddf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afbf573a6aecae9cba02d7398e5637dd5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afbf573a6aecae9cba02d7398e5637dd5"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>getLevelNumber</b> ()</td></tr>
 <tr class="separator:afbf573a6aecae9cba02d7398e5637dd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a355ebe125bc8b61b8b7db7543f65bf5e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a355ebe125bc8b61b8b7db7543f65bf5e"></a>
-QString&#160;</td><td class="memItemRight" valign="bottom"><b>getDialogText</b> ()</td></tr>
-<tr class="separator:a355ebe125bc8b61b8b7db7543f65bf5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88af9e3a9a86d7692f665fe6d781ec17"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a88af9e3a9a86d7692f665fe6d781ec17"></a>
+QString&#160;</td><td class="memItemRight" valign="bottom"><b>getDialogText</b> (int value)</td></tr>
+<tr class="separator:a88af9e3a9a86d7692f665fe6d781ec17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25c74d7cf455e332d9aca192136b0c1b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a25c74d7cf455e332d9aca192136b0c1b"></a>
+QPoint&#160;</td><td class="memItemRight" valign="bottom"><b>getUnlockEndPoint</b> ()</td></tr>
+<tr class="separator:a25c74d7cf455e332d9aca192136b0c1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="level_8h_source.html">level.h</a></li>
@@ -123,7 +126,7 @@ QString&#160;</td><td class="memItemRight" valign="bottom"><b>getDialogText</b> 
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 15 2015 10:07:04 for James Gouin et la Banane Sacrée by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 22 2015 09:10:02 for James Gouin et la Banane Sacrée by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

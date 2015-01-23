@@ -5,7 +5,7 @@ E_Loup::E_Loup(QList<QPoint> path, Gameboard *g) : Ennemi(path, g)
 {
     //vitesse entre 1 et 100
     // 1 étant très rapide, 100 étant très lent
-    speed = 10; //vitesse par défaut
+    speed = 8; //vitesse par défaut
 
     leftSkin = ":/characters/characters/loup_left.png";
     rightSkin = ":/characters/characters/loup_right.png";

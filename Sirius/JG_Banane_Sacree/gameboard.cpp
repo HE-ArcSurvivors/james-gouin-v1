@@ -80,7 +80,7 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     //pour annimer !
     timer = new QTimer();
     setTimer();
-    timer->start(60); //environ 15 fois par sec
+    timer->start(100); //environ 15 fois par sec
 }
 
 void Gameboard::SlideBloc()
@@ -113,6 +113,7 @@ void Gameboard::SlideBloc()
                 if(SlidingBloc->IsMovableToBottom())
                 {
                     SlidingBloc->moveBy(0,1);
+
                     if(checkPosition(SlidingBloc))
                     {
                         SinkMovable(SlidingBloc);
@@ -179,19 +180,18 @@ void Gameboard::SlidePingouin()
 
         if(MovePingouinToTop() && pingouin->isSlide())
         {
-                if(!checkGameOver())
-                {
-                    checkItem();
-                    checkChangeView(cSensPingouinSlide);
-                    pingouin->moveBy(0, -1);
 
-                    if(moveBloc != NULL)
-                    {
-                        moveBloc->moveBy(0,-1);
-                        SinkMovable(moveBloc);
-                        moveBloc = NULL;
-                    }
-                }
+            checkItem();
+            checkChangeView(cSensPingouinSlide);
+            pingouin->moveBy(0, -1);
+            checkGameOver();
+
+            if(moveBloc != NULL)
+            {
+                moveBloc->moveBy(0,-1);
+                SinkMovable(moveBloc);
+                moveBloc = NULL;
+            }
              endSlide = false;
 
         }
@@ -202,11 +202,11 @@ void Gameboard::SlidePingouin()
 
         if(MovePingouinToBottom() && pingouin->isSlide())
         {
-            if(!checkGameOver())
-            {
+
                 checkItem();
                 checkChangeView(cSensPingouinSlide);
                 pingouin->moveBy(0, 1);
+                checkGameOver();
 
                 if(moveBloc != NULL)
                 {
@@ -214,7 +214,7 @@ void Gameboard::SlidePingouin()
                     SinkMovable(moveBloc);
                     moveBloc = NULL;
                 }
-            }
+
 
             endSlide = false;
         }
@@ -222,7 +222,7 @@ void Gameboard::SlidePingouin()
 
     case 'l':
 
-        if(MovePingouinToLeft() && pingouin->isSlide() && !checkGameOver())
+        if(MovePingouinToLeft() && pingouin->isSlide())
         {
 
             checkItem();
@@ -245,19 +245,18 @@ void Gameboard::SlidePingouin()
 
         if(MovePingouinToRight() && pingouin->isSlide())
         {
-            if(!checkGameOver())
-                {
-                   pingouin->moveBy(1, 0);
-                   checkItem();
-                   checkChangeView(cSensPingouinSlide);
 
-                   if(moveBloc != NULL)
-                    {
-                        moveBloc->moveBy(1,0);
-                        SinkMovable(moveBloc);
-                        moveBloc = NULL;
-                    }
-                 }
+               pingouin->moveBy(1, 0);
+               checkItem();
+               checkChangeView(cSensPingouinSlide);
+               checkGameOver();
+
+               if(moveBloc != NULL)
+                {
+                    moveBloc->moveBy(1,0);
+                    SinkMovable(moveBloc);
+                    moveBloc = NULL;
+               }
 
                endSlide = false;
         }
