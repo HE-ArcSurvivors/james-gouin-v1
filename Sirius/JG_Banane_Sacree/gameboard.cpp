@@ -80,7 +80,7 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     //pour annimer !
     timer = new QTimer();
     setTimer();
-    timer->start(60); //environ 15 fois par sec
+    timer->start(100); //environ 15 fois par sec
 }
 
 void Gameboard::SlideBloc()
