@@ -72,6 +72,7 @@ private:
     bool checkPosition(QGraphicsItem *object);
     void saveCheckpoint();
     void loadCheckpoint();
+    void setFirstDialog();
 
     //Gestion des proxy / widgets
     void setPositionBottom(QWidget* widget);
@@ -166,6 +167,7 @@ public slots:
     void exitGame();
     void restartLevel();
     void restartGame();
+    void returnIsland();
 };
 
 #endif // GAMEBOARD_H

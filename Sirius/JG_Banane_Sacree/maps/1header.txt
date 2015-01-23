@@ -3,8 +3,12 @@ width=20
 height=15
 viewRequestedX=1
 viewRequestedY=1
-levelStartX=10
+levelStartX=11
 levelStartY=12
+unlockEndX=9
+unlockEndY=11
 tilewidth=32
 tileheight=32
-orientation=orthogonal
+
+[tilesets]
+tileset=../../Images/Tiles/Ice_tiles.png,32,32,0,0
