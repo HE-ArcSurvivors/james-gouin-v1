@@ -99,11 +99,6 @@ bool B_Movable::IsMovable(QList<QGraphicsItem *> l)
         {
             bMove = false;
         }
-//        if(typeid(*l.at(i)).name() == typeid(B_Water).name())
-//        {
-//            bMove = true;
-//        }
-
     }
     return bMove;
 }
