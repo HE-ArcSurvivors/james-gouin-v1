@@ -80,7 +80,7 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     //pour annimer !
     timer = new QTimer();
     setTimer();
-    timer->start(100); //environ 15 fois par sec
+    timer->start(100); //10 fois par sec
 }
 
 void Gameboard::SlideBloc()
@@ -101,7 +101,7 @@ void Gameboard::SlideBloc()
                     SlidingBloc->moveBy(0,-1);
                     if(checkPosition(SlidingBloc))
                     {
-                        SinkMovable(SlidingBloc);
+                        fixeMovable(SlidingBloc);
                         removeBloc = false;
                     }
                 }
@@ -116,7 +116,7 @@ void Gameboard::SlideBloc()
 
                     if(checkPosition(SlidingBloc))
                     {
-                        SinkMovable(SlidingBloc);
+                        fixeMovable(SlidingBloc);
                         removeBloc = false;
                     }
                 }
@@ -128,10 +128,10 @@ void Gameboard::SlideBloc()
                 if(SlidingBloc->IsMovableToLeft())
                 {
                     SlidingBloc->moveBy(-1,0);
-                    SinkMovable(SlidingBloc);
+                    fixeMovable(SlidingBloc);
                     if(checkPosition(SlidingBloc))
                     {
-                        SinkMovable(SlidingBloc);
+                        fixeMovable(SlidingBloc);
                         removeBloc = false;
                     }
                 }
@@ -143,10 +143,10 @@ void Gameboard::SlideBloc()
                 if(SlidingBloc->IsMovableToRight())
                 {
                     SlidingBloc->moveBy(1,0);
-                    SinkMovable(SlidingBloc);
+                    fixeMovable(SlidingBloc);
                     if(checkPosition(SlidingBloc))
                     {
-                        SinkMovable(SlidingBloc);
+                        fixeMovable(SlidingBloc);
                         removeBloc = false;
                     }
                 }
@@ -189,7 +189,7 @@ void Gameboard::SlidePingouin()
             if(moveBloc != NULL)
             {
                 moveBloc->moveBy(0,-1);
-                SinkMovable(moveBloc);
+                fixeMovable(moveBloc);
                 moveBloc = NULL;
             }
              endSlide = false;
@@ -211,7 +211,7 @@ void Gameboard::SlidePingouin()
                 if(moveBloc != NULL)
                 {
                     moveBloc->moveBy(0,1);
-                    SinkMovable(moveBloc);
+                    fixeMovable(moveBloc);
                     moveBloc = NULL;
                 }
 
@@ -233,7 +233,7 @@ void Gameboard::SlidePingouin()
             if(moveBloc != NULL)
             {
                 moveBloc->moveBy(-1,0);
-                SinkMovable(moveBloc);
+                fixeMovable(moveBloc);
                 moveBloc = NULL;
             }
 
@@ -254,7 +254,7 @@ void Gameboard::SlidePingouin()
                if(moveBloc != NULL)
                 {
                     moveBloc->moveBy(1,0);
-                    SinkMovable(moveBloc);
+                    fixeMovable(moveBloc);
                     moveBloc = NULL;
                }
 
@@ -301,7 +301,7 @@ void Gameboard::setViewPosition()
     }
 }
 
-void Gameboard::SinkMovable(B_Movable *b)
+void Gameboard::fixeMovable(B_Movable *b)
 {
     QList<QGraphicsItem *> CollidingItems = b->CollidesCenter();
     for(int i=0; i<CollidingItems.length(); i++)
@@ -595,7 +595,7 @@ void Gameboard::MoveBloc(char sens)
         break;
     }
 
-    SinkMovable(moveBloc);
+    fixeMovable(moveBloc);
 
 
     if(moveBloc->isSlide())
