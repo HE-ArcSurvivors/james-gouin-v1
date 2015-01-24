@@ -1063,7 +1063,9 @@ void Gameboard::removeAllItems()
     QList<QGraphicsItem*>::iterator end = itemsList.end();
     while(iter != end)
     {
-        QGraphicsItem* item = (*iter); mainScene->removeItem(item);
+        QGraphicsItem* item = (*iter);
+        mainScene->removeItem(item);
         iter++;
     }
+    mainScene->clear();
 }
