@@ -99,6 +99,8 @@ private:
     void checkItem();
     void pauseMenu();
 
+    void removeAllItems();
+
     /*
      * ATTRIBUTS
     */

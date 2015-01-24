@@ -50,7 +50,7 @@ MainGame::MainGame(QWidget *parent) : QWidget(parent)
 
     gameTitle->setStyleSheet(
                         "color: #2e2e2e;"
-                        "font: bold 30px;"
+                        "font: bold 29px;"
                         "font-family: Century Gothic;"
                         );
 
