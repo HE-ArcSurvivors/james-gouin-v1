@@ -58,8 +58,8 @@ M_Pause::M_Pause(QWidget *parent)
 
 
     btnMenuPauseResume = new QPushButton(tr("Reprendre la Partie"));
-    btnMenuPauseRestartLevel = new QPushButton(tr("Redémarrer le Niveau"));
-    btnMenuPauseRestartGame = new QPushButton(tr("Redémarrer le Jeu"));
+    btnMenuPauseRestartLevel = new QPushButton(tr("Retourner au dernier Checkpoint"));
+    btnMenuPauseRestartGame = new QPushButton(tr("Redémarrer la partie"));
     btnMenuPauseIsland = new QPushButton(tr("Aller sur l'île"));
     btnMenuPauseQuit = new QPushButton(tr("Menu Principal"));
 

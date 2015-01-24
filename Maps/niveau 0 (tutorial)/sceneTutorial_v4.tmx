@@ -18,7 +18,7 @@
  </layer>
  <layer name="Walls_Blocks" width="60" height="30">
   <data encoding="base64" compression="zlib">
-   eJztmEEKgzAQRecMNsvgsvXAHqLesg5mVcT8ZgZNx/9gECT85DFRNCL3Ybl6ASdzpe+w1qNSyXnO3vs7OufRNza9+6L91XcB8qxH8c3g2Ci+z7UmYFwUXxT6nofuwVelkD36C7331xv6xmbPdy7X2rf8Xmke8h+AViqZLSUH973QvOyYN4rvGr19dX30teXRtx362ribb++wvzboa8+jbzv0tfHPvm/Zzhi+/ytq5xHIuQVaU5nbK0+zPsTSPYk=
+   eJztmFEOgyAQRPcM1k/jZ+uBewh7o/a3XkQ25avRMoWN4jqTTEyADLwsGkHkPHrsvYCNtSdvE3xJuDWes/b69sZ55PWt2nnR+uq3AHnXvfB24FgvvNfgARjnhRcVebeT7sFbwsge/Ue119da5PWtJd57fKb+5Zesecg5AHUbM3MsP9qtpHmdYV4vtmu05tX1kbcsj7z5Im+ZzsZbu1jfMpG3PI+8+crJega/Vvo88r6Dp5W+I/OO8rlj+D5XpO4jkHsL1EOc2ypPs2YrakD/
   </data>
  </layer>
  <layer name="Solid_Blocks" width="60" height="30">
@@ -56,7 +56,7 @@
    eJzt1kENAEAIA0FU4V/aeSCEI2FGQffXiL3y94Bh13oBAOh17U/qBQAAgJoHOZMBDw==
   </data>
  </layer>
- <layer name="Snow_Surface" width="60" height="30" visible="0">
+ <layer name="Snow_Surface" width="60" height="30">
   <data encoding="base64" compression="zlib">
    eJztlEEOwyAMBPn/g3uOcquQ1yxhbajTkXKBwHqIQ2t/vvmQTxWq+/a1I69VX3Rm0Wdo5Xl1jcaf5O70HdWFxhUP2lcJk4ey2TNi3ax6osm6l3b180w9FX3ZXozI6cczsO4lNKfIeYvvKWT18ym8zfemgtOMQwVfFqafR33u3btMXgPvqllxVfpm3BOrroyvl82MKcnwndnnl3z7fb1MK3u0TkHk9/Xe69dkonD2+lPZNwqi/1+UYdWRQZYvW0M0Kl+0H8pAa6KJ+L7NmO8zUQ0ZRPTzTF9k+1q5Sl9rHuXu5IQaFFwD7yPb
   </data>
@@ -81,19 +81,19 @@
    eJztzgEJAAAMA6A1e/9WjzEGmsAEAAAAAPZcOwAAMOoBZPYAQA==
   </data>
  </layer>
- <layer name="Enemies" width="60" height="30">
+ <layer name="Enemies" width="60" height="30" visible="0">
   <data encoding="base64" compression="zlib">
    eJzt1LEJAAAIA0H3n9jS1gFEEe4m+CIkgi6vAwAG+DK+sVkAAAAA2FPc3gLp
   </data>
  </layer>
  <layer name="Dialogs" width="60" height="30" visible="0">
   <data encoding="base64" compression="zlib">
-   eJzt18EJADAIA0Cn6v7dzBEKRVDauwnyCEQj4F2rOwBjVXdD1wCAydwqVNrdAQAO/Pz8xC4DtxI5xwLH
+   eJzt17ENACAIBECnsnV2N7OxtTEkEL1raL/4BGgN3tWzA1BWdDd0DQCozK1CpJkdAOBg7Onn5yf2MnBrAQCtAwY=
   </data>
  </layer>
  <layer name="Deco" width="60" height="30">
   <data encoding="base64" compression="zlib">
-   eJzt1bENgDAMRcEg2BgoIXOHCo9AhRO4k15r/c6lAPzTMvV9DwDow+zHD6dlDwDgM67sAcCw1miL9uwhLzmiM6rZQ3jsBuRzBNg=
+   eJzt1bERgCAQRUEY6b8+TLUKiaAEIg90d+anNy+7lAD+qeS17wEAazj8+O080QEAfEaLDgC2VsfO6IgXXWN3dATTOjthBXg=
   </data>
  </layer>
  <layer name="Map2" width="60" height="30">
@@ -101,7 +101,7 @@
    eJztzjENAAAIwDD8a0MRFw8eCKFN9i8CAAAAAOC+2h4AeCgnbmnffwKT
   </data>
  </layer>
- <layer name="More" width="60" height="30" visible="0">
+ <layer name="More" width="60" height="30">
   <data encoding="base64" compression="zlib">
    eJztw7EJAAAIA7CK///s4AHOQgJJAAAAAAAAgEvX/m4AIk4ACQ==
   </data>

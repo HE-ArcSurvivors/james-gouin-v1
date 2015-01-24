@@ -1018,6 +1018,8 @@ void Gameboard::setLevel(int value)
 void Gameboard::loadLevel()
 {
     qDebug() << "LOAD LEVEL";
+
+    removeAllItems();
     mainScene = currentLevel->populateScene();
     setViewPosition();
 
@@ -1052,4 +1054,18 @@ void Gameboard::setFirstDialog()
     dialogProxy->show();
     dialog->setText(currentLevel->getDialogText(1),1);
     dialogToogle = true;
+}
+
+void Gameboard::removeAllItems()
+{
+    QList<QGraphicsItem*> itemsList = mainScene->items();
+    QList<QGraphicsItem*>::iterator iter = itemsList.begin();
+    QList<QGraphicsItem*>::iterator end = itemsList.end();
+    while(iter != end)
+    {
+        QGraphicsItem* item = (*iter);
+        mainScene->removeItem(item);
+        iter++;
+    }
+    mainScene->clear();
 }
