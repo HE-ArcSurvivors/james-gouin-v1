@@ -1,3 +1,17 @@
+/*********************************************************************************
+* Copyright (C) Haute-Ecole ARC - All Rights Reserved
+* Copyright (C) Banana Rocket - All Rights Reserved
+*
+* This file is part of <P2 Project: James Gouin et la Banane Sacrée>.
+*
+* Unauthorized copying of this file, via any medium is strictly prohibited
+* Proprietary and confidential
+* Written by Claret-Yakovenko Roman <romain.claret@rocla.ch>, 27 January 2015
+* Written by Divernois Margaux <>, 27 January 2015
+* Written by Visinand Steve <>, 27 January 2015
+**********************************************************************************/
+
+
 #include "gameboard.h"
 #include "p_penguin.h"
 #include "b_wall.h"
