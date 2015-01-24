@@ -92,7 +92,7 @@ private:
 
     void MoveBloc(char);
 
-    void SinkMovable(B_Movable *b);
+    void fixeMovable(B_Movable *b);
     void checkChangeView(char);
     void ChangeView(char sens);
     bool checkGameOver();
