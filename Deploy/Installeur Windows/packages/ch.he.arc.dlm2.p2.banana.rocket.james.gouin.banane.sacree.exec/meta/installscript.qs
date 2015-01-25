@@ -66,6 +66,10 @@ Component.prototype.createOperations = function()
         component.addOperation("CreateShortcut", "@TargetDir@/JG Game Windows/JG Game.exe", "@StartMenuDir@/JG Holy Banana.lnk",
             "workingDirectory=@TargetDir@", "iconPath=%SystemRoot%/system32/SHELL32.dll",
             "iconId=2");
+            
+        component.addOperation("CreateShortcut", "@TargetDir@/Uninstaller JG Holy Banana.exe", "@StartMenuDir@/Uninstall JG.lnk",
+            "workingDirectory=@TargetDir@", "iconPath=%SystemRoot%/system32/SHELL32.dll",
+            "iconId=2");
     }
     
     
