@@ -619,6 +619,7 @@ void Level::getSceneDialog()
     if(f.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QTextStream t(&f);
+        t.setCodec("UTF-8");
         QString line[1000];
         int line_count=0;
 

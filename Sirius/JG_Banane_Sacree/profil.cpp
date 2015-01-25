@@ -2,6 +2,8 @@
 #include <qDebug>
 #include <QDateTime>
 
+int Profil::NBMAXVIE = 99;
+
 Profil::Profil()
 {
     this->username = "Nouveau";

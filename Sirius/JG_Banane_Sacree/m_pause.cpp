@@ -57,9 +57,9 @@ M_Pause::M_Pause(QWidget *parent)
 //    this->setGraphicsEffect(effect);
 
 
-    btnMenuPauseResume = new QPushButton(tr("Reprendre la Partie"));
-    btnMenuPauseRestartLevel = new QPushButton(tr("Redémarrer le Niveau"));
-    btnMenuPauseRestartGame = new QPushButton(tr("Redémarrer le Jeu"));
+    btnMenuPauseResume = new QPushButton(tr("Reprendre la partie"));
+    btnMenuPauseRestartLevel = new QPushButton(tr("Recommencer l'énigme"));
+    btnMenuPauseRestartGame = new QPushButton(tr("Recommencer le niveau"));
     btnMenuPauseIsland = new QPushButton(tr("Aller sur l'île"));
     btnMenuPauseQuit = new QPushButton(tr("Menu Principal"));
 

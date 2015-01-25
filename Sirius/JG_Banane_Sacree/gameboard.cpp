@@ -181,10 +181,9 @@ void Gameboard::SlidePingouin()
         if(MovePingouinToTop() && pingouin->isSlide())
         {
 
-            checkItem();
+            checkPositionEvents();
             checkChangeView(cSensPingouinSlide);
             pingouin->moveBy(0, -1);
-            checkGameOver();
 
             if(moveBloc != NULL)
             {
@@ -203,10 +202,9 @@ void Gameboard::SlidePingouin()
         if(MovePingouinToBottom() && pingouin->isSlide())
         {
 
-                checkItem();
+                checkPositionEvents();
                 checkChangeView(cSensPingouinSlide);
                 pingouin->moveBy(0, 1);
-                checkGameOver();
 
                 if(moveBloc != NULL)
                 {
@@ -224,11 +222,9 @@ void Gameboard::SlidePingouin()
 
         if(MovePingouinToLeft() && pingouin->isSlide())
         {
-
-            checkItem();
+            checkPositionEvents();
             checkChangeView(cSensPingouinSlide);
             pingouin->moveBy(-1, 0);
-            checkGameOver();
 
             if(moveBloc != NULL)
             {
@@ -247,9 +243,8 @@ void Gameboard::SlidePingouin()
         {
 
                pingouin->moveBy(1, 0);
-               checkItem();
+               checkPositionEvents();
                checkChangeView(cSensPingouinSlide);
-               checkGameOver();
 
                if(moveBloc != NULL)
                 {
@@ -267,7 +262,7 @@ void Gameboard::SlidePingouin()
 
     if(endSlide)
     {
-        checkItem();
+        checkPositionEvents();
         checkChangeView(cSensPingouinSlide);
         timerPingouinSlide->stop();
         isSliding=false;
@@ -356,39 +351,7 @@ void Gameboard::SinkMovable(B_Movable *b)
     }
 }
 
-bool Gameboard::checkGameOver()
-{
-    QList<QGraphicsItem *> CollidingItems = pingouin->CollidesCenter();
-
-    for(int i=0; i<CollidingItems.length(); i++)
-    {
-        if(typeid(*CollidingItems.at(i)).name() == typeid(B_Water).name())
-        {
-            restartLevel();
-
-            setPositionCenter(dialog);
-            dialogProxy->show();
-            dialog->setText("Plouf, dans l'eau! Tu recommences au dernier checkpoint",2);
-            dialogToogle = true;
-
-            return true;
-        }
-        if(typeid(*CollidingItems.at(i)).name() == typeid(E_Renard).name() || typeid(*CollidingItems.at(i)).name() == typeid(E_Loup).name())
-        {
-            restartLevel();
-
-            setPositionCenter(dialog);
-            dialogProxy->show();
-            dialog->setText("Tu t'es fait repéré par un ennemi",2);
-            dialogToogle = true;
-
-            return true;
-        }
-    }
-    return false;
-}
-
-void Gameboard::checkItem()
+void Gameboard::checkPositionEvents()
 {
     QList<QGraphicsItem *> CollidingItems = pingouin->CollidesCenter();
 
@@ -407,8 +370,19 @@ void Gameboard::checkItem()
             }
             else if(objet->getName() == "Oeuf")
             {
-                playerProfil->setNbLive(playerProfil->getNbLive()+1);
-                lifeList->updateHearts(playerProfil->getNbLive());
+                if(playerProfil->getNbLive()<Profil::NBMAXVIE)
+                {
+                    playerProfil->setNbLive(playerProfil->getNbLive()+1);
+                    lifeList->updateHearts(playerProfil->getNbLive());
+                }
+                else
+                {
+                    QString text(tr("Le nombre de vies maximum de %1 a été atteint").arg(Profil::NBMAXVIE));
+                    setPositionCenter(dialog);
+                    dialogProxy->show();
+                    dialog->setText(text,2);
+                    dialogToogle = true;
+                }
             }
 
             objectList->reloadObjectList(pingouin->getSacoche());
@@ -423,6 +397,24 @@ void Gameboard::checkItem()
             setPositionCenter(dialog);
             dialogProxy->show();
             dialog->setText(currentLevel->getDialogText(item->getDialogNumber()),1);
+            dialogToogle = true;
+        }
+        if(typeid(*CollidingItems.at(i)).name() == typeid(B_Water).name())
+        {
+            restartLevel();
+
+            setPositionCenter(dialog);
+            dialogProxy->show();
+            dialog->setText("Plouf, dans l'eau! Tu recommences au dernier checkpoint",2);
+            dialogToogle = true;
+        }
+        if(typeid(*CollidingItems.at(i)).name() == typeid(E_Renard).name() || typeid(*CollidingItems.at(i)).name() == typeid(E_Loup).name())
+        {
+            restartLevel();
+
+            setPositionCenter(dialog);
+            dialogProxy->show();
+            dialog->setText("Tu t'es fait repéré par un ennemi",2);
             dialogToogle = true;
         }
     }
@@ -457,6 +449,7 @@ void Gameboard::checkChangeView(char sens)
             if(bloc->isEndLevel() && endable)
             {
                 endable = false;
+                pingouin->emptySacoche();
                 setLevel(bloc->getNextLevel());
                 setProxy();
                 setFirstDialog();
@@ -657,21 +650,18 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
                 {
                     pingouin->moveBy(0, -1);
 
-                    if(!checkGameOver())
-                    {
-                        checkItem();
-                        checkChangeView('t');
+                    checkPositionEvents();
+                    checkChangeView('t');
 
-                        if(moveBloc != NULL)
-                        {
-                            MoveBloc('t');
-                        }
-                        if(pingouin->isSlide())
-                        {
-                            isSliding=true;
-                            cSensPingouinSlide = 't';
-                            timerPingouinSlide->start(SLIDE_SPEED);
-                        }
+                    if(moveBloc != NULL)
+                    {
+                        MoveBloc('t');
+                    }
+                    if(pingouin->isSlide())
+                    {
+                        isSliding=true;
+                        cSensPingouinSlide = 't';
+                        timerPingouinSlide->start(SLIDE_SPEED);
                     }
                 }
             }
@@ -683,20 +673,17 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
                 {
                     pingouin->moveBy(0, 1);
 
-                    if(!checkGameOver() && checkPosition(pingouin))
+                    checkPositionEvents();
+                    checkChangeView('b');
+                    if(moveBloc != NULL)
                     {
-                        checkItem();
-                        checkChangeView('b');
-                        if(moveBloc != NULL)
-                        {
-                            MoveBloc('b');
-                        }
-                        if(pingouin->isSlide())
-                        {
-                            isSliding=true;
-                            cSensPingouinSlide = 'b';
-                            timerPingouinSlide->start(SLIDE_SPEED);
-                        }
+                        MoveBloc('b');
+                    }
+                    if(pingouin->isSlide())
+                    {
+                        isSliding=true;
+                        cSensPingouinSlide = 'b';
+                        timerPingouinSlide->start(SLIDE_SPEED);
                     }
                 }
             }
@@ -708,9 +695,8 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
                 {
                     pingouin->moveBy(-1, 0);
 
-                    if(!checkGameOver())
-                    {
-                        checkItem();
+
+                        checkPositionEvents();
                         checkChangeView('l');
                         if(moveBloc != NULL)
                         {
@@ -722,7 +708,6 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
                             cSensPingouinSlide = 'l';
                             timerPingouinSlide->start(SLIDE_SPEED);
                         }
-                    }
                 }
             }
             if(event->key() == Qt::Key_D || event->key() == Qt::Key_Right)
@@ -733,9 +718,8 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
                 {
                     pingouin->moveBy(1, 0);
 
-                    if(!checkGameOver())
-                    {
-                        checkItem();
+
+                        checkPositionEvents();
                         checkChangeView('r');
                         if(moveBloc != NULL)
                         {
@@ -747,7 +731,6 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
                             cSensPingouinSlide = 'r';
                             timerPingouinSlide->start(SLIDE_SPEED);
                         }
-                    }
                 }
             }
             if(event->key() == Qt::Key_0)
@@ -867,17 +850,14 @@ void Gameboard::restartLevel()
 {
     if(playerProfil->getNbLive()>0)
     {
-        mainScene->removeItem(proxy);
-        mainScene->removeItem(objectListProxy);
-        mainScene->removeItem(lifeListProxy);
-        mainScene->removeItem(dialogProxy);
+        removeAllItems();
+        disconnectTimer();
 
         playerProfil->setNbLive(playerProfil->getNbLive()-1);
         lifeList->updateHearts(playerProfil->getNbLive());
 
         loadLevel();
         setProxy();
-        setTimer();
     }
     else
     {
@@ -893,16 +873,13 @@ void Gameboard::restartLevel()
 
 void Gameboard::restartGame()
 {
-    mainScene->removeItem(proxy);
-    mainScene->removeItem(objectListProxy);
-    mainScene->removeItem(lifeListProxy);
-    mainScene->removeItem(dialogProxy);
+    removeAllItems();
+    disconnectTimer();
 
     pingouin->emptySacoche();
 
     setLevel(currentLevel->getLevelNumber());
     setProxy();
-    setTimer();
 
     playerProfil->setNbLive(playerProfil->getNbLive()-1);
     lifeList->updateHearts(playerProfil->getNbLive());
@@ -973,7 +950,7 @@ void Gameboard::saveCheckpoint()
 void Gameboard::loadCheckpoint()
 {
     pingouin->setPos((checkpoint->x()+gameSquares)/gameSquares,(checkpoint->y()+gameSquares)/gameSquares);
-    checkItem();
+    checkPositionEvents();
 }
 
 void Gameboard::setProxy()
@@ -1018,8 +995,6 @@ void Gameboard::setLevel(int value)
 void Gameboard::loadLevel()
 {
     qDebug() << "LOAD LEVEL";
-
-    removeAllItems();
     mainScene = currentLevel->populateScene();
     setViewPosition();
 
@@ -1031,11 +1006,17 @@ void Gameboard::loadLevel()
     pingouin->removeTempFromSacoche();
     pingouin->setPlayerOrientation("down");
     loadCheckpoint();
+    setTimer();
 }
 
 void Gameboard::setTimer()
 {
     QObject::connect(timer, SIGNAL(timeout()), mainScene, SLOT(advance()));
+}
+
+void Gameboard::disconnectTimer()
+{
+    QObject::disconnect(timer, SIGNAL(timeout()), mainScene, SLOT(advance()));
 }
 
 void Gameboard::setPlayerProfil(Profil *playerProfil)

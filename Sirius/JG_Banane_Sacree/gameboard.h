@@ -66,6 +66,7 @@ private:
     void loadLevel();
     void setLevel(int value);
     void setTimer();
+    void disconnectTimer();
 
     //Positionnement et gestion du niveau
     void setViewPosition();
@@ -96,7 +97,7 @@ private:
     void checkChangeView(char);
     void ChangeView(char sens);
     bool checkGameOver();
-    void checkItem();
+    void checkPositionEvents();
     void pauseMenu();
 
     void removeAllItems();
