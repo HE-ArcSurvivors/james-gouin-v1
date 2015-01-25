@@ -58,5 +58,15 @@ Component.prototype.createOperations = function()
     } catch (e) {
         print(e);
     }
+    
+    if (installer.value("os") === "win")
+    {
+        component.addOperation("CreateShortcut", "@TargetDir@/JG Game Windows/JG Game.exe", "@DesktopDir@/JG Holy Banana.lnk");
+        
+        component.addOperation("CreateShortcut", "@TargetDir@/JG Game Windows/JG Game.exe", "@StartMenuDir@/JG Holy Banana.lnk",
+            "workingDirectory=@TargetDir@", "iconPath=%SystemRoot%/system32/SHELL32.dll",
+            "iconId=2");
+    }
+    
+    
 }
-
