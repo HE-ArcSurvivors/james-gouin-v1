@@ -9,5 +9,5 @@ Toutes utilisations et/ou copies et/ou modifications des fichiers sources en deh
 Listes des 3 concepteurs du logiciel de la team ©Banana Rocket:
 
 Claret-Yakovenko Romain (romain.claret@rocla.ch)
-Divernois Margaux
+Divernois Margaux (margaux.divernois@gmail.com)
 Visinand Steve (visinandst@gmail.com)
