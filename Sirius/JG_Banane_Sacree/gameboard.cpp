@@ -991,6 +991,7 @@ void Gameboard::setLevel(int value)
     currentLevel = new Level(value, this);
     pingouin->setPos(currentLevel->getStartingPoint()->x(),currentLevel->getStartingPoint()->y());
     viewRequested = currentLevel->getViewStart();
+    MenuStart::saveGame(playerProfil);
     saveCheckpoint();
     loadLevel();
 }
