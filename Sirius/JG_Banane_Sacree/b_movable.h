@@ -36,7 +36,6 @@ public:
 private:
 
     bool IsMovable(QList<QGraphicsItem *>);
-
     void setDesign(int xpos, int ypos);
 
 

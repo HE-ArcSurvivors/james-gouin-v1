@@ -63,6 +63,8 @@ private:
     bool toggleGameCreated;
     bool toggleFirstStart;
 
+    void closeEvent (QCloseEvent *event);
+
 signals:
 
 public slots:

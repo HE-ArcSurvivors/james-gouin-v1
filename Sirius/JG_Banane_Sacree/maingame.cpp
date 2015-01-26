@@ -4,9 +4,12 @@
 #include <QGraphicsView>
 #include <QLabel>
 #include <QDebug>
+#include <QMessageBox>
 
 MainGame::MainGame(QWidget *parent) : QWidget(parent)
 {
+//    connect(this,SIGNAL(closeEvent()),this,SLOT(Gameboard::exitGame()));
+
     toggleGameCreated = false;
     toggleFirstStart = true;
 
@@ -109,5 +112,17 @@ void MainGame::resizeEvent(QResizeEvent * event) {
             theGame->setGeometry(event->size().width()/2-windowSizeX/2,event->size().height()/2-windowSizeY/2,windowSizeX,windowSizeY);
         }
 
+    }
+}
+
+void MainGame::closeEvent (QCloseEvent *event)
+{
+    QMessageBox::StandardButton resBtn = QMessageBox::question( this, tr("Quitter ?"),
+                                                                tr("Êtes-vous sur ?\n"),
+                                                                QMessageBox::Cancel | QMessageBox::Yes);
+    if (resBtn != QMessageBox::Yes) {
+        event->ignore();
+    } else {
+        event->accept();
     }
 }

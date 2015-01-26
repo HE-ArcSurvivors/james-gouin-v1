@@ -157,6 +157,8 @@ private:
     QPushButton *btnMenuPauseConfigure;
     QPushButton *btnMenuPauseQuit;
 
+    void closeEvent (QCloseEvent *event);
+
 protected:
 
 signals:
