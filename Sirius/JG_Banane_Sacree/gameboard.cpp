@@ -1052,15 +1052,3 @@ void Gameboard::removeAllItems()
     }
     mainScene->clear();
 }
-
-void Gameboard::closeEvent (QCloseEvent *event)
-{
-    QMessageBox::StandardButton resBtn = QMessageBox::question( this, tr("Quitter ?"),
-                                                                tr("Êtes-vous sur ?\n"),
-                                                                QMessageBox::Cancel | QMessageBox::Yes);
-    if (resBtn != QMessageBox::Yes) {
-        event->ignore();
-    } else {
-        event->accept();
-    }
-}

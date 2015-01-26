@@ -91,19 +91,19 @@
    eJzt17ENACAIBECnsnV2N7OxtTEkEL1raL/4BGgN3tWzA1BWdDd0DQCozK1CpJkdAOBg7Onn5yf2MnBrAQCtAwY=
   </data>
  </layer>
- <layer name="Deco" width="60" height="30">
+ <layer name="Deco" width="60" height="30" visible="0">
   <data encoding="base64" compression="zlib">
    eJzt1bERgCAQRUEY6b8+TLUKiaAEIg90d+anNy+7lAD+qeS17wEAazj8+O080QEAfEaLDgC2VsfO6IgXXWN3dATTOjthBXg=
   </data>
  </layer>
- <layer name="Map2" width="60" height="30">
+ <layer name="Map2" width="60" height="30" visible="0">
   <data encoding="base64" compression="zlib">
    eJztzjENAAAIwDD8a0MRFw8eCKFN9i8CAAAAAOC+2h4AeCgnbmnffwKT
   </data>
  </layer>
  <layer name="More" width="60" height="30">
   <data encoding="base64" compression="zlib">
-   eJztw7EJAAAIA7CK///s4AHOQgJJAAAAAAAAgEvX/m4AIk4ACQ==
+   eJztzkEKABAUANEvl2fLhSlXkJ96r2Y/EQAAAAAAANzUdj174qGxm9kTD9Ry+t0C2SoCPw==
   </data>
  </layer>
 </map>

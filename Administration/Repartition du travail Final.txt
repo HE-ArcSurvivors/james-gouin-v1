@@ -1,0 +1,32 @@
+    player.h	Romain
+    surface.h	Romain & Steve
+    gameboard.h Romain & Margaux & Steve
+    b_movable.h	Steve
+    b_wall.h	Steve
+    s_viewtransition.h Romain & Margaux
+    s_snow.h	Steve
+    p_penguin.h	Steve & Romain
+    b_water.h	Steve
+    profil.h	Margaux
+    m_menustart.h Romain & Margaux
+    object.h	Margaux
+    m_pause.h	Romain
+    ennemi.h	Steve
+    s_ice.h	Steve
+    level.h	Romain & Margaux
+    maingame.h	Romain
+    w_object.h	Margaux
+    e_renard.h	Steve
+    e_loup.h	Steve
+    s_dialog.h	Margaux
+    w_dialog.h	Margaux
+    w_life.h	Margaux
+    images.qrc	Romain
+    ItemsPopulation.qrc	Romain & Margaux
+    icons.qrc Romain
+License		Romain
+Maps		Romain
+Enigmes		Romain & Margaux & Steve
+Deploy		Romain
+Installateur	Romain
+Design		Steve & Margaux
