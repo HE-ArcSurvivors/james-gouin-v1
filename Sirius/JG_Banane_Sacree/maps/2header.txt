@@ -1,10 +1,10 @@
 [header]
 width=60
 height=30
-viewRequestedX=3
+viewRequestedX=1
 viewRequestedY=1
-levelStartX=60
-levelStartY=8
+levelStartX=20
+levelStartY=11
 unlockEndX=0
 unlockEndY=20
 tilewidth=32

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="Pokemon_Ice_tiles.png" tilewidth="32" tileheight="32">
-  <image source="../../Images/Tiles/Pokemon_Ice_tiles.png" width="320" height="416"/>
+  <image source="../../Tiles/Pokemon_Ice_tiles.png" width="320" height="416"/>
  </tileset>
  <tileset firstgid="131" name="Ice_tiles.png" tilewidth="32" tileheight="32">
-  <image source="../../Images/Tiles/Ice_tiles.png" width="320" height="416"/>
+  <image source="../../Tiles/Ice_tiles.png" width="320" height="416"/>
  </tileset>
  <layer name="Base" width="60" height="30">
   <data encoding="base64" compression="zlib">
@@ -31,7 +31,7 @@
    eJzt2NEOgCAIBVDnt/fhvTPQRBCwe7bWgzNAVmu0BlSPTkDpUe6rUq+2PmpUr/YsurD3xNnOYnjlwNWcoV7rWFJvLWNwd7rOrXlbiReZ5y6rHlt9W7pwWdl9VrX+Srzf7SiZviEAAAAAM5n+T77msjM3qKpy7iui5isneM6GAOdwi0x9vHVmwflLnVm9kR4Bdw==
   </data>
  </layer>
- <layer name="Items" width="60" height="30">
+ <layer name="Items" width="60" height="30" visible="0">
   <data encoding="base64" compression="zlib">
    eJzt10EJAAAIA0BTm98K4kfQuwRDxsAIuCu3AxzlrkCXvQAAAL7w/7BB74CpAuvMAk8=
   </data>
