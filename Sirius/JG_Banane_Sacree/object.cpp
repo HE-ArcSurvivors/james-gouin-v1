@@ -30,11 +30,6 @@ QString Object::getName()
     return *nom;
 }
 
-void Object::action()
-{
-
-}
-
 QPixmap Object::getTexture()
 {
     return objectSkin->texture();

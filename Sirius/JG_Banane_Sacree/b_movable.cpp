@@ -133,28 +133,32 @@ QList<QGraphicsItem *> B_Movable::CollidesCenter(){
      return collidingItems();
 }
 
-QGraphicsRectItem* B_Movable::getCollideBloc(char sens)
+QGraphicsRectItem* B_Movable::getCollideBlocPosition(char sens)
 {
-    qDebug() << "Bloc : " << this->x() << " " << this->y();
+    QGraphicsRectItem* collide = new QGraphicsRectItem();
     if(sens == 'b')
     {
-        qDebug() << "BottomCollideBox :" << this->bottomCollideBox->x() << " " << this->bottomCollideBox->y();
-        return this->bottomCollideBox;
+        collide->setX(this->x());
+        collide->setY(this->y()+32);
+        return collide;
     }
     else if(sens == 'l')
     {
-        qDebug() << "LeftCollideBox :" << this->leftCollideBox->x() << " " << this->leftCollideBox->y();
-        return this->leftCollideBox;
+        collide->setX(this->x()-32);
+        collide->setY(this->y());
+        return collide;
     }
     else if(sens == 'r')
     {
-        qDebug() << "RightCollideBox :" << this->rightCollideBox->x() << " " << this->rightCollideBox->y();
-        return this->rightCollideBox;
+        collide->setX(this->x()+32);
+        collide->setY(this->y());
+        return collide;
     }
     else if(sens == 't')
     {
-        qDebug() << "TopCollideBox :" << this->topCollideBox->x() << " " << this->topCollideBox->y();
-        return this->topCollideBox;
+        collide->setX(this->x());
+        collide->setY(this->y()-32);
+        return collide;
     }
     return NULL;
 }

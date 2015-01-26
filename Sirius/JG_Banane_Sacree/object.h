@@ -16,7 +16,6 @@ public:
 
     void setDesign();
     QString getName();
-    void action();
     QPixmap getTexture();
 
 private:

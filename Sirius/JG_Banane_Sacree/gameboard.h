@@ -50,7 +50,6 @@ public:
     static int sizeX;
     static int sizeY;
 
-    QPoint *getCheckPoint();
     void setPlayerProfil(Profil* playerProfil);
 
 private:
@@ -66,6 +65,7 @@ private:
     void loadLevel();
     void setLevel(int value);
     void setTimer();
+    void disconnectTimer();
 
     //Positionnement et gestion du niveau
     void setViewPosition();
@@ -96,7 +96,7 @@ private:
     void checkChangeView(char);
     void ChangeView(char sens);
     bool checkGameOver();
-    void checkItem();
+    void checkPositionEvents();
     void pauseMenu();
 
     void removeAllItems();
@@ -157,6 +157,8 @@ private:
     QPushButton *btnMenuPauseConfigure;
     QPushButton *btnMenuPauseQuit;
 
+    void closeEvent (QCloseEvent *event);
+
 protected:
 
 signals:
@@ -167,8 +169,8 @@ public slots:
     void SlideBloc();
 
     void exitGame();
+    void restartEnigma();
     void restartLevel();
-    void restartGame();
     void returnIsland();
 };
 

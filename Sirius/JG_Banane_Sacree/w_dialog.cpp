@@ -58,6 +58,11 @@ void WidgetDialog::setText(QString text, int type)
     this->text->setText(text);
 }
 
+QString WidgetDialog::getText()
+{
+    return this->text->text();
+}
+
 void WidgetDialog::paintEvent(QPaintEvent *pe)
 {
   QStyleOption o;

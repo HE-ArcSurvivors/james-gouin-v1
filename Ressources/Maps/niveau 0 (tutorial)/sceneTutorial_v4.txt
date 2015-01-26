@@ -6,8 +6,8 @@ tileheight=32
 orientation=orthogonal
 
 [tilesets]
-tileset=../../Images/Tiles/Pokemon_Ice_tiles.png,32,32,0,0
-tileset=../../Images/Tiles/Ice_tiles.png,32,32,0,0
+tileset=../../Tiles/Pokemon_Ice_tiles.png,32,32,0,0
+tileset=../../Tiles/Ice_tiles.png,32,32,0,0
 
 [layer]
 type=Base

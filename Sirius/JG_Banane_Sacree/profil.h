@@ -34,7 +34,9 @@ public:
     void write(QJsonObject &json) const;
     void print();
 
-//private :
+    static int NBMAXVIE;
+
+private :
     QString username;
     QString startDate;
     QString saveDate;

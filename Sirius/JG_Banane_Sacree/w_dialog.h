@@ -10,6 +10,7 @@ class WidgetDialog : public QWidget
 public:
     WidgetDialog(QWidget *parent = 0);
     void setText(QString text, int type);
+    QString getText();
     void paintEvent(QPaintEvent *);
 
 signals:

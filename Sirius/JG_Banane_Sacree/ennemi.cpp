@@ -146,7 +146,7 @@ void Ennemi::pinguinDetection()
                     this->detectPinguin = true;
                     vb.bloc->setBrush(brush);
                     vb.bloc->setPen(pen);
-                    game->restartLevel();
+                    game->restartEnigma();
                 }
             }
         }

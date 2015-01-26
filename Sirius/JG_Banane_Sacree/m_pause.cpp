@@ -56,21 +56,17 @@ M_Pause::M_Pause(QWidget *parent)
 //    effect->setOpacity(0.5);
 //    this->setGraphicsEffect(effect);
 
-
     btnMenuPauseResume = new QPushButton(tr("Reprendre la Partie"));
-    btnMenuPauseRestartLevel = new QPushButton(tr("Retourner au dernier Checkpoint"));
-    btnMenuPauseRestartGame = new QPushButton(tr("Redémarrer la partie"));
+    btnMenuPauseRestartEnigma = new QPushButton(tr("Retourner au dernier checkpoint"));
+    btnMenuPauseRestartLevel = new QPushButton(tr("Redémarrer la partie"));
     btnMenuPauseIsland = new QPushButton(tr("Aller sur l'île"));
     btnMenuPauseQuit = new QPushButton(tr("Menu Principal"));
 
-
     btnMenuPauseResume->setStyleSheet(styleBtn);
-    btnMenuPauseRestartLevel->setStyleSheet(styleBtn);
+    btnMenuPauseRestartEnigma->setStyleSheet(styleBtn);
     btnMenuPauseQuit->setStyleSheet(styleBtn);
     btnMenuPauseIsland->setStyleSheet(styleBtn);
-    btnMenuPauseRestartGame->setStyleSheet(styleBtn);
-
-
+    btnMenuPauseRestartLevel->setStyleSheet(styleBtn);
 
 //    btnMenuPauseResume->setGraphicsEffect(shadowbtn());
 //    btnMenuPauseRestartLevel->setGraphicsEffect(shadowbtn());
@@ -80,15 +76,15 @@ M_Pause::M_Pause(QWidget *parent)
 
     connect(btnMenuPauseQuit, SIGNAL(clicked()),parent, SLOT(exitGame()));
     connect(btnMenuPauseResume, SIGNAL(clicked()),parent, SLOT(resumeGame()));
+    connect(btnMenuPauseRestartEnigma, SIGNAL(clicked()),parent, SLOT(restartEnigma()));
     connect(btnMenuPauseRestartLevel, SIGNAL(clicked()),parent, SLOT(restartLevel()));
-    connect(btnMenuPauseRestartGame, SIGNAL(clicked()),parent, SLOT(restartGame()));
     connect(btnMenuPauseIsland, SIGNAL(clicked()),parent, SLOT(returnIsland()));
 
     layoutMenuPause->addRow(titleMenuPause);
     layoutMenuPause->addRow(undertitleMenuPause);
     layoutMenuPause->addRow(btnMenuPauseResume);
+    layoutMenuPause->addRow(btnMenuPauseRestartEnigma);
     layoutMenuPause->addRow(btnMenuPauseRestartLevel);
-    layoutMenuPause->addRow(btnMenuPauseRestartGame);
     layoutMenuPause->addRow(btnMenuPauseIsland);
     layoutMenuPause->addRow(btnMenuPauseQuit);
 
@@ -134,21 +130,21 @@ void M_Pause::setUnableMenu(int levelValue)
             break;
     case 1: btnMenuPauseIsland->setDisabled(true);
             btnMenuPauseIsland->setStyleSheet(styleBtnUnable);
-            btnMenuPauseRestartGame->setDisabled(true);
-            btnMenuPauseRestartGame->setStyleSheet(styleBtnUnable);
             btnMenuPauseRestartLevel->setDisabled(true);
             btnMenuPauseRestartLevel->setStyleSheet(styleBtnUnable);
+            btnMenuPauseRestartEnigma->setDisabled(true);
+            btnMenuPauseRestartEnigma->setStyleSheet(styleBtnUnable);
             break;
     default:
         btnMenuPauseResume->setDisabled(false);
-        btnMenuPauseRestartLevel->setDisabled(false);
+        btnMenuPauseRestartEnigma->setDisabled(false);
         btnMenuPauseQuit->setDisabled(false);
         btnMenuPauseIsland->setDisabled(false);
-        btnMenuPauseRestartGame->setDisabled(false);
+        btnMenuPauseRestartLevel->setDisabled(false);
         btnMenuPauseResume->setStyleSheet(styleBtn);
-        btnMenuPauseRestartLevel->setStyleSheet(styleBtn);
+        btnMenuPauseRestartEnigma->setStyleSheet(styleBtn);
         btnMenuPauseQuit->setStyleSheet(styleBtn);
         btnMenuPauseIsland->setStyleSheet(styleBtn);
-        btnMenuPauseRestartGame->setStyleSheet(styleBtn);
+        btnMenuPauseRestartLevel->setStyleSheet(styleBtn);
     }
 }
