@@ -635,7 +635,7 @@ QString Level::getDialogText(int value)
     }
     else
     {
-        () << "ERREUR - PAS DE TEXTE POUR CE DIALOG : " << dialogValue;
+        qDebug() << "ERREUR - PAS DE TEXTE POUR CE DIALOG : " << dialogValue;
         return "";
     }
 }
