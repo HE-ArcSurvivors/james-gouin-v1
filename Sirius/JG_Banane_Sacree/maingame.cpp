@@ -118,7 +118,7 @@ void MainGame::resizeEvent(QResizeEvent * event) {
 void MainGame::closeEvent (QCloseEvent *event)
 {
     QMessageBox::StandardButton resBtn = QMessageBox::question( this, tr("Quitter ?"),
-                                                                tr("Êtes-vous sur ?\n"),
+                                                                tr("En quittant de ce manière, vous allez perdre votre progression. Si vous souhaitez sauvegarder votre partie, annuler et quitter depuis le menu escape.\n"),
                                                                 QMessageBox::Cancel | QMessageBox::Yes);
     if (resBtn != QMessageBox::Yes) {
         event->ignore();
