@@ -1,3 +1,17 @@
+/*********************************************************************************
+* Copyright (C) Haute-Ecole ARC - All Rights Reserved
+* Copyright (C) Banana Rocket - All Rights Reserved
+*
+* This file is part of <P2 Project: James Gouin et la Banane Sacrée>.
+*
+* Unauthorized copying of this file, via any medium is strictly prohibited
+* Proprietary and confidential
+* Written by Claret-Yakovenko Roman <romain.claret@rocla.ch>, 27 January 2015
+* Written by Divernois Margaux <>, 27 January 2015
+* Written by Visinand Steve <>, 27 January 2015
+**********************************************************************************/
+
+
 #include "gameboard.h"
 #include "p_penguin.h"
 #include "b_wall.h"
@@ -80,7 +94,7 @@ Gameboard::Gameboard(QWidget *parent) : QWidget(parent)
     //pour annimer !
     timer = new QTimer();
     setTimer();
-    timer->start(100); //environ 15 fois par sec
+    timer->start(100); //10 fois par sec
 }
 
 void Gameboard::SlideBloc()
@@ -101,7 +115,7 @@ void Gameboard::SlideBloc()
                     SlidingBloc->moveBy(0,-1);
                     if(checkPosition(SlidingBloc))
                     {
-                        SinkMovable(SlidingBloc);
+                        fixeMovable(SlidingBloc);
                         removeBloc = false;
                     }
                 }
@@ -116,7 +130,7 @@ void Gameboard::SlideBloc()
 
                     if(checkPosition(SlidingBloc))
                     {
-                        SinkMovable(SlidingBloc);
+                        fixeMovable(SlidingBloc);
                         removeBloc = false;
                     }
                 }
@@ -128,10 +142,10 @@ void Gameboard::SlideBloc()
                 if(SlidingBloc->IsMovableToLeft())
                 {
                     SlidingBloc->moveBy(-1,0);
-                    SinkMovable(SlidingBloc);
+                    fixeMovable(SlidingBloc);
                     if(checkPosition(SlidingBloc))
                     {
-                        SinkMovable(SlidingBloc);
+                        fixeMovable(SlidingBloc);
                         removeBloc = false;
                     }
                 }
@@ -143,10 +157,10 @@ void Gameboard::SlideBloc()
                 if(SlidingBloc->IsMovableToRight())
                 {
                     SlidingBloc->moveBy(1,0);
-                    SinkMovable(SlidingBloc);
+                    fixeMovable(SlidingBloc);
                     if(checkPosition(SlidingBloc))
                     {
-                        SinkMovable(SlidingBloc);
+                        fixeMovable(SlidingBloc);
                         removeBloc = false;
                     }
                 }
@@ -180,15 +194,14 @@ void Gameboard::SlidePingouin()
 
         if(MovePingouinToTop() && pingouin->isSlide())
         {
-
+            pingouin->moveBy(0, -1);
             checkPositionEvents();
             checkChangeView(cSensPingouinSlide);
-            pingouin->moveBy(0, -1);
 
             if(moveBloc != NULL)
             {
                 moveBloc->moveBy(0,-1);
-                SinkMovable(moveBloc);
+                fixeMovable(moveBloc);
                 moveBloc = NULL;
             }
              endSlide = false;
@@ -201,18 +214,16 @@ void Gameboard::SlidePingouin()
 
         if(MovePingouinToBottom() && pingouin->isSlide())
         {
+            checkPositionEvents();
+            pingouin->moveBy(0, 1);
+            checkChangeView(cSensPingouinSlide);
 
-                checkPositionEvents();
-                checkChangeView(cSensPingouinSlide);
-                pingouin->moveBy(0, 1);
-
-                if(moveBloc != NULL)
-                {
-                    moveBloc->moveBy(0,1);
-                    SinkMovable(moveBloc);
-                    moveBloc = NULL;
-                }
-
+            if(moveBloc != NULL)
+            {
+                moveBloc->moveBy(0,1);
+                fixeMovable(moveBloc);
+                moveBloc = NULL;
+            }
 
             endSlide = false;
         }
@@ -222,14 +233,14 @@ void Gameboard::SlidePingouin()
 
         if(MovePingouinToLeft() && pingouin->isSlide())
         {
+            pingouin->moveBy(-1, 0);
             checkPositionEvents();
             checkChangeView(cSensPingouinSlide);
-            pingouin->moveBy(-1, 0);
 
             if(moveBloc != NULL)
             {
                 moveBloc->moveBy(-1,0);
-                SinkMovable(moveBloc);
+                fixeMovable(moveBloc);
                 moveBloc = NULL;
             }
 
@@ -241,19 +252,18 @@ void Gameboard::SlidePingouin()
 
         if(MovePingouinToRight() && pingouin->isSlide())
         {
+           pingouin->moveBy(1, 0);
+           checkPositionEvents();
+           checkChangeView(cSensPingouinSlide);
 
-               pingouin->moveBy(1, 0);
-               checkPositionEvents();
-               checkChangeView(cSensPingouinSlide);
+           if(moveBloc != NULL)
+            {
+                moveBloc->moveBy(1,0);
+                fixeMovable(moveBloc);
+                moveBloc = NULL;
+           }
 
-               if(moveBloc != NULL)
-                {
-                    moveBloc->moveBy(1,0);
-                    SinkMovable(moveBloc);
-                    moveBloc = NULL;
-               }
-
-               endSlide = false;
+           endSlide = false;
         }
         break;
     default:
@@ -296,7 +306,7 @@ void Gameboard::setViewPosition()
     }
 }
 
-void Gameboard::SinkMovable(B_Movable *b)
+void Gameboard::fixeMovable(B_Movable *b)
 {
     QList<QGraphicsItem *> CollidingItems = b->CollidesCenter();
     for(int i=0; i<CollidingItems.length(); i++)
@@ -315,7 +325,7 @@ void Gameboard::SinkMovable(B_Movable *b)
         }
         if(typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
         {
-            QString text = "Tu as bloqué ta sortie!";
+            QString text = tr("Tu as bloqué ta sortie!");
             setPositionCenter(dialog);
             dialogProxy->show();
             dialog->setText(text,2);
@@ -337,11 +347,11 @@ void Gameboard::SinkMovable(B_Movable *b)
 
             if(objet->getName() != "Oeuf")
             {
-                restartLevel();
+                restartEnigma();
 
-                QString text = "OUCH! Ce bloc vient d'écraser un ";
+                QString text = tr("OUCH! Ce bloc vient d'écraser un ");
                 text.append(objet->getName());
-                text.append("! Tu recommences au dernier checkpoint! ");
+                text.append(tr("! Tu recommences au dernier checkpoint! "));
                 setPositionCenter(dialog);
                 dialogProxy->show();
                 dialog->setText(text,2);
@@ -401,7 +411,7 @@ void Gameboard::checkPositionEvents()
         }
         if(typeid(*CollidingItems.at(i)).name() == typeid(B_Water).name())
         {
-            restartLevel();
+            restartEnigma();
 
             setPositionCenter(dialog);
             dialogProxy->show();
@@ -410,7 +420,7 @@ void Gameboard::checkPositionEvents()
         }
         if(typeid(*CollidingItems.at(i)).name() == typeid(E_Renard).name() || typeid(*CollidingItems.at(i)).name() == typeid(E_Loup).name())
         {
-            restartLevel();
+            restartEnigma();
 
             setPositionCenter(dialog);
             dialogProxy->show();
@@ -482,11 +492,11 @@ void Gameboard::checkChangeView(char sens)
                 }
                 else
                 {
-                    QString text = "Il te faut ";
+                    QString text = tr("Il te faut ");
                     text.append(QString::number(bloc->getNbItem()));
-                    text.append("x l'objet \"");
+                    text.append(tr("x l'objet \""));
                     text.append((bloc->getNeededItem()));
-                    text.append("\" pour aller plus loin ;) ");
+                    text.append(tr("\" pour aller plus loin ;) "));
 
                     setPositionCenter(dialog);
                     dialogProxy->show();
@@ -588,7 +598,7 @@ void Gameboard::MoveBloc(char sens)
         break;
     }
 
-    SinkMovable(moveBloc);
+    fixeMovable(moveBloc);
 
 
     if(moveBloc->isSlide())
@@ -735,7 +745,7 @@ void Gameboard::keyPressEvent(QKeyEvent *event)
             }
             if(event->key() == Qt::Key_0)
             {
-                restartLevel();
+                restartEnigma();
             }
         }
         else
@@ -787,20 +797,23 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
             B_Movable *b;
             b = dynamic_cast<B_Movable*>(CollidingItems.at(i));
 
-            if(sensDepl == 'l' && b->IsMovableToLeft()) //&& checkPosition(b->getCollideBloc('l'))
+            if(sensDepl == 'l' && b->IsMovableToLeft() && checkPosition(b->getCollideBlocPosition(sensDepl)))
             {
                 moveBloc = b;
                 bMove = true;
             }
-            else if(sensDepl == 'r' && b->IsMovableToRight()){ //&& checkPosition(b->getCollideBloc('r'))
+            else if(sensDepl == 'r' && b->IsMovableToRight() && checkPosition(b->getCollideBlocPosition(sensDepl)))
+            {
                 moveBloc = b;
                 bMove = true;
             }
-            else if(sensDepl == 't' && b->IsMovableToTop()){ //&& checkPosition(b->getCollideBloc('l'))
+            else if(sensDepl == 't' && b->IsMovableToTop() && checkPosition(b->getCollideBlocPosition(sensDepl)))
+            {
                 moveBloc = b;
                 bMove = true;
             }
-            else if(sensDepl == 'b' && b->IsMovableToBottom()){ //&& checkPosition(b->getCollideBloc('b'))
+            else if(sensDepl == 'b' && b->IsMovableToBottom()  && checkPosition(b->getCollideBlocPosition(sensDepl)))
+            {
                 moveBloc = b;
                 bMove = true;
             }
@@ -813,10 +826,10 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
             bMove = true;
         }
     }
-    if(bMove && (!checkPosition(pingouin->getCollideBloc(sensDepl))))
-    {
-        bMove=false;
-    }
+//    if(bMove && (!checkPosition(pingouin->getCollideBloc(sensDepl))))
+//    {
+//        bMove=false;
+//    }
     return bMove;
 }
 
@@ -846,7 +859,7 @@ void Gameboard::resumeGame()
     pauseMenu();
 }
 
-void Gameboard::restartLevel()
+void Gameboard::restartEnigma()
 {
     if(playerProfil->getNbLive()>0)
     {
@@ -862,16 +875,16 @@ void Gameboard::restartLevel()
     else
     {
         playerProfil->setNbLive(4);
-        restartGame();
+        restartLevel();
 
         setPositionCenter(dialog);
         dialogProxy->show();
-        dialog->setText("Tu as perdu toutes tes vies! Tu recommences au début du niveau.",1);
+        dialog->setText(tr("Tu as perdu toutes tes vies! Tu recommences au début du niveau."),1);
         dialogToogle = true;
     }
 }
 
-void Gameboard::restartGame()
+void Gameboard::restartLevel()
 {
     removeAllItems();
     disconnectTimer();
@@ -910,10 +923,10 @@ void Gameboard::exitGame()
 {
     QMessageBox msgBox;
     msgBox.setText(tr("Vous êtes sur le point de quitter le jeu"));
-    msgBox.setInformativeText("Voulez vous sauvegarder ?");
-    msgBox.addButton("Sauvegarder", QMessageBox::AcceptRole);
-    msgBox.addButton("Annuler", QMessageBox::RejectRole);
-    msgBox.addButton("Ne pas Sauvegarder", QMessageBox::DestructiveRole);
+    msgBox.setInformativeText(tr("Voulez vous sauvegarder ?"));
+    msgBox.addButton(tr("Sauvegarder"), QMessageBox::AcceptRole);
+    msgBox.addButton(tr("Annuler"), QMessageBox::RejectRole);
+    msgBox.addButton(tr("Ne pas Sauvegarder"), QMessageBox::DestructiveRole);
 
 
     int ret = msgBox.exec();
@@ -936,10 +949,6 @@ void Gameboard::exitGame()
     }
 }
 
-QPoint* Gameboard::getCheckPoint()
-{
-    return this->checkpoint;
-}
 
 void Gameboard::saveCheckpoint()
 {
@@ -994,7 +1003,6 @@ void Gameboard::setLevel(int value)
 
 void Gameboard::loadLevel()
 {
-    qDebug() << "LOAD LEVEL";
     mainScene = currentLevel->populateScene();
     setViewPosition();
 
@@ -1044,7 +1052,9 @@ void Gameboard::removeAllItems()
     QList<QGraphicsItem*>::iterator end = itemsList.end();
     while(iter != end)
     {
-        QGraphicsItem* item = (*iter); mainScene->removeItem(item);
+        QGraphicsItem* item = (*iter);
+        mainScene->removeItem(item);
         iter++;
     }
+    mainScene->clear();
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <Installer>
+	<Name>P2 DLM2 Project "James Gouin and the Holy Banana" </Name>
+	<Version>1.0.0</Version>
+	<Title>James Gouin and the Holy Banana</Title>
+	<Publisher>Banana Rocket</Publisher>
+	<ProductUrl>https://bitbucket.org/bananarocket/p2</ProductUrl>
+	<Icon>installer</Icon>
+	<UninstallerName>Uninstaller JG Holy Banana</UninstallerName>
+	<UninstallerIniFile>Uninstaller</UninstallerIniFile>
+	<AllowNonAsciiCharacters>true</AllowNonAsciiCharacters>
+	<AllowSpaceInPath>true</AllowSpaceInPath>
+	<Background>background.png</Background>
+	<TargetDir>@ApplicationsDir@/JG Holy Banana/</TargetDir>
+	<AdminTargetDir>@ApplicationsDir@/JG Holy Banana/</AdminTargetDir>
+	<RepositorySettingsPageVisible>false</RepositorySettingsPageVisible>
+ </Installer>

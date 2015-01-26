@@ -27,7 +27,7 @@ MainGame::MainGame(QWidget *parent) : QWidget(parent)
     titleSizeY = 30;
 
     this->setWindowTitle(windowTitle);
-    this->resize(windowSizeX,windowSizeY);
+    this->setMinimumSize(windowSizeX,windowSizeY);
 
     gameScene = new QGraphicsScene(this);
     gameScene = currentLevel->populateScene();

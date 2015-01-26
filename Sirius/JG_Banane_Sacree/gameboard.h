@@ -50,7 +50,6 @@ public:
     static int sizeX;
     static int sizeY;
 
-    QPoint *getCheckPoint();
     void setPlayerProfil(Profil* playerProfil);
 
 private:
@@ -93,7 +92,7 @@ private:
 
     void MoveBloc(char);
 
-    void SinkMovable(B_Movable *b);
+    void fixeMovable(B_Movable *b);
     void checkChangeView(char);
     void ChangeView(char sens);
     bool checkGameOver();
@@ -168,8 +167,8 @@ public slots:
     void SlideBloc();
 
     void exitGame();
+    void restartEnigma();
     void restartLevel();
-    void restartGame();
     void returnIsland();
 };
 

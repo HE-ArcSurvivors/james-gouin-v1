@@ -10,6 +10,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = JG_Banane_Sacree
 TEMPLATE = app
+macx:ICON = $${PWD}/icons/logo.icns
+win32:RC_FILE = winIcon.rc
 
 
 SOURCES += \
@@ -64,4 +66,5 @@ HEADERS  += \
     w_life.h
 RESOURCES += \
     images.qrc \
-    ItemsPopulation.qrc
+    ItemsPopulation.qrc \
+    icons.qrc

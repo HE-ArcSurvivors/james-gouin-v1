@@ -146,7 +146,7 @@ void Ennemi::pinguinDetection()
                     this->detectPinguin = true;
                     vb.bloc->setBrush(brush);
                     vb.bloc->setPen(pen);
-                    game->restartLevel();
+                    game->restartEnigma();
                 }
             }
         }
@@ -221,181 +221,186 @@ int Ennemi::nextPoint()
 //Cerveau de l'ennemi
 void Ennemi::advance(int step)
 {
-    viewBlocActif();
-    pinguinDetection();
-    if(step == 1 && time % speed==0 && !detectPinguin)
+    if(step == 1)
     {
-        time = 0;
-        QPoint posEnnemi = convertPosPoint(this->pos());
+        viewBlocActif();
+        pinguinDetection();
 
-        //1 on trouve son orientation
-        char direction = orientation;
-        if(path.at(iDestPoint).x() > posEnnemi.x())
+        if(time % speed==0 && !detectPinguin)
         {
-            direction = 'r'; // la direction voulu avant de marcher
-        }
-        else if(path.at(iDestPoint).x() < posEnnemi.x())
-        {
-            direction = 'l';
-        }
-        else if(path.at(iDestPoint).y() > posEnnemi.y())
-        {
-            direction = 'b';
-        }
-        else if(path.at(iDestPoint).y() < posEnnemi.y())
-        {
-            direction = 't';
-        }
+            time = 0;
+            QPoint posEnnemi = convertPosPoint(this->pos());
 
-        if(direction != orientation) //l'orientation n'est pas bonne
-        {
-            //le point est a ma gauche ou a ma droite ?
-           if(orientation == 't')
-           {
-               if(path.at(iDestPoint).x() > posEnnemi.x())
-               {
-                   //tourne a droite
-                   //turnRight();
-                   setOrientation_right();
-               }
-               else if(path.at(iDestPoint).x() < posEnnemi.x())
-               {
-                   //tourne a gauche
-                   //turnLeft();
-                   setOrientation_left();
-               }
-               else if(path.at(iDestPoint).y() > posEnnemi.y())
-               {
-                   //on se retourne ( toujours par la droite )
-                   //turnRight();
-                   setOrientation_right();
-               }
-           }
-           else if(orientation=='b')
-           {
-               if(path.at(iDestPoint).x() > posEnnemi.x())
-               {
-                   //tourne a SA gauche
-                   //turnLeft();
-                   setOrientation_right();
-               }
-               else if(path.at(iDestPoint).x() < posEnnemi.x())
-               {
-                   //tourne a SA droite
-                   //turnRight();
-                   setOrientation_left();
-               }
-               else if(path.at(iDestPoint).y() < posEnnemi.y())
-               {
-                   //on se retourne ( toujours par SA droite )
-                   setOrientation_left();
-               }
-           }
-           else if(orientation=='r')
-           {
-               if(path.at(iDestPoint).x() < posEnnemi.x())
-               {
-                   //on se retourne ( toujours par SA droite )
-                   //turnRight();
-                   setOrientation_bottom();
-               }
-               else if(path.at(iDestPoint).y() < posEnnemi.y())
-               {
-                   //tourne a SA gauche
-                   //turnLeft();
-                   setOrientation_top();
-               }
-               else if(path.at(iDestPoint).y() > posEnnemi.y())
-               {
-                   //tourne a SA droite
-                   //turnRight();
-                   setOrientation_bottom();
-               }
-           }
-           else if(orientation=='l')
-           {
-               if(path.at(iDestPoint).x() > posEnnemi.x())
-               {
-                   //on se retourne ( toujours par SA droite )
-                   //turnRight();
-                   setOrientation_top();
-               }
-               else if(path.at(iDestPoint).y() < posEnnemi.y())
-               {
-                   //tourne a SA droite
-                   //turnRight();
-                   setOrientation_top();
-               }
-               else if(path.at(iDestPoint).y() > posEnnemi.y())
-               {
-                   //tourne a SA droite
-                   //turnLeft();
-                   setOrientation_bottom();
-
-               }
-           }
-        }
-        else
-        {
-            //déplacement en x en premier puis en y
+            //1 on trouve son orientation
+            char direction = orientation;
             if(path.at(iDestPoint).x() > posEnnemi.x())
             {
-                if(!collide())
-                {
-                    this->moveBy(1,0);
-                }
-                else
-                {
-                    sens = !sens;
-                    iDestPoint = nextPoint();
-                }
+                direction = 'r'; // la direction voulu avant de marcher
             }
             else if(path.at(iDestPoint).x() < posEnnemi.x())
             {
-                if(!collide())
-                {
-                    this->moveBy(-1,0);
-                }
-                else
-                {
-                    sens = !sens;
-                    iDestPoint = nextPoint();
-                }
+                direction = 'l';
             }
             else if(path.at(iDestPoint).y() > posEnnemi.y())
             {
-                if(!collide())
-                {
-                    this->moveBy(0,1);
-                }
-                else
-                {
-                    sens = !sens;
-                    iDestPoint = nextPoint();
-                }
+                direction = 'b';
             }
             else if(path.at(iDestPoint).y() < posEnnemi.y())
             {
-                if(!collide())
-                {
-                    this->moveBy(0,-1);
+                direction = 't';
+            }
+
+            if(direction != orientation) //l'orientation n'est pas bonne
+            {
+                //le point est a ma gauche ou a ma droite ?
+                   if(orientation == 't')
+                   {
+                       if(path.at(iDestPoint).x() > posEnnemi.x())
+                       {
+                           //tourne a droite
+                           //turnRight();
+                           setOrientation_right();
+                       }
+                       else if(path.at(iDestPoint).x() < posEnnemi.x())
+                       {
+                           //tourne a gauche
+                           //turnLeft();
+                           setOrientation_left();
+                       }
+                       else if(path.at(iDestPoint).y() > posEnnemi.y())
+                       {
+                           //on se retourne ( toujours par la droite )
+                           //turnRight();
+                           setOrientation_right();
+                       }
+                   }
+                   else if(orientation=='b')
+                   {
+                       if(path.at(iDestPoint).x() > posEnnemi.x())
+                       {
+                           //tourne a SA gauche
+                           //turnLeft();
+                           setOrientation_right();
+                       }
+                       else if(path.at(iDestPoint).x() < posEnnemi.x())
+                       {
+                           //tourne a SA droite
+                           //turnRight();
+                           setOrientation_left();
+                       }
+                       else if(path.at(iDestPoint).y() < posEnnemi.y())
+                       {
+                           //on se retourne ( toujours par SA droite )
+                           setOrientation_left();
+                       }
+                   }
+                   else if(orientation=='r')
+                   {
+                       if(path.at(iDestPoint).x() < posEnnemi.x())
+                       {
+                           //on se retourne ( toujours par SA droite )
+                           //turnRight();
+                           setOrientation_bottom();
+                       }
+                       else if(path.at(iDestPoint).y() < posEnnemi.y())
+                       {
+                           //tourne a SA gauche
+                           //turnLeft();
+                           setOrientation_top();
+                       }
+                       else if(path.at(iDestPoint).y() > posEnnemi.y())
+                       {
+                           //tourne a SA droite
+                           //turnRight();
+                           setOrientation_bottom();
+                       }
+                   }
+                   else if(orientation=='l')
+                   {
+                       if(path.at(iDestPoint).x() > posEnnemi.x())
+                       {
+                           //on se retourne ( toujours par SA droite )
+                           //turnRight();
+                           setOrientation_top();
+                       }
+                       else if(path.at(iDestPoint).y() < posEnnemi.y())
+                       {
+                           //tourne a SA droite
+                           //turnRight();
+                           setOrientation_top();
+                       }
+                       else if(path.at(iDestPoint).y() > posEnnemi.y())
+                       {
+                           //tourne a SA droite
+                           //turnLeft();
+                           setOrientation_bottom();
+
+                       }
+                   }
                 }
-                else
+            else
+            {
+                //déplacement en x en premier puis en y
+                if(path.at(iDestPoint).x() > posEnnemi.x())
                 {
-                    sens = !sens;
+                    if(!collide())
+                    {
+                        this->moveBy(1,0);
+                    }
+                    else
+                    {
+                        sens = !sens;
+                        iDestPoint = nextPoint();
+                    }
+                }
+                else if(path.at(iDestPoint).x() < posEnnemi.x())
+                {
+                    if(!collide())
+                    {
+                        this->moveBy(-1,0);
+                    }
+                    else
+                    {
+                        sens = !sens;
+                        iDestPoint = nextPoint();
+                    }
+                }
+                else if(path.at(iDestPoint).y() > posEnnemi.y())
+                {
+                    if(!collide())
+                    {
+                        this->moveBy(0,1);
+                    }
+                    else
+                    {
+                        sens = !sens;
+                        iDestPoint = nextPoint();
+                    }
+                }
+                else if(path.at(iDestPoint).y() < posEnnemi.y())
+                {
+                    if(!collide())
+                    {
+                        this->moveBy(0,-1);
+                    }
+                    else
+                    {
+                        sens = !sens;
+                        iDestPoint = nextPoint();
+                    }
+                }
+                else //on est arrivé sur le point de destination
+                {
                     iDestPoint = nextPoint();
                 }
             }
-            else //on est arrivé sur le point de destination
-            {
-                iDestPoint = nextPoint();
-            }
-        }
 
-        viewBlocActif();
-        pinguinDetection();
+            viewBlocActif();
+            pinguinDetection();
+
+        }
+        time ++;
     }
-    time ++;
 }
 void Ennemi::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {

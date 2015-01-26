@@ -110,19 +110,6 @@ QGraphicsScene* Level::populateScene()
             line_count++;
             line[line_count]=t.readLine();
 
-            if(line[line_count].contains("[header]"))
-            {
-                line_count++;
-                line[line_count] = t.readLine();
-                QStringList valueWidth = line[line_count].split("=");
-                maxBlocksWidth = valueWidth.at(1).toInt();
-
-                line_count++;
-                line[line_count] = t.readLine();
-                QStringList valueHeight = line[line_count].split("=");
-                maxBlocksHeight = valueHeight.at(1).toInt();
-            }
-
             if(line[line_count].contains("[ennemi]"))
             {
                 line_count++;
@@ -148,17 +135,13 @@ QGraphicsScene* Level::populateScene()
                 line[line_count]=t.readLine();
                 line_count ++;
                 line[line_count]=t.readLine();
-//              qDebug() << "Found Layer: " << line[line_count] << " at: " << line_count;
                 for (matY = 0; matY < maxBlocksHeight; matY++)
                 {
                     QStringList values = line[line_count].split(",");
 
-//                    qDebug() << "Flaged: " << line[line_count] << " at: " << line_count;
-//                    qDebug() << "Values: " << values;
                     for (matX = 0; matX < maxBlocksWidth; matX++)
                     {
                         Mat_Walls_Blocks[matX][matY] = values.at(matX).toInt();
-//                        qDebug() << "Value: " << Walls[matX][matY];
                     }
                     line_count++;
                     line[line_count]=t.readLine();
@@ -504,7 +487,6 @@ QGraphicsScene* Level::populateScene()
                 {
                     item->setNbItem(Mat_Doors[i][j]%20);
                     item->setNeededItem("Poisson");
-
                 }
 
                 scene->addItem(item);
@@ -599,9 +581,6 @@ void Level::getSceneSize()
                 line[line_count] = t.readLine();
                 QStringList unlockEndY = line[line_count].split("=");
                 unlockEnd->setY(unlockEndY.at(1).toInt()*Gameboard::getGameSquares());
-
-                qDebug() << "StartingPoint" << startingPoint->x() << " " << startingPoint->y();
-                qDebug() << "UnlockEnd" << unlockEnd->x() << " " << unlockEnd->y();
             }
         }
     }
@@ -629,8 +608,6 @@ void Level::getSceneDialog()
             line[line_count]=t.readLine();
             dialogList.append(line[line_count]);
         }
-
-        qDebug() << dialogList.at(0);
     }
     f.close();
  }
@@ -658,7 +635,7 @@ QString Level::getDialogText(int value)
     }
     else
     {
-        qDebug() << "ERREUR - PAS DE TEXTE POUR CE DIALOG : " << dialogValue;
+        () << "ERREUR - PAS DE TEXTE POUR CE DIALOG : " << dialogValue;
         return "";
     }
 }

@@ -25,8 +25,8 @@ private:
     QPushButton *btnMenuPauseResume;
     QPushButton *btnMenuPauseIsland;
     QPushButton *btnMenuPauseQuit;
+    QPushButton *btnMenuPauseRestartEnigma;
     QPushButton *btnMenuPauseRestartLevel;
-    QPushButton *btnMenuPauseRestartGame;
 
     QString styleBtn;
 
