@@ -96,14 +96,14 @@ void Gameboard::SlideBloc()
             {
             case 't':
 
-                if(SlidingBloc->IsMovableToTop()) //&& Qu'il ne sorte pas de la view
+                if(SlidingBloc->IsMovableToTop())
                 {
                     SlidingBloc->moveBy(0,-1);
-                    if(checkPosition(SlidingBloc))
-                    {
-                        fixeMovable(SlidingBloc);
+                    fixeMovable(SlidingBloc);
+//                    if(checkPosition(SlidingBloc))
+//                    {
                         removeBloc = false;
-                    }
+//                    }
                 }
 
                 break;
@@ -113,12 +113,11 @@ void Gameboard::SlideBloc()
                 if(SlidingBloc->IsMovableToBottom())
                 {
                     SlidingBloc->moveBy(0,1);
-
-                    if(checkPosition(SlidingBloc))
-                    {
-                        fixeMovable(SlidingBloc);
+                    fixeMovable(SlidingBloc);
+//                    if(checkPosition(SlidingBloc))
+//                    {
                         removeBloc = false;
-                    }
+//                    }
                 }
 
                 break;
@@ -129,11 +128,10 @@ void Gameboard::SlideBloc()
                 {
                     SlidingBloc->moveBy(-1,0);
                     fixeMovable(SlidingBloc);
-                    if(checkPosition(SlidingBloc))
-                    {
-                        fixeMovable(SlidingBloc);
+//                    if(checkPosition(SlidingBloc))
+//                    {
                         removeBloc = false;
-                    }
+//                    }
                 }
 
                 break;
@@ -144,16 +142,12 @@ void Gameboard::SlideBloc()
                 {
                     SlidingBloc->moveBy(1,0);
                     fixeMovable(SlidingBloc);
-                    if(checkPosition(SlidingBloc))
-                    {
-                        fixeMovable(SlidingBloc);
+//                    if(checkPosition(SlidingBloc))
+//                    {
                         removeBloc = false;
-                    }
+//                    }
                 }
 
-                break;
-
-            default:
                 break;
             }
         }

@@ -89,7 +89,6 @@ void B_Movable::removeFromScene(QGraphicsScene* Scene)
 
 bool B_Movable::IsMovable(QList<QGraphicsItem *> l)
 {
-    bool bMove = true;
     for(int i=0; i<l.length(); i++)
     {
         if(typeid(*l.at(i)).name() == typeid(B_Wall).name() ||
@@ -97,25 +96,24 @@ bool B_Movable::IsMovable(QList<QGraphicsItem *> l)
            typeid(*l.at(i)).name() == typeid(E_Renard).name() ||
            typeid(*l.at(i)).name() == typeid(E_Loup).name())
         {
-            bMove = false;
+            return false;
         }
     }
-    return bMove;
+    return true;
 }
 
 bool B_Movable::isSlide()
 {
     QList<QGraphicsItem *> CollidingItems = this->CollidesCenter();
-    bool slide = false;
 
     for(int i=0; i<CollidingItems.length(); i++)
     {
         if(typeid(*CollidingItems.at(i)).name() == typeid(S_Ice).name())
         {
-            slide = true;
+            return true;
         }
     }
-    return slide;
+    return false;
 }
 
 bool B_Movable::IsMovableToLeft(){
