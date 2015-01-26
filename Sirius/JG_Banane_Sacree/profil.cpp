@@ -4,7 +4,7 @@
 
 Profil::Profil()
 {
-    this->username = tr("Nouveau");
+    this->username = "Nouveau";
     QDateTime current = QDateTime::currentDateTime();
     this->startDate = current.toString("dd:MM:yyyy:hh:mm");
     this->gameTime = "00:00:0000:00:00:00";
