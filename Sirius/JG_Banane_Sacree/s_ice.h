@@ -1,7 +1,8 @@
 #ifndef S_ICE_H
 #define S_ICE_H
 #include "surface.h"
-#include "qgraphicsitem.h"
+
+class QGraphicsItem;
 
 class S_Ice : public Surface
 {

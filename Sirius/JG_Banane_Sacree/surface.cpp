@@ -2,6 +2,7 @@
 #include "gameboard.h"
 #include <QGraphicsItem>
 #include <QPoint>
+#include <QPen>
 
 #include <QDebug>
 

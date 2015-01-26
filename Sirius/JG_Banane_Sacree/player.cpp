@@ -5,6 +5,10 @@
 #include <QGraphicsItem>
 #include <QDebug>
 
+#include <QRectF>
+#include <QGraphicsItem>
+
+
 Player::Player()
 {
     leftSkin = ":/characters/characters/player_left.png";

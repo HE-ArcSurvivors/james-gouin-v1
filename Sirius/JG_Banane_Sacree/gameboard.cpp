@@ -44,6 +44,7 @@
 #include <QPushButton>
 #include <QMessageBox>
 #include <QTimer>
+#include <QGraphicsProxyWidget>
 
 #define SLIDE_SPEED (80)
 

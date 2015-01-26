@@ -2,7 +2,6 @@
 #include <QDebug>
 #include <QGraphicsRectItem>
 #include <QGraphicsScene>
-#include <QList>
 
 #include "b_wall.h"
 #include "b_movable.h"
