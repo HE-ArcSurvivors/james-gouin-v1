@@ -1,9 +1,11 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <QRectF>
-#include "qpainter.h"
-#include "qgraphicsitem.h"
+
+class QPainter;
+class QRectF;
+#include <QGraphicsItem>
+
 
 class Player : public QGraphicsItem
 {

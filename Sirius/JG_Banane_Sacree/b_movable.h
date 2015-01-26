@@ -1,10 +1,11 @@
 #ifndef B_MOVABLE_H
 #define B_MOVABLE_H
 #include "surface.h"
+#include <QList>
 
-#include "qgraphicsitem.h"
-#include "qgraphicsscene.h"
-#include "qlist.h"
+class QGraphicsRectItem;
+class QGraphicsScene;
+
 
 class B_Movable : public Surface
 {

@@ -5,6 +5,11 @@
 #include <QLabel>
 #include <QDebug>
 #include <QMessageBox>
+#include <QResizeEvent>
+#include <QPushButton>
+#include <QFormLayout>
+
+
 
 MainGame::MainGame(QWidget *parent) : QWidget(parent)
 {

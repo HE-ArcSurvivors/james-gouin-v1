@@ -6,9 +6,10 @@ class QGraphicsScene;
 class QPixmap;
 class QPoint;
 class Gameboard;
+class QStringList;
 
 #include <QList>
-#include <QStringList>
+
 #include "w_dialog.h"
 
 //#include "gameboard.h"

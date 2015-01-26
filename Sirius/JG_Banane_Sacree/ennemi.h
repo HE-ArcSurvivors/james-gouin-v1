@@ -2,6 +2,7 @@
 #define MECHANT_H
 
 #include <QGraphicsItem>
+
 class QPoint;
 class QGraphicsRectItem;
 class Gameboard;

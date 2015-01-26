@@ -1,6 +1,7 @@
 #include "object.h"
 #include "surface.h"
 #include <QBrush>
+#include <QGraphicsItem>
 
 Object::Object(int xpos, int ypos, QGraphicsItem *parent) : Surface(xpos, ypos, parent)
 {

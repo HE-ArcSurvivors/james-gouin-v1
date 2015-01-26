@@ -2,16 +2,17 @@
 #define GAMEBOARD_H
 
 #include <QWidget>
+
 #include "p_penguin.h"
 #include "b_movable.h"
 #include "m_pause.h"
-#include <QGraphicsProxyWidget>
 #include "level.h"
 #include "w_object.h"
 #include "w_dialog.h"
 #include "profil.h"
 #include "w_life.h"
 
+class QGraphicsProxyWidget;
 class QGraphicsScene;
 class QGraphicsView;
 class QGraphicsItem;
