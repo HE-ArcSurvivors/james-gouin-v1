@@ -1,3 +1,17 @@
+/*********************************************************************************
+* Copyright (C) Haute-Ecole ARC - All Rights Reserved
+* Copyright (C) Banana Rocket - All Rights Reserved
+*
+* This file is part of <P2 Project: James Gouin et la Banane Sacrée>.
+*
+* Unauthorized copying of this file, via any medium is strictly prohibited
+* Proprietary and confidential
+* Written by Claret-Yakovenko Roman <romain.claret@rocla.ch>, 27 January 2015
+* Written by Divernois Margaux <>, 27 January 2015
+* Written by Visinand Steve <>, 27 January 2015
+**********************************************************************************/
+
+
 #include "gameboard.h"
 #include "p_penguin.h"
 #include "b_wall.h"
@@ -314,7 +328,7 @@ void Gameboard::fixeMovable(B_Movable *b)
         }
         if(typeid(*CollidingItems.at(i)).name() == typeid(S_ViewTransition).name())
         {
-            QString text = "Tu as bloqué ta sortie!";
+            QString text = tr("Tu as bloqué ta sortie!");
             setPositionCenter(dialog);
             dialogProxy->show();
             dialog->setText(text,2);
@@ -338,9 +352,9 @@ void Gameboard::fixeMovable(B_Movable *b)
             {
                 restartLevel();
 
-                QString text = "OUCH! Ce bloc vient d'écraser un ";
+                QString text = tr("OUCH! Ce bloc vient d'écraser un ");
                 text.append(objet->getName());
-                text.append("! Tu recommences au dernier checkpoint! ");
+                text.append(tr("! Tu recommences au dernier checkpoint! "));
                 setPositionCenter(dialog);
                 dialogProxy->show();
                 dialog->setText(text,2);
@@ -362,7 +376,7 @@ bool Gameboard::checkGameOver()
 
             setPositionCenter(dialog);
             dialogProxy->show();
-            dialog->setText("Plouf, dans l'eau! Tu recommences au dernier checkpoint",2);
+            dialog->setText(tr("Plouf, dans l'eau! Tu recommences au dernier checkpoint"),2);
             dialogToogle = true;
 
             return true;
@@ -373,7 +387,7 @@ bool Gameboard::checkGameOver()
 
             setPositionCenter(dialog);
             dialogProxy->show();
-            dialog->setText("Tu t'es fait repéré par un ennemi",2);
+            dialog->setText(tr("Tu t'es fait repéré par un ennemi"),2);
             dialogToogle = true;
 
             return true;
@@ -483,11 +497,11 @@ void Gameboard::checkChangeView(char sens)
                 }
                 else
                 {
-                    QString text = "Il te faut ";
+                    QString text = tr("Il te faut ");
                     text.append(QString::number(bloc->getNbItem()));
-                    text.append("x l'objet \"");
+                    text.append(tr("x l'objet \""));
                     text.append((bloc->getNeededItem()));
-                    text.append("\" pour aller plus loin ;) ");
+                    text.append(tr("\" pour aller plus loin ;) "));
 
                     setPositionCenter(dialog);
                     dialogProxy->show();
@@ -880,7 +894,7 @@ void Gameboard::restartLevel()
 
         setPositionCenter(dialog);
         dialogProxy->show();
-        dialog->setText("Tu as perdu toutes tes vies! Tu recommences au début du niveau.",1);
+        dialog->setText(tr("Tu as perdu toutes tes vies! Tu recommences au début du niveau."),1);
         dialogToogle = true;
     }
 }
@@ -927,10 +941,10 @@ void Gameboard::exitGame()
 {
     QMessageBox msgBox;
     msgBox.setText(tr("Vous êtes sur le point de quitter le jeu"));
-    msgBox.setInformativeText("Voulez vous sauvegarder ?");
-    msgBox.addButton("Sauvegarder", QMessageBox::AcceptRole);
-    msgBox.addButton("Annuler", QMessageBox::RejectRole);
-    msgBox.addButton("Ne pas Sauvegarder", QMessageBox::DestructiveRole);
+    msgBox.setInformativeText(tr("Voulez vous sauvegarder ?"));
+    msgBox.addButton(tr("Sauvegarder"), QMessageBox::AcceptRole);
+    msgBox.addButton(tr("Annuler"), QMessageBox::RejectRole);
+    msgBox.addButton(tr("Ne pas Sauvegarder"), QMessageBox::DestructiveRole);
 
 
     int ret = msgBox.exec();

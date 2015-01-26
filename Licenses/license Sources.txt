@@ -1,0 +1,13 @@
+©James Gouin et la Banane Sacrée 2014-2015
+©Banana Rocket 2014-2015
+
+Vous n’avez le droit d’utiliser ces codes sources uniquement dans le cadre du Projet P2 DLM2 2014-2015 de la haute école HE-ARC. Dans ce cadre, uniquement, vous pouvez utiliser et/ou copier et/ou modifier tous les fichiers sources du projet.
+
+Toutes utilisations et/ou copies et/ou modifications des fichiers sources en dehors du cadre du projet P2 DLM2 2014-2015 sont interdites sans l’autorisation écrite d’au moins deux des concepteurs de ce logiciel. 
+
+
+Listes des 3 concepteurs du logiciel de la team ©Banana Rocket:
+
+Claret-Yakovenko Romain (romain.claret@rocla.ch)
+Divernois Margaux (margaux.divernois@gmail.com)
+Visinand Steve (visinandst@gmail.com)
