@@ -1,3 +1,16 @@
+/*********************************************************************************
+* Copyright © Haute-Ecole ARC - All Rights Reserved
+* Copyright © Banana Rocket - All Rights Reserved
+*
+* This file is part of <P2 Qt Project: James Gouin et la Banane Sacrée>.
+*
+* Unauthorized copying of this file, via any medium is strictly prohibited
+* Proprietary and confidential
+* Written by Claret-Yakovenko Roman <romain.claret@rocla.ch>, 27 January 2015
+* Written by Divernois Margaux <margaux.divernois@gmail.com>, 27 January 2015
+* Written by Visinand Steve <visinandst@gmail.com>, 27 January 2015
+**********************************************************************************/
+
 #include "maingame.h"
 #include "profil.h"
 
@@ -67,6 +80,18 @@ MainGame::MainGame(QWidget *parent) : QWidget(parent)
     refreshGameMenu();
 
     quitGame = new QPushButton(tr("Quitter le jeu"), this);
+
+    quitGame->setStyleSheet( "border-style: none;"
+                             "border-radius: 5px;"
+                             "padding: 6px;"
+                             "margin: 5px;"
+                              "font-family: Century Gothic;"
+                              "background-color: white;"
+                              "color: #2e2e2e;"
+                              "font-weight: bold;"
+                              "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ffffff, stop: 1 #f2f2f2);"
+);
+
     QObject::connect(quitGame,SIGNAL(clicked()),this,SLOT(close()));
     quitGame->setGeometry(windowSizeX/2-quitBtnSizeX/2,windowSizeY/2+menuSizeY/2+35,quitBtnSizeX,quitBtnSizeY);
 }
