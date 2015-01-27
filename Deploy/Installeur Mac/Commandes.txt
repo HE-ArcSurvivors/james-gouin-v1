@@ -3,7 +3,7 @@ Creer un bundle exportable de l’application:
 	Il faut une version Release de l’application.
 	Et utiliser la commande:
 
-/Users/Rocla/Qt/5.4/clang_64/bin/macdeployqt /Users/Rocla/Clouds/OneDrive/HE-Arc/Projet\ Qt/P2/Deploy/JG_Banane_Sacree.app
+/Users/Rocla/Qt/5.4/clang_64/bin/macdeployqt /Users/Rocla/Clouds/OneDrive/HE-Arc/deploy/JG_Banane_Sacree.app
 
 	Pour la compression de l’executable ou des sources:
 
@@ -11,4 +11,4 @@ Creer un bundle exportable de l’application:
 
 	Pour la compilation de l’installeur:
 
-/Users/Rocla/Qt/ifw-bld/bin/binarycreator --offline-only -t /Users/Rocla/Qt/ifw-bld/bin/installerbase -p /Users/Rocla/Clouds/OneDrive/HE-Arc/Projet\ Qt/P2/Installeur\ Mac/packages -c /Users/Rocla/Clouds/OneDrive/HE-Arc/Projet\ Qt/P2/Installeur\ Mac/config/config.xml /Users/Rocla/Clouds/OneDrive/HE-Arc/Projet\ Qt/P2/Installeur\ Mac/Installer
+/Users/Rocla/Qt/ifw-bld/bin/binarycreator --offline-only -t /Users/Rocla/Qt/ifw-bld/bin/installerbase -p /Users/Rocla/Clouds/OneDrive/HE-Arc/Projet\ Qt/P2/Deploy/Installeur\ Mac/packages -c /Users/Rocla/Clouds/OneDrive/HE-Arc/Projet\ Qt/P2/Deploy/Installeur\ Mac/config/config.xml /Users/Rocla/Clouds/OneDrive/HE-Arc/Projet\ Qt/P2/Deploy/Installeur\ Mac/Installer

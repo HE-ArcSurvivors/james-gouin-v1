@@ -61,15 +61,11 @@ Component.prototype.createOperations = function()
     
     if (installer.value("os") === "win")
     {
-        component.addOperation("CreateShortcut", "@TargetDir@/JG Game Windows/JG Game.exe", "@DesktopDir@/JG Holy Banana.lnk");
+        component.addOperation("CreateShortcut", "@TargetDir@/JG Game Windows/James Gouin et la Banane Sacree.exe", "@DesktopDir@/JG Holy Banana.lnk");
         
-        component.addOperation("CreateShortcut", "@TargetDir@/JG Game Windows/JG Game.exe", "@StartMenuDir@/JG Holy Banana.lnk",
-            "workingDirectory=@TargetDir@", "iconPath=%SystemRoot%/system32/SHELL32.dll",
-            "iconId=2");
+        component.addOperation("CreateShortcut", "@TargetDir@/JG Game Windows/James Gouin et la Banane Sacree.exe", "@StartMenuDir@/JG Holy Banana.lnk");
             
-        component.addOperation("CreateShortcut", "@TargetDir@/Uninstaller JG Holy Banana.exe", "@StartMenuDir@/Uninstall JG.lnk",
-            "workingDirectory=@TargetDir@", "iconPath=%SystemRoot%/system32/SHELL32.dll",
-            "iconId=2");
+        component.addOperation("CreateShortcut", "@TargetDir@/Uninstaller JG Holy Banana.exe", "@StartMenuDir@/Uninstall JG.lnk");
     }
     
     
