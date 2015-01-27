@@ -820,10 +820,10 @@ bool Gameboard::MovePingouin(QList<QGraphicsItem *> CollidingItems, char sensDep
             bMove = true;
         }
     }
-//    if(bMove && (!checkPosition(pingouin->getCollideBloc(sensDepl))))
-//    {
-//        bMove=false;
-//    }
+    if(bMove && (!checkPosition(pingouin->getCollideBloc(sensDepl))))
+    {
+        bMove=false;
+    }
     return bMove;
 }
 
