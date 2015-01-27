@@ -1,0 +1,32 @@
+<RCC>
+    <qresource prefix="/characters">
+        <file>characters/player_front.png</file>
+        <file>characters/player_left.png</file>
+        <file>characters/player_right.png</file>
+        <file>characters/player_back.png</file>
+        <file>characters/renard_back.png</file>
+        <file>characters/renard_right.png</file>
+        <file>characters/renard_front.png</file>
+        <file>characters/renard_left.png</file>
+        <file>characters/loup_left.png</file>
+        <file>characters/loup_front.png</file>
+        <file>characters/loup_back.png</file>
+        <file>characters/loup_right.png</file>
+    </qresource>
+    <qresource prefix="/items">
+        <file>items/poisson.png</file>
+        <file>items/poisson2.png</file>
+        <file>items/oeuf.png</file>
+        <file>items/chaussure.png</file>
+        <file>items/poisson3.png</file>
+        <file>items/poisson4.png</file>
+        <file>items/poisson5.png</file>
+    </qresource>
+    <qresource prefix="/maps">
+        <file>maps/0.png</file>
+        <file>maps/1.png</file>
+        <file>maps/-1.png</file>
+        <file>maps/2.png</file>
+        <file>maps/0Ouvert.png</file>
+    </qresource>
+</RCC>

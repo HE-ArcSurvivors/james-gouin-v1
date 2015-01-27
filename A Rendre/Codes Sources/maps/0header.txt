@@ -1,0 +1,15 @@
+[header]
+width=60
+height=30
+viewRequestedX=1
+viewRequestedY=2
+levelStartX=7
+levelStartY=21
+unlockEndX=4
+unlockEndY=3
+tilewidth=32
+tileheight=32
+
+[tilesets]
+tileset=../../Images/Tiles/Pokemon_Ice_tiles.png,32,32,0,0
+tileset=../../Images/Tiles/Ice_tiles.png,32,32,0,0

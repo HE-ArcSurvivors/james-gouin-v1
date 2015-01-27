@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/maps">
+        <file>maps/-1.txt</file>
+        <file>maps/0.txt</file>
+        <file>maps/0texte.txt</file>
+        <file>maps/0header.txt</file>
+        <file>maps/1.txt</file>
+        <file>maps/1texte.txt</file>
+        <file>maps/1header.txt</file>
+        <file>maps/2.txt</file>
+        <file>maps/2header.txt</file>
+        <file>maps/2texte.txt</file>
+        <file>maps/3.txt</file>
+        <file>maps/3header.txt</file>
+        <file>maps/3texte.txt</file>
+    </qresource>
+</RCC>
