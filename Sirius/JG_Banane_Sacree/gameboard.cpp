@@ -11,7 +11,6 @@
 * Written by Visinand Steve <visinandst@gmail.com>, 27 January 2015
 **********************************************************************************/
 
-
 #include "gameboard.h"
 #include "p_penguin.h"
 #include "b_wall.h"
