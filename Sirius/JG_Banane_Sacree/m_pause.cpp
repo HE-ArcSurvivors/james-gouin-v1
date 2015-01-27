@@ -4,6 +4,10 @@
 #include <QFrame>
 #include <QStyleOption>
 #include <QPainter>
+#include <QLabel>
+#include <QPushButton>
+#include <QFormLayout>
+
 
 M_Pause::M_Pause(QWidget *parent)
 {

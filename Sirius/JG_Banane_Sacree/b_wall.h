@@ -1,7 +1,8 @@
 #ifndef B_WALL_H
 #define B_WALL_H
 #include "surface.h"
-#include "qgraphicsitem.h"
+
+class QGraphicsRectItem;
 
 class B_Wall : public Surface
 {

@@ -5,6 +5,11 @@
 #include <QLabel>
 #include <QDebug>
 #include <QMessageBox>
+#include <QResizeEvent>
+#include <QPushButton>
+#include <QFormLayout>
+
+
 
 MainGame::MainGame(QWidget *parent) : QWidget(parent)
 {
@@ -117,8 +122,8 @@ void MainGame::resizeEvent(QResizeEvent * event) {
 
 void MainGame::closeEvent (QCloseEvent *event)
 {
-    QMessageBox::StandardButton resBtn = QMessageBox::question( this, tr("Quitter ?"),
-                                                                tr("En quittant de ce manière, vous allez perdre votre progression. Si vous souhaitez sauvegarder votre partie, annuler et quitter depuis le menu escape.\n"),
+    QMessageBox::StandardButton resBtn = QMessageBox::warning( this, tr("Quitter de cette manière?"),
+                                                                tr("En quittant de ce manière, vous allez perdre votre progression. Si vous souhaitez sauvegarder votre partie, annulez et quittez depuis le menu Escape.\n"),
                                                                 QMessageBox::Cancel | QMessageBox::Yes);
     if (resBtn != QMessageBox::Yes) {
         event->ignore();

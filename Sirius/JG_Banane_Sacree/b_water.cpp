@@ -2,6 +2,7 @@
 
 #include <QBrush>
 #include <QGraphicsItem>
+#include <QGraphicsRectItem>
 
 B_Water::B_Water(int xpos, int ypos, QGraphicsItem *parent) : Surface(xpos, ypos, parent)
 {

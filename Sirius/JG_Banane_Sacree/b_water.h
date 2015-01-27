@@ -1,7 +1,8 @@
 #ifndef B_WATER_H
 #define B_WATER_H
+
 #include "surface.h"
-#include "qgraphicsitem.h"
+class QGraphicsRectItem;
 
 class B_Water : public Surface
 {

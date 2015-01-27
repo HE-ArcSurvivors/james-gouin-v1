@@ -2,7 +2,8 @@
 #define S_VIEWTRANSITION_H
 
 #include "surface.h"
-#include "qgraphicsitem.h"
+
+class QGraphicsItem;
 
 class S_ViewTransition : public Surface
 {

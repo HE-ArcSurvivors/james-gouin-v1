@@ -1,7 +1,8 @@
 #ifndef S_SNOW_H
 #define S_SNOW_H
 #include "surface.h"
-#include "qgraphicsitem.h"
+
+class QGraphicsItem;
 
 class S_Snow : public Surface
 {

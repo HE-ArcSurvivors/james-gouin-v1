@@ -6,6 +6,7 @@
 #include <QDebug>
 //#include <QList>
 //#include <QMap>
+#include <QPainter>
 
 WidgetObject::WidgetObject(QWidget *parent)
 {

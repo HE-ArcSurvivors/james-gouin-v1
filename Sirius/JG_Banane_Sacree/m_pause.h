@@ -2,10 +2,11 @@
 #define M_PAUSE_H
 
 #include <QWidget>
-#include <QLabel>
-#include <QPushButton>
-#include <QFormLayout>
-#include <QGraphicsDropShadowEffect>
+
+class QLabel;
+class QPushButton;
+class QFormLayout;
+class QGraphicsDropShadowEffect;
 
 
 

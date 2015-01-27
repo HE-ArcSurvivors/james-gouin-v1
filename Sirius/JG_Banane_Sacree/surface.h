@@ -1,8 +1,8 @@
 #ifndef SURFACE_H
 #define SURFACE_H
 
-#include "qgraphicsitem.h"
-#include "qpoint.h"
+#include <QGraphicsRectItem>
+class QPoint;
 
 class Surface : public QGraphicsRectItem
 {

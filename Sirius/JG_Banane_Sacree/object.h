@@ -1,9 +1,10 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include <QGraphicsItem>
+
 #include "surface.h"
 
+class QGraphicsItem;
 class QPixmap;
 class QGraphicsPixmapItem;
 class QBrush;
